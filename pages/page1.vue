@@ -1,7 +1,10 @@
 <template>
   <v-container class=" mt-6">
     <v-row class="wrapper rounded-xl">
-      <v-col class="pa-5">
+      <v-col cols="8">
+        ola
+      </v-col>
+      <v-col cols="4" class="pa-5">
         <v-sheet class="d-flex px-5" style="">
           <v-sheet class="me-auto">
             <p><strong>Total balance</strong></p>

@@ -1,6 +1,7 @@
 <template>
   <v-app style="" class="app">
     <v-navigation-drawer
+    style="background: #f2f2f2;"
       v-model="drawer"
       :rail="rail"
       permanent
@@ -9,12 +10,14 @@
       rail-width="85"
     >
       <v-list-item
-        prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        title="John Leider"
+        prepend-icon="mdi-wallet"
+        title="Manager system"
         nav
         absolute
-        class="ml-3 mt-5"
+        color="blue"
+        class="ml-4 mt-5"
       >
+        <strong>Fin.plan</strong>
         <template v-slot:append>
           <v-btn
             variant="text"
@@ -38,7 +41,7 @@
         </NuxtLink>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="d-flex flex-column">
+    <v-main class="d-flex flex-column" >
       <NuxtPage />
     </v-main>
   </v-app>
@@ -73,6 +76,11 @@ export default {
 
 .fs-10 {
   font-size: 10px;
+}
+
+.mdi-wallet {
+  font-size: 36px;
+  color: green;
 }
 
 </style>
