@@ -19,3 +19,8 @@ export async function deleteRelease(id) {
     method: 'DELETE',
   });
 }
+
+// Cards
+export async function getCards() {
+  return await fetch('https://backend-finplan.vercel.app/api/cards');
+}

@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { getReleases } from "../api.js"
+import { getReleases, getCards } from "../api.js"
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    release: []
+    release: [],
+    cards: []
   }),
   actions: {
     async getReleases() {
@@ -12,6 +13,16 @@ export const useCounterStore = defineStore('counter', {
         const data = await response.json()
 
         this.release = data
+      } catch (error) {
+        throw new Error('Erro ao obter os lançamentos');
+      }
+    },
+    async getCards() {
+      try {
+        const response = await getCards()
+        const data = await response.json()
+
+        this.cards = data
       } catch (error) {
         throw new Error('Erro ao obter os lançamentos');
       }

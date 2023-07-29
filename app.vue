@@ -1,10 +1,11 @@
 <template>
   <v-app style="" class="app">
     <v-navigation-drawer
-    style="background: #f2f2f2;"
+      style="background: #f2f2f2;"
       v-model="drawer"
       :rail="rail"
       permanent
+      :location="size < 600 ? 'top' : 'left'"
       @click="rail = false"
       class="rounded-xl"
       rail-width="85"
@@ -31,13 +32,16 @@
 
       <v-list density="compact" nav class="ml-3" base-color="black">
         <NuxtLink class="list-text" to="/">
-          <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
+          <v-list-item prepend-icon="mdi-home" title="Home" value="home"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/">
-          <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
+          <v-list-item prepend-icon="mdi-finance" title="Dashboard" value="account"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/page2">
-          <v-list-item prepend-icon="mdi-account-group-outline" title="Users" value="users"></v-list-item>
+          <v-list-item prepend-icon="mdi-credit-card" title="Add Card" value="Card"></v-list-item>
+        </NuxtLink>
+        <NuxtLink class="list-text" to="/page2">
+          <v-list-item prepend-icon="mdi-form-select" title="Add Transactions" value="Transactions"></v-list-item>
         </NuxtLink>
       </v-list>
     </v-navigation-drawer>
@@ -46,19 +50,24 @@
     </v-main>
   </v-app>
 </template>
-<script>
+<script setup>
+  const drawer = ref(true)
+  const rail = ref(true)
+  const size = ref(true)
 
-export default {
-  data: () => ({
-    items: [
-      { text: 'Home', icon: 'mdi-view-dashboard', link: '/' },
-      { text: 'Add', icon: 'mdi-credit-card-plus', link: '/page1' },
-      { text: 'Dashboard', icon: 'mdi-finance', link: '/page2' },
-    ],
-    drawer: true,
-    rail: true,
-  }),
-}
+  onMounted(() => {
+    size.value = window.innerWidth
+    window.addEventListener('resize', updatesizeValue);
+  });
+
+  const updatesizeValue = () => {
+    size.value = window.innerWidth;
+  };
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', updatesizeValue);
+  });
+
 </script>
 <style>
 .app {
