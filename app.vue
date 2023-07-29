@@ -33,7 +33,7 @@
         <NuxtLink class="list-text" to="/">
           <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/page1">
+        <NuxtLink class="list-text" to="/">
           <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/page2">

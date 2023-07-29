@@ -4,21 +4,12 @@
     :key="item.id"
     :title="item.name"
     subtitle="..."
-    class="d-flex justify-space-between align-center mx-5"
+    class="d-flex justify-space-between align-center"
     >
-    <v-sheet class="d-flex flex-column" @click="ola(item._id)">
-      <sup class="mt-2"><b>{{ formatDate(item.createdAt) }}</b></sup>
-      <v-list-item>
-        <v-icon class="mr-3" :color="inOut(item.type)">{{ item.type === 'Saída' ? 'mdi-cash-minus' : 'mdi-cash-plus'}}</v-icon>
-        {{ item.name }}
-      </v-list-item>
-    </v-sheet>
-    <v-list-item :style="`color: ${inOut(item.type)}`">
-      {{ formatCurrency(item.value) }}
-      <v-icon color="grey" class="ml-5">
-        mdi-delete
-      </v-icon>
-    </v-list-item>
+      <v-icon class="mr-3" :color="inOut(item.type)">{{ item.type === 'Saída' ? 'mdi-cash-minus' : 'mdi-cash-plus'}}</v-icon>
+      <p>{{ item.name }}</p>
+      <p :style="`color: ${inOut(item.type)}`">{{ formatCurrency(item.value) }}</p>
+      <p>{{ formatDate(item.createdAt) }}</p>
   </v-list>
 </template>
 <script setup>
