@@ -1,6 +1,7 @@
 <template>
   <v-app style="" class="app">
     <v-navigation-drawer
+      v-if="openMenu"
       style="background: #f2f2f2;"
       v-model="drawer"
       :rail="rail"
@@ -34,18 +35,21 @@
         <NuxtLink class="list-text" to="/">
           <v-list-item prepend-icon="mdi-home" title="Home" value="home"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/">
+        <NuxtLink class="list-text" to="/welcome">
           <v-list-item prepend-icon="mdi-finance" title="Dashboard" value="account"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/page2">
+        <NuxtLink class="list-text" to="/card-register">
           <v-list-item prepend-icon="mdi-credit-card" title="Add Card" value="Card"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/page2">
+        <NuxtLink class="list-text" to="/login">
           <v-list-item prepend-icon="mdi-form-select" title="Add Transactions" value="Transactions"></v-list-item>
+        </NuxtLink>
+        <NuxtLink class="list-text" to="/lp">
+          <v-list-item prepend-icon="mdi-page" title="Landing page" value="Transactions"></v-list-item>
         </NuxtLink>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="d-flex flex-column" >
+    <v-main class="d-flex justify-center" >
       <NuxtPage />
     </v-main>
   </v-app>
@@ -54,8 +58,14 @@
   const drawer = ref(true)
   const rail = ref(true)
   const size = ref(true)
+  const openMenu = ref(true)
+  const route = useRoute()
 
   onMounted(() => {
+    console.log(route)
+    if (route.path === '/') {
+      openMenu.value = false
+    }
     size.value = window.innerWidth
     window.addEventListener('resize', updatesizeValue);
   });
@@ -67,6 +77,12 @@
   onBeforeUnmount(() => {
     window.removeEventListener('resize', updatesizeValue);
   });
+
+  watch(
+    () => route.path,
+    (newRoute) => newRoute != "/" ? openMenu.value = true : openMenu.value = false
+
+  )
 
 </script>
 <style>

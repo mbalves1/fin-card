@@ -1,124 +1,157 @@
 <template>
-  <v-container class=" mt-6">
-    <v-row class="wrapper rounded-xl flex-column flex-sm-row">
-      <v-col cols="8">
-        <v-sheet class="me-auto">
-          <p><strong>Total balance</strong></p>
-          <h2 class="ml-5">{{ formatCurrency(balance) }}</h2>
-          <p class="fs-10">Number of financial postings {{ len }}</p>
-        </v-sheet>
-        <div>
-          <v-sheet class="d-flex justify-space-between">
-            <h3 class="ml-3">Dashboard</h3>
-            <v-icon>mdi-arrow-bottom-left</v-icon>
-          </v-sheet>
-          <v-divider class="my-2 mb-5"></v-divider>
-          <div>
-            <BarChart :data="chartDataIn" :options="chartOptions" class="doughnut" ></BarChart>
+  <v-container class="d-flex flex-end">
+    <v-row>
+      <v-col class="d-flex justify-center align-center" style="">
+        <v-card elevation="5" height="500" width="400" class="rounded-xl">
+          <div class="custom">
+            <div class="animate one">
+              <strong><span>f</span><span>i</span><span>n</span><span>.</span>
+              <span class="custom--subtitle">p</span><span class="custom--subtitle">l</span><span class="custom--subtitle">a</span><span class="custom--subtitle">n</span></strong>
+            </div>
           </div>
-          <div class="mt-10">
-            <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
-          </div>
-        </div>
-      </v-col>
-      <v-col cols="4" class="pa-5">
-        <v-sheet class="text-h4 d-flex px-5" style="">
-          Releases
-        </v-sheet>
-        <v-sheet class="wrapper--list">
-          <ListCards></ListCards>
-        </v-sheet>
-      </v-col>
-    </v-row>
-    <v-row class="mt-6">
-      <v-col class="wrapper rounded-xl mt-6 mr-6 pa-5">
-        <v-sheet class="text-h4 d-flex px-5" style="">
-          Transactions
-        </v-sheet>
-        <ListRelease
-          @total="totalBalance"
-          @releaseLenght="releaseLenght">
-        </ListRelease>
+          <div class="text-align px-10">Lorem ipsum dolor sit amet consectectecte quasi.</div>
+          <v-form class="mx-10">
+            <v-text-field
+              class="mt-5"
+              variant="outlined"
+              label="e-mail"
+              color="#74C27F"
+            ></v-text-field>
+            <v-text-field
+              class=""
+              variant="outlined"
+              label="senha"
+              color="#74C27F"
+            ></v-text-field>
+
+            <div class="d-flex flex-column">
+              <v-btn
+                variant="flat"
+                class="text-capitalize mt-5"
+                color="#74C27F"
+              >
+                Entrar
+              </v-btn>
+              <v-btn
+                variant="outlined"
+                class="text-capitalize mt-3"
+                v-ripple="false"
+              > Criar conta
+              </v-btn>
+            </div>
+
+          </v-form>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
-<script>
+<script setup>
+</script>
+<style lang="scss" scoped>
+.custom {
+  // background-image: url("../assets/Revenue-bro.svg");
+  // background-size: cover; /* ajusta o tamanho da imagem para cobrir todo o elemento */
+  background-repeat: no-repeat; /* evita que a imagem seja repetida */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 30px;
 
-export default {
-  data: () => ({
-    textfield: null,
-    model: true
-  }),
-  setup() {
-    const store = useCounterStore()
-    const balance = ref(0);
-    const len = ref(0);
+  &--title {
+    color: #B9E9BF;
+  }
 
-    const totalBalance = (valor) => balance.value = valor
+  &--subtitle {
+    color: #f2f2f2;
+  }
 
-    const releaseLenght = (valor) => len.value = valor
+  & > img {
+    margin-top: 30px;
+  }
 
-    const releasesOut = ref([]);
-    const releasesIn = ref([]);
-
-    onMounted(async () => {
-      await store.getReleases();
-      releasesOut.value = store.release.filter(rel => rel.type === 'Saída');
-      releasesIn.value = store.release.filter(rel => rel.type === 'Entrada');
-    });
-
-    const chartData = computed(() => {
-      return {
-        labels: releasesOut.value.map(rel => rel.name),
-        datasets: [
-          {
-            backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-            data: releasesOut.value.map(rel => rel.value)
-          },
-        ]
-      };
-    });
-
-    const chartDataIn = computed(() => {
-      return {
-        labels: releasesIn.value.map(rel => rel.name),
-        datasets: [
-          {
-            backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
-            data: releasesIn.value.map(rel => rel.value)
-          },
-        ]
-      };
-    });
-    
-
-    const chartOptions = computed(() => {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: false
-          // legend: {
-          //   position: 'right',
-          //   labels: {
-          //     usePointStyle: true
-          //   }
-          // }
-        }
-      };
-    });
-
-    return { totalBalance, balance, releaseLenght, len, chartData, chartOptions, chartDataIn }
+  &-btn {
+    background: #B9E9BF;
+    margin: 20px;
+    width: 200px;
+    height: 60px;
   }
 }
-</script>
-<style scoped lang="scss">
-.wrapper {
-  background-color: white;
-  &--list {
-    height: 400px;
-    overflow-y: scroll;
+
+.main {
+  padding: 0 20px;
+  background: #222;
+}
+
+.floating { 
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  margin-left: 30px;
+  margin-top: 5px;
+}
+ 
+@keyframes floating {
+  0% { transform: translate(0,  0px); }
+  50%  { transform: translate(30px, 0px); }
+  100%   { transform: translate(0, -0px); }   
+}
+
+
+.one span {
+  font-size: 35px;
+	// color: #B9E9BF;
+	opacity: 0;
+	transform: translate(-150px, -50px) rotate(-180deg) scale(3);
+	animation: revolveScale .4s forwards;
+}
+
+.animate span:nth-of-type(2) {
+	animation-delay: 1.05s;
+}
+.animate span:nth-of-type(3) {
+	animation-delay: 1.1s;
+}
+.animate span:nth-of-type(4) {
+	animation-delay: 2.9s;
+}
+.animate span:nth-of-type(5) {
+	animation-delay: 2.00s;
+}
+.animate span:nth-of-type(6) {
+	animation-delay: 2.05s;
+}
+.animate span:nth-of-type(7) {
+	animation-delay: 2.15s;
+}
+.animate span:nth-of-type(8) {
+	animation-delay: 2.5s;
+}
+
+@keyframes revolveScale {
+	20% {
+		transform: translate(20px, 20px) rotate(30deg) scale(.3);
+    color: #FFF;
+	}
+
+  60% {
+    color: #46754D;
   }
+
+  70% {
+    color: #93F5A0;
+	}
+  
+  80% {
+    color: white;
+	}
+
+	100% {
+		transform: translate(0) rotate(0) scale(1);
+		opacity: 1;
+    color: #74C27F;
+	}
 }
 </style>

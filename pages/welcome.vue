@@ -1,0 +1,124 @@
+<template>
+  <v-container class=" mt-6">
+    <v-row class="wrapper rounded-xl flex-column flex-sm-row">
+      <v-col cols="8">
+        <v-sheet class="me-auto">
+          <p><strong>Total balance</strong></p>
+          <h2 class="ml-5">{{ formatCurrency(balance) }}</h2>
+          <p class="fs-10">Number of financial postings {{ len }}</p>
+        </v-sheet>
+        <div>
+          <v-sheet class="d-flex justify-space-between">
+            <h3 class="ml-3">Dashboard</h3>
+            <v-icon>mdi-arrow-bottom-left</v-icon>
+          </v-sheet>
+          <v-divider class="my-2 mb-5"></v-divider>
+          <div>
+            <BarChart :data="chartDataIn" :options="chartOptions" class="doughnut" ></BarChart>
+          </div>
+          <div class="mt-10">
+            <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="4" class="pa-5">
+        <v-sheet class="text-h4 d-flex px-5" style="">
+          Releases
+        </v-sheet>
+        <v-sheet class="wrapper--list">
+          <ListCards></ListCards>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row class="mt-6">
+      <v-col class="wrapper rounded-xl mt-6 mr-6 pa-5">
+        <v-sheet class="text-h4 d-flex px-5" style="">
+          Transactions
+        </v-sheet>
+        <ListRelease
+          @total="totalBalance"
+          @releaseLenght="releaseLenght">
+        </ListRelease>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+<script>
+
+export default {
+  data: () => ({
+    textfield: null,
+    model: true
+  }),
+  setup() {
+    const store = useCounterStore()
+    const balance = ref(0);
+    const len = ref(0);
+
+    const totalBalance = (valor) => balance.value = valor
+
+    const releaseLenght = (valor) => len.value = valor
+
+    const releasesOut = ref([]);
+    const releasesIn = ref([]);
+
+    onMounted(async () => {
+      await store.getReleases();
+      releasesOut.value = store.release.filter(rel => rel.type === 'Saída');
+      releasesIn.value = store.release.filter(rel => rel.type === 'Entrada');
+    });
+
+    const chartData = computed(() => {
+      return {
+        labels: releasesOut.value.map(rel => rel.name),
+        datasets: [
+          {
+            backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
+            data: releasesOut.value.map(rel => rel.value)
+          },
+        ]
+      };
+    });
+
+    const chartDataIn = computed(() => {
+      return {
+        labels: releasesIn.value.map(rel => rel.name),
+        datasets: [
+          {
+            backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
+            data: releasesIn.value.map(rel => rel.value)
+          },
+        ]
+      };
+    });
+    
+
+    const chartOptions = computed(() => {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: false
+          // legend: {
+          //   position: 'right',
+          //   labels: {
+          //     usePointStyle: true
+          //   }
+          // }
+        }
+      };
+    });
+
+    return { totalBalance, balance, releaseLenght, len, chartData, chartOptions, chartDataIn }
+  }
+}
+</script>
+<style scoped lang="scss">
+.wrapper {
+  background-color: white;
+  &--list {
+    height: 400px;
+    overflow-y: scroll;
+  }
+}
+</style>
