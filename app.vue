@@ -58,13 +58,13 @@
   const drawer = ref(true)
   const rail = ref(true)
   const size = ref(true)
-  const openMenu = ref(true)
+  const openMenu = ref(false)
   const route = useRoute()
 
   onMounted(() => {
     console.log(route)
-    if (route.path === '/') {
-      openMenu.value = false
+    if (route.path !== '/') {
+      openMenu.value = true
     }
     size.value = window.innerWidth
     window.addEventListener('resize', updatesizeValue);
@@ -80,7 +80,7 @@
 
   watch(
     () => route.path,
-    (newRoute) => newRoute != "/" ? openMenu.value = true : openMenu.value = false
+    (newRoute) => newRoute != "/" ? openMenu.value = false : openMenu.value = true
 
   )
 

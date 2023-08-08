@@ -2,44 +2,121 @@
   <v-container class="d-flex flex-end">
     <v-row>
       <v-col class="d-flex justify-center align-center" style="">
-        <v-card elevation="5" height="500" width="400" class="rounded-xl">
+        <v-card elevation="5" height="auto" width="400" class="rounded-xl">
           <div class="custom">
             <div class="animate one">
               <strong><span>f</span><span>i</span><span>n</span><span>.</span>
               <span class="custom--subtitle">p</span><span class="custom--subtitle">l</span><span class="custom--subtitle">a</span><span class="custom--subtitle">n</span></strong>
             </div>
           </div>
-          <div class="text-align px-10">Lorem ipsum dolor sit amet consectectecte quasi.</div>
+          <div class="px-10 d-flex justify-center flex-column mt-5">
+            <span class="text-align">Seu Guia para a Saúde Financeira</span>
+            <strong class="text-align" >Todas as Suas Contas, Um Único Lugar.</strong>
+          </div>
           <v-form class="mx-10">
-            <v-text-field
-              class="mt-5"
-              variant="outlined"
-              label="e-mail"
-              color="#74C27F"
-            ></v-text-field>
-            <v-text-field
-              class=""
-              variant="outlined"
-              label="senha"
-              color="#74C27F"
-            ></v-text-field>
+            <v-slide-y-reverse-transition hide-on-leave>
+              <div v-if="!expand2">
+                <v-text-field
+                density="compact"
+                  class="mt-5"
+                  label="email"
+                  variant="outlined"
+                  
+                  color="#74C27F"
+                ></v-text-field>
+                <v-text-field
+                density="compact"
+                  
+                  variant="outlined"
+                  label="senha"
+                  color="#74C27F"
+                ></v-text-field>
+  
+                <div class="d-flex flex-column my-10">
+                  <v-btn
+                    variant="flat"
+                    
+                    class="text-capitalize mt-5"
+                    color="#74C27F"
+                  >
+                    Entrar
+                  </v-btn>
+                  <v-btn
+                  
+                    variant="plain"
+                    class="text-capitalize mt-3"
+                    v-ripple="false"
+                    @click="expand2 = !expand2"
+                  > Criar conta
+                  </v-btn>
+                </div>
+              </div>
 
-            <div class="d-flex flex-column">
-              <v-btn
-                variant="flat"
-                class="text-capitalize mt-5"
-                color="#74C27F"
-              >
-                Entrar
-              </v-btn>
-              <v-btn
+              <div v-if="expand2">
+                <v-text-field
+                density="compact"
+                  
+                class="mt-5"
                 variant="outlined"
-                class="text-capitalize mt-3"
-                v-ripple="false"
-              > Criar conta
-              </v-btn>
-            </div>
-
+                label="Primeiro nome"
+                color="#74C27F"
+                ></v-text-field>
+                <v-text-field
+                density="compact"
+                  
+                class="mt-5"
+                variant="outlined"
+                label="Último nome"
+                color="#74C27F"
+                ></v-text-field>
+                <v-text-field
+                density="compact"
+                  
+                class="mt-5"
+                variant="outlined"
+                label="e-mail"
+                color="#74C27F"
+                ></v-text-field>
+                <v-text-field
+                density="compact"
+                  
+                class=""
+                variant="outlined"
+                label="senha"
+                color="#74C27F"
+                ></v-text-field>
+                <v-text-field
+                density="compact"
+                  
+                  class=""
+                  variant="outlined"
+                  label="Confirme a senha"
+                  color="#74C27F"
+                  type="password"
+                ></v-text-field>
+                  
+                  <div class="d-flex flex-column my-10">
+                    <v-btn
+                      
+                      variant="flat"
+                      class="text-capitalize mt-5"
+                      color="#74C27F"
+                      @click="expand2 = !expand2"
+                      >
+                      Registrar
+                    </v-btn>
+                    <v-btn
+                      
+                      variant="flat"
+                      class="text-capitalize mt-5"
+                      color="grey"
+                      @click="expand2 = !expand2"
+                      >
+                      Voltar
+                    </v-btn>
+                  </div>
+              </div>
+            </v-slide-y-reverse-transition>
           </v-form>
         </v-card>
       </v-col>
@@ -47,6 +124,8 @@
   </v-container>
 </template>
 <script setup>
+
+const expand2 = ref(false)
 </script>
 <style lang="scss" scoped>
 .custom {
