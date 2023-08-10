@@ -17,23 +17,14 @@
   const data = ref([])
   const emit = defineEmits();
   
-  onMounted(async () => {
-    try {
-      // await store.getReleases();
-      data.value = store.release
-      totalValue()
-    } catch (error) {
-      console.error(error);
-    }
-  })
 
-  const totalValue = () => {
-    const totalBalance = data.value.reduce((acc, { value, type }) => {
-      return type === "Entrada" ? acc + value : acc - value;
-    }, 0);
-    emit('total', totalBalance)
-    emit('releaseLenght', data.value.length)
-  }
+  // const totalValue = () => {
+  //   const totalBalance = data.value.reduce((acc, { value, type }) => {
+  //     return type === "Entrada" ? acc + value : acc - value;
+  //   }, 0);
+  //   emit('total', totalBalance)
+  //   emit('releaseLenght', data.value.length)
+  // }
 
 </script>
 

@@ -17,17 +17,17 @@
   </v-list>
 </template>
 <script setup>
-  const store = useCounterStore()
+  const { getCards, cards } = useCounterStore()
   const dataCards = ref([])
 
   
-  onMounted(async () => {
-    try {
-      await store.getCards();
-      dataCards.value = store.cards
-    } catch (error) {
-      console.error(error);
-    }
-  })
+  // onMounted(async () => {
+  //   try {
+  //     await getCards();
+  //     dataCards.value = cards
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // })
 
 </script>
