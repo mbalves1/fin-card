@@ -2,6 +2,7 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="3">
+        Aqui caralo
         <form @submit.prevent="submit">
           <v-text-field
             v-model="form"
@@ -47,20 +48,4 @@
   </v-container>
 </template>
 <script setup>
-const {postRegister, user} = useUserStore()
-
-
-const clickme = () => {
-  console.log("store", );
-  postRegister(user)
-}
-
-const form = ref({
-  name: null,
-  phone: null,
-  checkbox: null
-})
-
-console.log(form.value);
-
 </script>

@@ -20,9 +20,6 @@
   const store = useCounterStore()
   const dataCards = ref([])
 
-  const ola = (id) => {
-    console.log("ola", id);
-  }
   
   onMounted(async () => {
     try {

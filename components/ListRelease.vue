@@ -9,17 +9,13 @@
       <v-icon class="mr-3" :color="inOut(item.type)">{{ item.type === 'Saída' ? 'mdi-cash-minus' : 'mdi-cash-plus'}}</v-icon>
       <p>{{ item.name }}</p>
       <p :style="`color: ${inOut(item.type)}`">{{ formatCurrency(item.value) }}</p>
-      <p>{{ formatDate(item.createdAt) }}</p>
+      <p v-if="item.createdAt">{{ formatDate(item.createdAt) }}</p>
   </v-list>
 </template>
 <script setup>
   const store = useCounterStore()
   const data = ref([])
   const emit = defineEmits();
-
-  const ola = (id) => {
-    console.log("ola", id);
-  }
   
   onMounted(async () => {
     try {

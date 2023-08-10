@@ -47,7 +47,7 @@
 </template>
 <script setup>
 const router = useRouter()
-const clickme = () => router.push('/welcome')
+const clickme = () => router.push('/home')
 </script>
 <style scope lang="scss">
 // *{ background: blue;}

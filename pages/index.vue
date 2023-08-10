@@ -13,20 +13,25 @@
             <span class="text-align">Seu Guia para a Saúde Financeira</span>
             <strong class="text-align" >Todas as Suas Contas, Um Único Lugar.</strong>
           </div>
+
+          <div v-if="messageFail">
+            Desculpe! Cadastro não encontrado.
+          </div>
+
           <v-form class="mx-10">
             <v-slide-y-reverse-transition hide-on-leave>
               <div v-if="!expand2">
                 <v-text-field
-                density="compact"
+                  density="compact"
                   class="mt-5"
                   label="email"
                   variant="outlined"
-                  
+                  v-model="form.email"
                   color="#74C27F"
                 ></v-text-field>
                 <v-text-field
-                density="compact"
-                  
+                  density="compact"
+                  v-model="form.password"
                   variant="outlined"
                   label="senha"
                   color="#74C27F"
@@ -35,9 +40,10 @@
                 <div class="d-flex flex-column my-10">
                   <v-btn
                     variant="flat"
-                    
                     class="text-capitalize mt-5"
                     color="#74C27F"
+                    @click="loginIn"
+                    :loading="loading"
                   >
                     Entrar
                   </v-btn>
@@ -125,112 +131,43 @@
 </template>
 <script setup>
 
+definePageMeta({
+  layout: 'layout'
+})
+
+const router = useRouter()
+
 const expand2 = ref(false)
+const { postLogin, user } = useUserStore()
+
+const form = ref({
+  email: "mbalves1@outlook.com",
+  password: '123'
+})
+
+const messageFail = ref(false)
+const loading = ref(false)
+
+
+const loginIn = async () => {
+  loading.value = true
+  try {
+    const { token } = await postLogin(form.value)
+    console.log("m", token)
+    loading.value = false
+    
+    if (token) router.push("/home")
+  } catch (error) {
+    loading.value = false
+    messageFail.value = true
+    setTimeout(() => {
+      messageFail.value = false
+    }, 5000)
+    console.error(error)
+  }
+}
+
 </script>
 <style lang="scss" scoped>
-.custom {
-  // background-image: url("../assets/Revenue-bro.svg");
-  // background-size: cover; /* ajusta o tamanho da imagem para cobrir todo o elemento */
-  background-repeat: no-repeat; /* evita que a imagem seja repetida */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  font-size: 30px;
 
-  &--title {
-    color: #B9E9BF;
-  }
-
-  &--subtitle {
-    color: #f2f2f2;
-  }
-
-  & > img {
-    margin-top: 30px;
-  }
-
-  &-btn {
-    background: #B9E9BF;
-    margin: 20px;
-    width: 200px;
-    height: 60px;
-  }
-}
-
-.main {
-  padding: 0 20px;
-  background: #222;
-}
-
-.floating { 
-  animation-name: floating;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-  margin-left: 30px;
-  margin-top: 5px;
-}
- 
-@keyframes floating {
-  0% { transform: translate(0,  0px); }
-  50%  { transform: translate(30px, 0px); }
-  100%   { transform: translate(0, -0px); }   
-}
-
-
-.one span {
-  font-size: 35px;
-	// color: #B9E9BF;
-	opacity: 0;
-	transform: translate(-150px, -50px) rotate(-180deg) scale(3);
-	animation: revolveScale .4s forwards;
-}
-
-.animate span:nth-of-type(2) {
-	animation-delay: 1.05s;
-}
-.animate span:nth-of-type(3) {
-	animation-delay: 1.1s;
-}
-.animate span:nth-of-type(4) {
-	animation-delay: 2.9s;
-}
-.animate span:nth-of-type(5) {
-	animation-delay: 2.00s;
-}
-.animate span:nth-of-type(6) {
-	animation-delay: 2.05s;
-}
-.animate span:nth-of-type(7) {
-	animation-delay: 2.15s;
-}
-.animate span:nth-of-type(8) {
-	animation-delay: 2.5s;
-}
-
-@keyframes revolveScale {
-	20% {
-		transform: translate(20px, 20px) rotate(30deg) scale(.3);
-    color: #FFF;
-	}
-
-  60% {
-    color: #46754D;
-  }
-
-  70% {
-    color: #93F5A0;
-	}
-  
-  80% {
-    color: white;
-	}
-
-	100% {
-		transform: translate(0) rotate(0) scale(1);
-		opacity: 1;
-    color: #74C27F;
-	}
-}
 </style>

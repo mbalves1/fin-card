@@ -1,7 +1,3 @@
-export async function getReleases() {
-  return await fetch('https://backend-finplan.vercel.app/api/services');
-}
-
 export async function postReleases(payload) {
   const response = await fetch('https://backend-finplan.vercel.app/api/services', {
     method: 'POST',
@@ -27,9 +23,20 @@ export async function getCards() {
 }
 
 // Login
+// export async function postLogin(payload) {
+//   console.log(payload);
+//   const response = await fetch('https://backend-finplan.vercel.app/api/auth/user', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(payload),
+//   });
+//   const data = await response.json();
+//   return data;
+// }
 
 export async function register(payload) {
-  console.log(payload);
   const response = await fetch('https://backend-finplan.vercel.app/api/auth/register', {
     method: 'POST',
     headers: {

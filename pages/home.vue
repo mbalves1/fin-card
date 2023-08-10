@@ -4,8 +4,8 @@
       <v-col cols="8">
         <v-sheet class="me-auto">
           <p><strong>Total balance</strong></p>
-          <h2 class="ml-5">{{ formatCurrency(balance) }}</h2>
-          <p class="fs-10">Number of financial postings {{ len }}</p>
+          <h2 class="ml-5">{{ formatCurrency(balance) || 0 }}</h2>
+          <p class="fs-10">Number of financial postings {{ len || 0 }}</p>
         </v-sheet>
         <div>
           <v-sheet class="d-flex justify-space-between">
@@ -13,10 +13,12 @@
             <v-icon>mdi-arrow-bottom-left</v-icon>
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
-          <div>
+        {{ releasesIn }} llllllll
+        {{ releasesOut }}dddddddddd
+          <div v-if="releasesIn">
             <BarChart :data="chartDataIn" :options="chartOptions" class="doughnut" ></BarChart>
           </div>
-          <div class="mt-10">
+          <div v-if="releasesOut" class="mt-10">
             <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
           </div>
         </div>
@@ -51,7 +53,7 @@ export default {
     model: true
   }),
   setup() {
-    const store = useCounterStore()
+    const { release, getReleases } = useCounterStore()
     const balance = ref(0);
     const len = ref(0);
 
@@ -63,9 +65,9 @@ export default {
     const releasesIn = ref([]);
 
     onMounted(async () => {
-      await store.getReleases();
-      releasesOut.value = store.release.filter(rel => rel.type === 'Saída');
-      releasesIn.value = store.release.filter(rel => rel.type === 'Entrada');
+      await getReleases();
+      releasesOut.value = release.filter(rel => rel.type === 'Saída');
+      releasesIn.value = release.filter(rel => rel.type === 'Entrada');
     });
 
     const chartData = computed(() => {
