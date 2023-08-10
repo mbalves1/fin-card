@@ -1,11 +1,11 @@
 <template>
-  <v-container class=" mt-6">
+  <v-container class="mt-6 mx-auto">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="8">
         <v-sheet class="me-auto">
-          <p><strong>Total balance</strong></p>
+          <!-- <p><strong>Total balance</strong></p>
           <h2 class="ml-5">{{ formatCurrency(balance) || 0 }}</h2>
-          <p class="fs-10">Number of financial postings {{ len || 0 }}</p>
+          <p class="fs-10">Number of financial postings {{ len || 0 }}</p> -->
         </v-sheet>
         <div>
           <v-sheet class="d-flex justify-space-between">
@@ -13,14 +13,14 @@
             <v-icon>mdi-arrow-bottom-left</v-icon>
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
-        {{ releasesIn }} llllllll
-        {{ releasesOut }}dddddddddd
-          <div v-if="releasesIn">
+        <!-- {{ releasesIn }} llllllll
+        {{ releasesOut }}dddddddddd -->
+          <!-- <div v-if="releasesIn">
             <BarChart :data="chartDataIn" :options="chartOptions" class="doughnut" ></BarChart>
           </div>
           <div v-if="releasesOut" class="mt-10">
             <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
-          </div>
+          </div> -->
         </div>
       </v-col>
       <v-col cols="4" class="pa-5">
@@ -37,10 +37,10 @@
         <v-sheet class="text-h4 d-flex px-5" style="">
           Transactions
         </v-sheet>
-        <ListRelease
+        <!-- <ListRelease
           @total="totalBalance"
           @releaseLenght="releaseLenght">
-        </ListRelease>
+        </ListRelease> -->
       </v-col>
     </v-row>
   </v-container>
@@ -53,7 +53,7 @@ export default {
     model: true
   }),
   setup() {
-    const { release, getReleases } = useCounterStore()
+    const { release } = useCounterStore()
     const balance = ref(0);
     const len = ref(0);
 
@@ -65,7 +65,6 @@ export default {
     const releasesIn = ref([]);
 
     onMounted(async () => {
-      await getReleases();
       releasesOut.value = release.filter(rel => rel.type === 'Saída');
       releasesIn.value = release.filter(rel => rel.type === 'Entrada');
     });

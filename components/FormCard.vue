@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="3">
-        <form @submit.prevent="submit">
+        <form>
           <v-text-field
             variant="outlined"
             v-model="form.name"
@@ -54,22 +54,6 @@
             @click="postReleases"
           >
             Send
-          </v-btn>
-
-          <v-btn
-            class="mt-4 button"
-            theme
-            @click="postReleases"
-            flat
-            :ripple="true"
-            variant="outlined"
-            size="x-large"
-            color="white"
-          >
-            Registrar
-            <!-- <v-icon class="menu-icon right-icon" color="#919191">
-              mdi-send
-            </v-icon> -->
           </v-btn>
         </form>
       </v-col>

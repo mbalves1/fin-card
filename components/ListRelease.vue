@@ -13,13 +13,13 @@
   </v-list>
 </template>
 <script setup>
-  const store = useCounterStore()
+  // const store = useCounterStore()
   const data = ref([])
   const emit = defineEmits();
   
   onMounted(async () => {
     try {
-      await store.getReleases();
+      // await store.getReleases();
       data.value = store.release
       totalValue()
     } catch (error) {
