@@ -1,8 +1,8 @@
 <template>
-  <v-container class="d-flex flex-end">
+  <v-container class="pa-0 mx-auto">
     <v-row>
-      <v-col class="d-flex justify-center align-center" style="">
-        <v-card elevation="5" height="auto" width="400" class="rounded-xl">
+      <v-col cols="12" col="2" class="d-flex justify-center align-center">
+        <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
           <div class="custom">
             <div class="animate one">
               <strong><span>f</span><span>i</span><span>n</span><span>.</span>
@@ -13,15 +13,12 @@
             <span class="text-align">Seu Guia para a Saúde Financeira</span>
             <strong class="text-align" >Todas as Suas Contas, Um Único Lugar.</strong>
           </div>
-
-          <div v-if="messageFail">
-            Desculpe! Cadastro não encontrado.
-          </div>
-
+          <!-- v-if="messageFail" -->
           <v-form class="mx-10">
             <v-slide-y-reverse-transition hide-on-leave>
               <div v-if="!expand2">
                 <v-text-field
+                  prepend-inner-icon="mdi-email-outline"
                   density="compact"
                   class="mt-5"
                   label="email"
@@ -32,10 +29,26 @@
                 <v-text-field
                   density="compact"
                   v-model="form.password"
+                  :type="show1 ? 'text' : 'password'"
                   variant="outlined"
                   label="senha"
                   color="#74C27F"
+                  :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
+                  prepend-inner-icon="mdi-lock-outline"
+                  @click:append-inner="show1 = !show1"
                 ></v-text-field>
+
+                <v-row v-if="messageFail" class="rounded-sm errorMessage">
+                  <div transition="scale-transition">
+                    <v-alert
+              
+                      type="error"
+                      icon="mdi-alert-circle-outline"
+                      text="Desculpe! Cadastro não encontrado."
+                      variant="tonal"
+                    ></v-alert>
+                  </div>
+                </v-row>
   
                 <div class="d-flex flex-column my-10">
                   <v-btn
@@ -44,11 +57,11 @@
                     color="#74C27F"
                     @click="loginIn"
                     :loading="loading"
+                    height="40"
                   >
                     Entrar
                   </v-btn>
                   <v-btn
-                  
                     variant="plain"
                     class="text-capitalize mt-3"
                     v-ripple="false"
@@ -69,41 +82,40 @@
                 ></v-text-field>
                 <v-text-field
                 density="compact"
-                  
-                class="mt-5"
                 variant="outlined"
                 label="Último nome"
                 color="#74C27F"
                 ></v-text-field>
                 <v-text-field
                 density="compact"
-                  
-                class="mt-5"
                 variant="outlined"
                 label="e-mail"
                 color="#74C27F"
                 ></v-text-field>
                 <v-text-field
                 density="compact"
-                  
+                :type="show2 ? 'text' : 'password'"
+                :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append-inner="show2 = !show2"
                 class=""
                 variant="outlined"
                 label="senha"
                 color="#74C27F"
                 ></v-text-field>
                 <v-text-field
-                density="compact"
-                  
+                  density="compact"
+                  :type="show3 ? 'text' : 'password'"
+                  :append-inner-icon="show3 ? 'mdi-eye-off' : 'mdi-eye'"
+                  @click:append-inner="show3 = !show3"
                   class=""
                   variant="outlined"
                   label="Confirme a senha"
                   color="#74C27F"
-                  type="password"
                 ></v-text-field>
                   
                   <div class="d-flex flex-column my-10">
                     <v-btn
-                      
+                      height="40"
                       variant="flat"
                       class="text-capitalize mt-5"
                       color="#74C27F"
@@ -112,7 +124,7 @@
                       Registrar
                     </v-btn>
                     <v-btn
-                      
+                      height="40"
                       variant="flat"
                       class="text-capitalize mt-5"
                       color="grey"
@@ -138,6 +150,9 @@ definePageMeta({
 const router = useRouter()
 
 const expand2 = ref(false)
+const show1 = ref(false)
+const show2 = ref(false)
+const show3 = ref(false)
 const { postLogin, user } = useUserStore()
 
 const form = ref({
