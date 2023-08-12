@@ -210,14 +210,12 @@ const loginIn = async () => {
 const registerUser = async () => {
   loading.value = true
   try {
-    console.log("register", register.value)
     const resp = await postRegister(register.value)
     loading.value = false
-    console.log("resp", resp);
+
     // if (token) router.push("/home")
   } catch (error) {
     let m = await msgError
-    console.log("msgError", m);
     loading.value = false
     messageFailRegister.value = true
     console.error(error)

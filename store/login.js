@@ -14,16 +14,13 @@ export const useUserStore = defineStore('user', {
         const response = await registerUser(payload)
         const data = await response.json()
         
-        console.log("user register", data)
         return data
       } catch (error) {
         this.msgError = 'Error while registering user'
-        console.log("this.msgError", this.msgError);
         throw new Error('Error while registering user');
       }
     },
     async postLogin(payload) {
-      console.log("action login", payload);
       try {
         const response = await postLogin(payload)
 

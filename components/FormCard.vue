@@ -86,7 +86,7 @@ const getTeste = async () => {
 const postReleases = async () => {
   try {
     const transaction = await postTransactions(form.value);
-    console.log(transaction)
+
   } catch (error) {
     console.error(error);
   }

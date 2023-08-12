@@ -5,12 +5,12 @@
         <v-sheet class="me-auto">
            <p><strong>Total balance</strong></p>
           <h2 class="ml-5">{{ totalBalance || "R$ 00,00" }}</h2>
-          <p class="fs-10">Number of financial postings {{ size || 0 }}</p>
         </v-sheet>
         <div>
-          <v-sheet class="d-flex justify-space-between">
+          <v-sheet class="d-flex justify-space-between align-center">
             <h3 class="ml-3">Dashboard</h3>
-            <v-icon>mdi-arrow-bottom-left</v-icon>
+            <p class="fs-10">Number of financial postings {{ size || 0 }}</p>
+            <!-- <v-icon>mdi-arrow-bottom-left</v-icon> -->
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
 
@@ -36,23 +36,19 @@
         <v-sheet class="text-h4 d-flex px-5" style="">
           Transactions
         </v-sheet>
-        <!-- <ListRelease
+        <ListRelease
           @total="totalBalance"
           @releaseLenght="releaseLenght">
-        </ListRelease> -->
+        </ListRelease>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script setup>
-
-
   const { getTransactions, transactions } = useTransactions()
 
   const data = ref()
   const size = ref(0);
-
-    // const releaseLenght = (valor) => len.value = valor
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
@@ -60,19 +56,21 @@
   onMounted(async () => {
     try {
       await fetchData()
-      totalBalance
-      releasesOut.value = data.value.filter(rel => rel.type === 'Saída');
-      releasesIn.value = data.value.filter(rel => rel.type === 'Entrada');
     } catch (error) {
       console.error(error)
     }
     // releasesIn.value = release.filter(rel => rel.type === 'Entrada');
   });
-
+  
   const fetchData = async () => {
     try {
-      await getTransactions()
-      data.value = await transactions
+      const m = await getTransactions()
+      data.value = m
+      console.log("mmmm", m)
+      totalBalance
+      console.log("chama", data.value)
+      releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
+      releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
     } catch (error) {
       console.error(error)
     }

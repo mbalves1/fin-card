@@ -7,9 +7,7 @@ export const useTransactions = defineStore('transactions', {
   }),
   actions: {
     async postTransactions(payload) {
-      console.log("paiylood post", payload);
       const token = localStorage.getItem("token")
-      console.log("token post", token);
       try {
         const response = await postTransactions(payload, token)
         const data = await response.json()
@@ -22,7 +20,6 @@ export const useTransactions = defineStore('transactions', {
       try {
         const response = await getTransactions()
         const data = await response.json()
-        console.log("data", data)
         this.transactions = data
         return data
       } catch (error) {

@@ -18,13 +18,5 @@
   const emit = defineEmits();
   
 
-  // const totalValue = () => {
-  //   const totalBalance = data.value.reduce((acc, { value, type }) => {
-  //     return type === "Entrada" ? acc + value : acc - value;
-  //   }, 0);
-  //   emit('total', totalBalance)
-  //   emit('releaseLenght', data.value.length)
-  // }
-
 </script>
 
