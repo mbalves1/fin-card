@@ -21,7 +21,6 @@ export const useTransactions = defineStore('transactions', {
     async getTransactions() {
       try {
         const response = await getTransactions()
-        console.log("transactions", response)
         const data = await response.json()
         console.log("data", data)
         this.transactions = data

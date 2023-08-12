@@ -1,20 +1,25 @@
 import { defineStore } from 'pinia'
-import { postLogin } from "../server/api-login.js"
+import { postLogin, registerUser } from "../server/api-login.js"
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
       token: null,
-    }
+    },
+    msgError: null
   }),
   actions: {
     async postRegister(payload) {
       try {
-        const response = await register(payload)
+        const response = await registerUser(payload)
         const data = await response.json()
-        this.release = data
+        
+        console.log("user register", data)
+        return data
       } catch (error) {
-        throw new Error('Erro ao obter os lançamentos');
+        this.msgError = 'Error while registering user'
+        console.log("this.msgError", this.msgError);
+        throw new Error('Error while registering user');
       }
     },
     async postLogin(payload) {
@@ -24,7 +29,7 @@ export const useUserStore = defineStore('user', {
 
         this.user.token = response.token
         localStorage.setItem("token", response.token)
-        console.log("CCC", response)
+
         return response
       } catch (error) {
         throw new Error('Error login');

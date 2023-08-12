@@ -74,23 +74,25 @@
               <div v-if="expand2">
                 <v-text-field
                 density="compact"
-                  
                 class="mt-5"
                 variant="outlined"
                 label="Primeiro nome"
                 color="#74C27F"
+                v-model="register.first_name"
                 ></v-text-field>
                 <v-text-field
                 density="compact"
                 variant="outlined"
                 label="Último nome"
                 color="#74C27F"
+                v-model="register.last_name"
                 ></v-text-field>
                 <v-text-field
                 density="compact"
                 variant="outlined"
                 label="e-mail"
                 color="#74C27F"
+                v-model="register.email"
                 ></v-text-field>
                 <v-text-field
                 density="compact"
@@ -101,6 +103,7 @@
                 variant="outlined"
                 label="senha"
                 color="#74C27F"
+                v-model="register.password"
                 ></v-text-field>
                 <v-text-field
                   density="compact"
@@ -111,7 +114,20 @@
                   variant="outlined"
                   label="Confirme a senha"
                   color="#74C27F"
+                  v-model="register.confirmpassword"
                 ></v-text-field>
+
+                <v-row v-if="messageFailRegister" class="rounded-sm errorMessage">
+                  <div transition="scale-transition">
+                    <v-alert
+                      type="error"
+                      icon="mdi-alert-circle-outline"
+                      :text="msgError"
+                      variant="tonal"
+                      closable
+                    ></v-alert>
+                  </div>
+                </v-row>
                   
                   <div class="d-flex flex-column my-10">
                     <v-btn
@@ -119,7 +135,8 @@
                       variant="flat"
                       class="text-capitalize mt-5"
                       color="#74C27F"
-                      @click="expand2 = !expand2"
+                      @click="registerUser"
+                      :loading="loading"
                       >
                       Registrar
                     </v-btn>
@@ -153,14 +170,23 @@ const expand2 = ref(false)
 const show1 = ref(false)
 const show2 = ref(false)
 const show3 = ref(false)
-const { postLogin, user } = useUserStore()
+const { postLogin, postRegister, user, msgError } = useUserStore()
 
 const form = ref({
   email: "mbalves1@outlook.com",
   password: '123'
 })
 
+const register = ref({
+  first_name: null,
+  last_name: null,
+  email: null,
+  password: null,
+  confirmpassword: null
+})
+
 const messageFail = ref(false)
+const messageFailRegister = ref(false)
 const loading = ref(false)
 
 
@@ -168,7 +194,6 @@ const loginIn = async () => {
   loading.value = true
   try {
     const { token } = await postLogin(form.value)
-    console.log("m", token)
     loading.value = false
     
     if (token) router.push("/home")
@@ -178,6 +203,23 @@ const loginIn = async () => {
     setTimeout(() => {
       messageFail.value = false
     }, 5000)
+    console.error(error)
+  }
+}
+
+const registerUser = async () => {
+  loading.value = true
+  try {
+    console.log("register", register.value)
+    const resp = await postRegister(register.value)
+    loading.value = false
+    console.log("resp", resp);
+    // if (token) router.push("/home")
+  } catch (error) {
+    let m = await msgError
+    console.log("msgError", m);
+    loading.value = false
+    messageFailRegister.value = true
     console.error(error)
   }
 }

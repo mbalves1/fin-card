@@ -1,35 +1,35 @@
 <template>
-  <div style="">
-    <v-navigation-drawer
-      style="background: #f2f2f2;"
-      v-model="drawer"
-      :rail="rail"
-      permanent
-      :location="size < 600 ? 'top' : 'left'"
-      @click="rail = false"
-      class="rounded-xl"
-      rail-width="85"
+  <v-navigation-drawer
+    style="background: #f2f2f2;"
+    v-model="drawer"
+    :rail="rail"
+    permanent
+    :location="size < 600 ? 'top' : 'left'"
+    @click="rail = false"
+    class="rounded-xl"
+    rail-width="85"
+  >
+    <v-list-item
+      prepend-icon="mdi-wallet"
+      title="Manager system"
+      nav
+      absolute
+      color="blue"
+      class="ml-4 mt-5"
     >
-      <v-list-item
-        prepend-icon="mdi-wallet"
-        title="Manager system"
-        nav
-        absolute
-        color="blue"
-        class="ml-4 mt-5"
-      >
-        <strong>Fin.plan</strong>
-        <template v-slot:append>
-          <v-btn
-            variant="text"
-            icon="mdi-chevron-left"
-            @click.stop="rail = !rail"
-          ></v-btn>
-        </template>
-      </v-list-item>
+      <strong>Fin.plan</strong>
+      <template v-slot:append>
+        <v-btn
+          variant="text"
+          icon="mdi-chevron-left"
+          @click.stop="rail = !rail"
+        ></v-btn>
+      </template>
+    </v-list-item>
 
-      <v-divider></v-divider>
+    <v-divider></v-divider>
 
+    <v-col class="d-flex justify-space-between flex-column h-90 pa-0">
       <v-list density="compact" nav class="ml-3" base-color="black">
         <NuxtLink class="list-text" to="/home">
           <v-list-item prepend-icon="mdi-home" title="Home" value="home"></v-list-item>
@@ -40,20 +40,15 @@
         <NuxtLink class="list-text" to="/card-register">
           <v-list-item prepend-icon="mdi-credit-card" title="Add Card" value="Card"></v-list-item>
         </NuxtLink>
-        <!-- <NuxtLink class="list-text" to="/login">
-          <v-list-item prepend-icon="mdi-form-select" title="Add Transactions" value="Transactions"></v-list-item>
-        </NuxtLink>
-        <NuxtLink class="list-text" to="/lp">
-          <v-list-item prepend-icon="mdi-page" title="Landing page" value="Transactions"></v-list-item>
-        </NuxtLink> -->
       </v-list>
-    </v-navigation-drawer>
-    <!-- <v-main class="d-flex justify-center" >
-      <NuxtLayout :name="layout">
-        <NuxtPage />
-      </NuxtLayout>
-    </v-main> -->
-  </div>
+
+      <v-list base-color="black" class="pa-0">
+        <NuxtLink class="list-text" to="/">
+          <v-list-item prepend-icon="mdi-logout" title="Logout" value="Card"></v-list-item>
+        </NuxtLink>
+      </v-list>
+    </v-col>
+  </v-navigation-drawer>
 </template>
 <script setup>
   const drawer = ref(true)
@@ -105,5 +100,8 @@
   color: green;
 }
 
+.h-90 {
+  height: 90% !important;
+}
 </style>
 
