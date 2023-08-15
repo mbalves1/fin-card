@@ -1,0 +1,3 @@
+<template>
+  <FormRelease></FormRelease>
+</template>

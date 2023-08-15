@@ -34,8 +34,11 @@
         <NuxtLink class="list-text" to="/home">
           <v-list-item prepend-icon="mdi-home" title="Home" value="home"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/card-register">
-          <v-list-item prepend-icon="mdi-finance" title="Teste" value="account"></v-list-item>
+        <NuxtLink class="list-text" to="/dash">
+          <v-list-item prepend-icon="mdi-finance" title="Dashboard" value="account"></v-list-item>
+        </NuxtLink>
+        <NuxtLink class="list-text" to="/release-register">
+          <v-list-item prepend-icon="mdi-credit-card" title="Add Release" value="release"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/card-register">
           <v-list-item prepend-icon="mdi-credit-card" title="Add Card" value="Card"></v-list-item>

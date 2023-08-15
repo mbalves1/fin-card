@@ -2,43 +2,22 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="12" lg="3" md="12">
-        <v-card
-          elevation="10"
-          width="320"
-          height="200"
-          class="rounded-lg pa-2 d-flex flex-column"
-        >
-          <div class="d-flex align-center justify-space-between">
-            <div>
-              Credit
-            </div>
-            <div>
-              MasterCard
-            </div>
-          </div>
-          <v-row no-gutters class="d-flex align-start flex-column justify-center">
-            <div>2324324534534</div>
-            <div>Murilo de Barros</div>
-          </v-row>
-          <v-row no-gutters class="d-flex flex-row justify-space-around mb-3" height="0">
-            <div class="d-flex flex-column">
-              <div style="font-size: 8px;">Data</div>
-              <div style="font-size: 10px;">03/10</div>
-            </div>
-            <div class="d-flex flex-column">
-              <div style="font-size: 10px;">090</div>
-            </div>
-          </v-row>
-        </v-card>
         <form>
-          <v-text-title>Cartão</v-text-title>
+          <v-radio-group inline hide-details="" v-model="form.type">
+            <template v-slot:label>
+              <div><strong>Tipo de lançamento</strong></div>
+            </template>
+            <v-radio label="Entrada" value="Entrada"></v-radio>
+            <v-radio label="Saída" value="Saída"></v-radio>
+          </v-radio-group>
+
           <v-text-field
-            density="compact"
+          density="compact"
             variant="outlined"
-            v-model="card.name"
+            v-model="form.name"
             class="my-1"
             :counter="10"
-            label="Nome no cartão"
+            label="Name"
             required
             :rules="[v => !!v || 'O nome é obrigatório']"
           ></v-text-field>
@@ -46,8 +25,8 @@
           <v-text-field
           density="compact"
             variant="outlined"
-            v-model="card.number_card"
-            label="Numero do cartão"
+            v-model="form.description"
+            label="Descrição"
             required
             class="my-1"
           ></v-text-field>
@@ -55,7 +34,7 @@
           <v-text-field
           density="compact"
             variant="outlined"
-            v-model="card.value"
+            v-model="form.value"
             label="Valor"
             required
             class="my-1"
@@ -66,13 +45,22 @@
           <v-select
           density="compact"
             variant="outlined"
-            v-model="card.month"
+            v-model="form.month"
             :items="items"
             label="Mês"
             required
             class="my-1"
             hide-details
           ></v-select>
+
+          <v-radio-group inline hide-details="">
+            <template v-slot:label>
+              <div><strong>Metodo de pagamento</strong></div>
+            </template>
+            <v-radio label="Cartão" value="1"></v-radio>
+            <v-radio label="Dinheiro" value="2"></v-radio>
+            <v-radio label="Pix" value="3"></v-radio>
+          </v-radio-group>
 
           <v-btn
             @click="postReleases"
@@ -88,22 +76,17 @@
 <script setup>
 const { postTransactions, getTransactions } = useTransactions()
 
-const card = ref({
+const form = ref({
   name: null,
-  number_card: null,
-  bank: null,
-  type: null,
-  flag: null,
-  expiration: null,
-  code: null
+  description: null,
+  value: null,
+  month: null,
+  type: null
 })
 
-// Visa: 4;
-// Mastercard: 51, 52, 53, 54 e 55;
-// Diners Club: 36 e 38;
-// Discover: 6011 e 65;
-// JCB: 35;
-// American Express: 34 e 37.
+const items = ref([
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+])
 
 onMounted(() => {
   getTeste()
