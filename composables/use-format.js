@@ -37,3 +37,5 @@ export const formatDate = (dataUTC, formato = "dd/MM/yyyy") => {
     // .replace("mm", dataFormatada.substr(14, 2))
     // .replace("ss", dataFormatada.substr(17, 2));
 }
+
+export const formattedNumber = (number) => number.toString().match(/.{1,4}/g)?.join(' ');
