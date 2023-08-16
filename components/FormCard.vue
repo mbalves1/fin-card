@@ -14,7 +14,7 @@
               {{ card.type || 'Credito' }}
             </div>
             <div style="font-size: 13px;">
-              {{ testetype }}
+              <v-img v-if="flagCard === 'Mastercard' || flagCard === 'Visa'" :src="`/img/${flagCard}.svg`" alt="" width="40"/>
             </div>
           </div>
           <div class="mt-10">
@@ -109,7 +109,7 @@
   </v-container>
 </template>
 <script setup>
-const { postTransactions, getTransactions } = useTransactions()
+const { postCard } = useCardStore()
 
 const card = ref({
   name: null,
@@ -121,74 +121,39 @@ const card = ref({
   code: null
 })
 
-const testetype = ref(null)
+const flagCard = ref(null)
 
 const sendCard = () => {
-  console.log("card", card.value)
-}
-
-// Visa: 4;
-// Mastercard: 51, 52, 53, 54 e 55;
-// Diners Club: 36 e 38;
-// Discover: 6011 e 65;
-// JCB: 35;
-// American Express: 34 e 37.
-
-const verificarBandeira = () => {  
-  const num1 = card.number_card
-
-  console.log(num1)
-
-  // if (primeiroDigito === 4) {
-  //     return "Visa";
-  // } else if ([51, 52, 53, 54, 55].includes(doisPrimeirosDigitos)) {
-  //     return "Mastercard";
-  // } else if ([36, 38].includes(doisPrimeirosDigitos)) {
-  //     return "Diners Club";
-  // } else if ([6011, 65].includes(quatroPrimeirosDigitos)) {
-  //     return "Discover";
-  // } else if (doisPrimeirosDigitos === 35) {
-  //     return "JCB";
-  // } else if ([34, 37].includes(doisPrimeirosDigitos)) {
-  //     return "American Express";
-  // } else {
-  //     return "Bandeira desconhecida";
-  // }
+  card.value = {
+    ...card.value,
+    flag: flagCard
+  }
+  postCard(card.value)
 }
 
 watch(
   () => card.value.number_card,
   (numberCard) => {
     const cardNumberStr = Number(numberCard)
-    console.log(cardNumberStr);
     const firstDigit = parseInt(cardNumberStr.toString()[0]);
     const firstTwoDigits = parseInt(cardNumberStr.toString().substring(0, 2));
     const firstFourDigits = parseInt(cardNumberStr.toString().substring(0, 2));
 
   if (firstDigit === 4) {
-    return testetype.value = 'Visa';
+    return flagCard.value = 'Visa';
     } else if ([51, 52, 53, 54, 55].includes(firstTwoDigits)) {
-      return testetype.value = 'Mastercard';
+      return flagCard.value = 'Mastercard';
     } else if ([36, 38].includes(firstTwoDigits)) {
-      return testetype.value = 'Diners Club';
+      return flagCard.value = 'Diners Club';
     } else if ([6011, 65].includes(firstFourDigits)) {
-      return testetype.value = 'Discover';
+      return flagCard.value = 'Discover';
     } else if (firstTwoDigits === 65) {
-      return testetype.value = 'JCB';
+      return flagCard.value = 'JCB';
     } else if ([34, 37].includes(firstTwoDigits)) {
-      return testetype.value = 'American Express';
+      return flagCard.value = 'American Express';
     } else {
-      return testetype.value = card.type;
+      return flagCard.value = card.type;
     }
   }
 )
-
-onMounted(() => {
-  getTeste()
-})
-
-const getTeste = async () => {
-  await getTransactions()
-}
-
 </script>

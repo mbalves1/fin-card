@@ -1,5 +1,4 @@
 export const formatCurrency = (valor = 0) => {
-  console.log(valor);
   // Verifica se o valor é um número
   if (typeof valor !== "number") {
     throw new Error("O valor informado não é um número.");

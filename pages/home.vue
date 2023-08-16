@@ -22,12 +22,18 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="4" class="pa-5">
+      <v-col cols="12" lg="4" sm="12" class="pa-5">
         <v-sheet class="text-h4 d-flex px-5" style="">
           Credits cards
         </v-sheet>
-        <v-sheet class="wrapper--list">
-          <ListCards></ListCards>
+        <v-sheet class="wrapper d-sm-flex d-xs-flex flex-lg-column">
+          <ListCards :data="cards" @openModalCard="teste"></ListCards>
+          <div class="d-flex justify-end">
+            <v-dialog v-model="openModal" location-strategy="connected"
+            class="d-flex justify-end">
+              <ModalRegisterCard class="d-flex justify-end"></ModalRegisterCard>
+            </v-dialog>
+          </div>
         </v-sheet>
       </v-col>
     </v-row>
@@ -45,10 +51,13 @@
   </v-container>
 </template>
 <script setup>
+
   const { getTransactions, transactions } = useTransactions()
+  const { getCards } = useCardStore()
 
   const data = ref()
   const size = ref(0);
+  const cards = ref(null)
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
@@ -59,16 +68,16 @@
     } catch (error) {
       console.error(error)
     }
-    // releasesIn.value = release.filter(rel => rel.type === 'Entrada');
   });
   
   const fetchData = async () => {
     try {
-      const m = await getTransactions()
-      data.value = m
-      console.log("mmmm", m)
+      const transations = await getTransactions()
+      const fecthCards = await getCards()
+      data.value = await transations
+      cards.value = fecthCards
+
       totalBalance
-      console.log("chama", data.value)
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
       releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
     } catch (error) {
@@ -77,14 +86,12 @@
   }
 
   const totalBalance = computed(() => {
-    const total = data.value?.reduce((acc, item) => {
-      size.value = data.value.length
-      if (item.type === "Saída") {
-        return acc - item.value
-      } else if (item.type === "Entrada") {
-        return acc + item.value
-      }
-    }, 0)
+    const out = releasesOut.value.map(i => i.value)
+    const inRel = releasesIn.value.map(i => i.value)
+
+    size.value = out.length + inRel.length
+
+    const total = (inRel.reduce((accumulator, currentValue) => accumulator + currentValue, 0) - out.reduce((accumulator, currentValue) => accumulator + currentValue, 0));
     return formatCurrency(total)
   })
 
@@ -94,7 +101,8 @@
         datasets: [
           {
             backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-            data: releasesOut.value.map(rel => rel.value)
+            data: releasesOut.value.map(rel => rel.value),
+            borderRadius: 10
           },
         ]
       };
@@ -110,6 +118,7 @@
             // backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
             minBarLength: 10,
             fill: 'origin',
+            borderRadius: 10,
             data: releasesIn.value.map(rel => rel.value)
           },
         ]
@@ -124,18 +133,35 @@
           legend: false,
           filler: {
             propagate: false
-          }
+          },
           // legend: {
-          //   position: 'right',
-          //   labels: {
-          //     usePointStyle: true
-          //   }
-          // }
-        }
+            //   position: 'right',
+            //   labels: {
+              //     usePointStyle: true
+              //   }
+              // }
+        },
+        scales: {
+          y: {
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
       };
     });
 
-    // return { totalBalance, balance, releaseLenght, len, chartData, chartOptions, chartDataIn }
+    const openModal = ref(false);
+
+    const teste = (event) => {
+      openModal.value = event
+      console.log(event);
+    };
 </script>
 <style scoped lang="scss">
 .wrapper {
