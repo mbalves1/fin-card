@@ -1,6 +1,6 @@
 <template>
   <v-card
-    :color="'black'"
+    :color="card.color"
     elevation="10"
     class="rounded-lg pa-4 pt-3 d-flex flex-column justify-space-around"
   >
@@ -35,6 +35,8 @@ defineProps({
     type: Object
   },
 })
+
+const { colorState } = useCardStore()
 
 
 </script>

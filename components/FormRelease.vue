@@ -3,13 +3,13 @@
     <v-row class="d-flex justify-center">
       <v-col cols="12" lg="3" md="12">
         <form>
-          <v-radio-group inline hide-details="" v-model="form.type">
+          <!-- <v-radio-group inline hide-details="" v-model="form.type">
             <template v-slot:label>
               <div><strong>Tipo de lançamento</strong></div>
             </template>
             <v-radio label="Entrada" value="Entrada"></v-radio>
             <v-radio label="Saída" value="Saída"></v-radio>
-          </v-radio-group>
+          </v-radio-group> -->
 
           <v-text-field
           density="compact"
@@ -62,6 +62,19 @@
             <v-radio label="Pix" value="3"></v-radio>
           </v-radio-group>
 
+          <v-select
+            density="compact"
+            variant="outlined"
+            v-model="form.attached"
+            :items="cards"
+            item-title="bank"
+            item-value="bank"
+            label="Mês"
+            required
+            class="my-1"
+            hide-details
+          ></v-select>
+
           <v-btn
             @click="postReleases"
           >
@@ -75,30 +88,46 @@
 </template>
 <script setup>
 const { postTransactions, getTransactions } = useTransactions()
+const { getCards } = useCardStore()
 
 const form = ref({
   name: null,
   description: null,
   value: null,
   month: null,
-  type: null
+  type: "Saída",
+  attached: null
 })
 
 const items = ref([
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ])
 
-onMounted(() => {
-  getTeste()
+const cards = ref([])
+
+onMounted(async () => {
+  await fetchTransactions()
+  await fetchCards()
 })
 
-const getTeste = async () => {
+const fetchCards = async () => {
+  const card = await getCards()
+  console.log('card', card);
+  cards.value = card
+}
+
+const fetchTransactions = async () => {
   await getTransactions()
 }
 
 const postReleases = async () => {
+  const card = cards.value.filter(item => item.bank === form.value.attached)
+  const payload = {
+    ...form.value, attached: card
+  }
+  console.log("attached", payload)
   try {
-    const transaction = await postTransactions(form.value);
+    const transaction = await postTransactions(payload);
 
   } catch (error) {
     console.error(error);

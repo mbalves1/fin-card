@@ -22,16 +22,16 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" lg="4" sm="12" class="pa-5">
+      <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
         <v-sheet class="text-h4 d-flex px-5" style="">
           Credits cards
         </v-sheet>
-        <v-sheet class="wrapper d-sm-flex d-xs-flex flex-lg-column">
-          <ListCards :data="cards" @openModalCard="teste"></ListCards>
+        <v-sheet class="wrapper d-sm-flex d-xs-flex flex-lg-column flex-sm-row overflow-x-auto">
+          <ListCards :data="cards" @openModalCard="teste" ></ListCards>
           <div class="d-flex justify-end">
             <v-dialog v-model="openModal" location-strategy="connected"
             class="d-flex justify-end">
-              <ModalRegisterCard class="d-flex justify-end"></ModalRegisterCard>
+              <ModalRegisterCard @closeModal="teste" class="d-flex justify-end"></ModalRegisterCard>
             </v-dialog>
           </div>
         </v-sheet>
@@ -97,13 +97,14 @@
 
     const chartData = computed(() => {
       return {
-        labels: releasesOut.value.map(rel => rel.name),
+        labels: releasesOut.value.map(rel => rel.month),
         datasets: [
           {
+            label: "Serie1",
             backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
             data: releasesOut.value.map(rel => rel.value),
             borderRadius: 10
-          },
+          }
         ]
       };
     });
@@ -160,7 +161,6 @@
 
     const teste = (event) => {
       openModal.value = event
-      console.log(event);
     };
 </script>
 <style scoped lang="scss">
