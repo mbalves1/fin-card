@@ -1,5 +1,5 @@
 <template>
-  <v-card width="auto" max-width="500" height="auto" class="d-flex pa-3 px-md-5">
+  <v-card :width="size ? '100%' : '500'" max-width="500" height="auto" class="pa-3 px-md-5 ml-auto">
     <div class="d-flex flex-row-reverse">
       <v-icon @click="close">mdi-close-circle-outline</v-icon>
     </div>
@@ -140,6 +140,21 @@ const card = ref({
   expiration: null,
   code: null
 })
+
+const size = ref(true)
+
+onMounted(() => {
+  size.value = window.innerWidth
+  window.addEventListener('resize', updatesizeValue);
+});
+
+const updatesizeValue = () => {
+  size.value = window.innerWidth;
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updatesizeValue);
+});
 
 const openMenu = ref(false)
 

@@ -15,7 +15,7 @@
           <v-divider class="my-2 mb-5"></v-divider>
 
           <div v-if="releasesIn">
-            <BarChart :data="chartDataIn" :options="chartOptions" class="doughnut" ></BarChart>
+            <BarChart :data="chartDataCard" :options="chartOptions" class="doughnut" ></BarChart>
           </div>
           <div v-if="releasesOut" class="mt-10">
             <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
@@ -23,15 +23,18 @@
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
-        <v-sheet class="text-h4 d-flex px-5" style="">
-          Credits cards
+        <v-sheet class="text-h4 d-flex px-5 alig-center" style="">
+          <v-title>Credits cards</v-title>
+          <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
-        <v-sheet class="wrapper d-sm-flex d-xs-flex flex-lg-column flex-sm-row overflow-x-auto">
-          <ListCards :data="cards" @openModalCard="teste" ></ListCards>
-          <div class="d-flex justify-end">
-            <v-dialog v-model="openModal" location-strategy="connected"
-            class="d-flex justify-end">
-              <ModalRegisterCard @closeModal="teste" class="d-flex justify-end"></ModalRegisterCard>
+        <v-sheet class="">
+          <div class="cardlist">
+            <ListCards :data="cards" @openModalCard="openModalToRegister" ></ListCards>
+          </div>
+          <div class="">
+            <v-dialog v-model="openModal"
+            class="">
+              <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end"></ModalRegisterCard>
             </v-dialog>
           </div>
         </v-sheet>
@@ -95,36 +98,51 @@
     return formatCurrency(total)
   })
 
-    const chartData = computed(() => {
-      return {
-        labels: releasesOut.value.map(rel => rel.month),
-        datasets: [
-          {
-            label: "Serie1",
-            backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-            data: releasesOut.value.map(rel => rel.value),
-            borderRadius: 10
-          }
-        ]
-      };
-    });
+  const removeDuplicate = (data) => [...new Set(data)]
 
-    const chartDataIn = computed(() => {
-      return {
-        labels: releasesIn.value.map(rel => rel.name),
-        datasets: [
-          {
-            label: 'Entradas',
-            backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
-            // backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-            minBarLength: 10,
-            fill: 'origin',
-            borderRadius: 10,
-            data: releasesIn.value.map(rel => rel.value)
-          },
-        ]
-      };
-    });
+  const chartData = computed(() => {
+    const monthsToSum = removeDuplicate(releasesOut.value.map(rel => rel.month))
+    const result = releasesOut.value.reduce((accumulator, currentItem) => {
+      const { month, value } = currentItem;
+      if (!accumulator[month]) {
+        accumulator[month] = value;
+      } else {
+        accumulator[month] += value;
+      }
+      return accumulator;
+    }, {});
+    const summedValues = monthsToSum.map(month => result[month]);
+    console.log("result", result);
+
+    return {
+      labels: monthsToSum,
+      datasets: [
+        {
+          backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
+          data: summedValues,
+          borderRadius: 10
+        }
+      ]
+    };
+  });
+
+  const chartDataCard = computed(() => {
+
+    return {
+      labels: releasesIn.value.map(rel => rel.name),
+      datasets: [
+        {
+          label: 'Entradas',
+          backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
+          // backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
+          minBarLength: 10,
+          fill: 'origin',
+          borderRadius: 10,
+          data: releasesIn.value.map(rel => rel.value)
+        },
+      ]
+    };
+  });
 
     const chartOptions = computed(() => {
       return {
@@ -159,7 +177,7 @@
 
     const openModal = ref(false);
 
-    const teste = (event) => {
+    const openModalToRegister = (event) => {
       openModal.value = event
     };
 </script>
@@ -169,6 +187,16 @@
   &--list {
     height: 400px;
     overflow-y: scroll;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .cardlist {
+    width: 500px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
   }
 }
 </style>

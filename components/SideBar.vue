@@ -18,6 +18,7 @@
       class="ml-4 mt-5"
     >
       <strong>Fin.plan</strong>
+      <!-- <v-img src="/img/coins.gif"></v-img> -->
       <template v-slot:append>
         <v-btn
           variant="text"
@@ -80,7 +81,7 @@
   // )
 
 </script>
-<style>
+<style lang="scss">
 .app {
   padding: 0px;
   margin: 0px;

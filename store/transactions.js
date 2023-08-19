@@ -12,8 +12,9 @@ export const useTransactions = defineStore('transactions', {
         const response = await postTransactions(payload, token)
         const data = await response.json()
         this.transactions = data
+        return
       } catch (error) {
-        throw new Error('Error to register a new transaction');
+        console.error(error)
       }
     },
     async getTransactions() {
