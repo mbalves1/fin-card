@@ -1,4 +1,30 @@
 <template>
+  <v-layout class="overflow-visible responsive" style="height: 56px;">
+    <v-bottom-navigation
+      v-model="value"
+      color="primary"
+      horizontal
+      bg-color="#f2f2f2"
+    >
+      <v-btn>
+        <v-icon>mdi-history</v-icon>
+
+        Recents
+      </v-btn>
+
+      <v-btn>
+        <v-icon>mdi-heart</v-icon>
+
+        Favorites
+      </v-btn>
+
+      <v-btn>
+        <v-icon>mdi-map-marker</v-icon>
+
+        Nearby
+      </v-btn>
+    </v-bottom-navigation>
+  </v-layout>
   <v-navigation-drawer
     style="background: #f2f2f2;"
     v-model="drawer"
@@ -61,6 +87,8 @@
   const openMenu = ref(false)
   const route = useRoute()
 
+  const value = ref(1)
+
   onMounted(() => {
     size.value = window.innerWidth
     window.addEventListener('resize', updatesizeValue);
@@ -106,6 +134,17 @@
 
 .h-90 {
   height: 90% !important;
+}
+
+.responsive {
+  display: none;
+}
+
+.navBarLeft {
+  display: block;
+  @media screen and (max-width:425px) {
+    display: none;
+  }
 }
 </style>
 

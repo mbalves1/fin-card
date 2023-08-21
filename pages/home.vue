@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mt-6 mx-auto">
+  <v-container class="mt-6 mx-auto w-100">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
         <v-sheet class="me-auto">
@@ -14,22 +14,24 @@
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
 
-          <div v-if="releasesIn">
+          <!-- <div v-if="releasesIn">
             <BarChart :data="chartDataCard" :options="chartOptions" class="doughnut" ></BarChart>
-          </div>
+          </div> -->
           <div v-if="releasesOut" class="mt-10">
-            <BarChart :data="chartData" :options="chartOptions" class="doughnut" ></BarChart>
+            <BarChart :data="chartData" :options="chartOptions" style="height: 300px"></BarChart>
           </div>
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
-        <v-sheet class="text-h4 d-flex px-5 alig-center" style="">
-          <v-title>Credits cards</v-title>
+        <v-sheet class="text-h4 d-flex px-5 align-center" style="">
+          <v-chip>{{ cardsNumber }}</v-chip>
+          <v-title class="mx-2">Credits cards</v-title>
+          <!-- <span class="fs-10">{{ cardsNumber }} cards</span> -->
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
         <v-sheet class="">
           <div class="cardlist">
-            <ListCards :data="cards" @openModalCard="openModalToRegister" ></ListCards>
+            <ListCards :data="cards" @openModalCard="openModalToRegister" class="ml-10"></ListCards>
           </div>
           <div class="">
             <v-dialog v-model="openModal"
@@ -41,13 +43,12 @@
       </v-col>
     </v-row>
     <v-row class="mt-6">
-      <v-col class="wrapper rounded-xl mt-6 mr-6 pa-5">
+      <v-col class="wrapper rounded-xl mt-6 pa-5">
         <v-sheet class="text-h4 d-flex px-5" style="">
           Transactions
         </v-sheet>
         <ListRelease
-          @total="totalBalance"
-          @releaseLenght="releaseLenght">
+          :data="data">
         </ListRelease>
       </v-col>
     </v-row>
@@ -61,9 +62,12 @@
   const data = ref()
   const size = ref(0);
   const cards = ref(null)
+  const cardsNumber = ref(0)
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
+
+  // const cardsNumber = computed(() => cards?.value.length)
 
   onMounted(async () => {
     try {
@@ -79,6 +83,7 @@
       const fecthCards = await getCards()
       data.value = await transations
       cards.value = fecthCards
+      cardsNumber.value = cards?.value.length 
 
       totalBalance
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
@@ -98,29 +103,27 @@
     return formatCurrency(total)
   })
 
-  const removeDuplicate = (data) => [...new Set(data)]
-
   const chartData = computed(() => {
-    const monthsToSum = removeDuplicate(releasesOut.value.map(rel => rel.month))
-    const result = releasesOut.value.reduce((accumulator, currentItem) => {
-      const { month, value } = currentItem;
-      if (!accumulator[month]) {
-        accumulator[month] = value;
-      } else {
-        accumulator[month] += value;
-      }
-      return accumulator;
-    }, {});
-    const summedValues = monthsToSum.map(month => result[month]);
-    console.log("result", result);
 
+    const releases = releasesOut.value;
+    const filledValues = Array(12).fill(0);
+    const monthMap = {
+      "Janeiro": 0, "Fevereiro": 1, "Março": 2, "Abril": 3, "Maio": 4, "Junho": 5,
+      "Julho": 6, "Agosto": 7, "Setembro": 8, "Outubro": 9, "Novembro": 10, "Dezembro": 11
+    };
+
+    releases.forEach(rel => {
+      const monthIndex = monthMap[rel.month];
+      filledValues[monthIndex] += rel.value;
+    });
+    
     return {
-      labels: monthsToSum,
+      labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
       datasets: [
         {
           backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-          data: summedValues,
-          borderRadius: 10
+          data: filledValues,
+          borderRadius: 5
         }
       ]
     };
@@ -190,8 +193,14 @@
   }
 }
 
+.cardlist {
+  height: 400px;
+  overflow-y: scroll;
+}
+
 @media screen and (max-width: 600px) {
   .cardlist {
+    height: auto;
     width: 500px;
     overflow-x: auto;
     white-space: nowrap;
