@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postLogin, registerUser } from "../server/api-login.js"
+import { postLogin, registerUser, getUser } from "../server/api-login.js"
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -27,6 +27,16 @@ export const useUserStore = defineStore('user', {
         this.user.token = response.token
         localStorage.setItem("token", response.token)
 
+        return response
+      } catch (error) {
+        throw new Error('Error login');
+      }
+    },
+    async getUser(id) {
+      console.log("id", id);
+      try {
+        const response = await getUser(id)
+        console.log("respoie", response);
         return response
       } catch (error) {
         throw new Error('Error login');

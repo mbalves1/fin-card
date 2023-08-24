@@ -43,13 +43,12 @@
       </v-col>
     </v-row>
     <v-row class="mt-6">
-      <v-col class="wrapper rounded-xl mt-6 pa-5">
+      <v-col class="wrapper rounded-xl mt-6 pa-5 mx-auto">
         <v-sheet class="text-h4 d-flex px-5" style="">
           Transactions
         </v-sheet>
-        <ListRelease
-          :data="data">
-        </ListRelease>
+
+        <TableRelease :data="data"></TableRelease>
       </v-col>
     </v-row>
   </v-container>
@@ -58,6 +57,7 @@
 
   const { getTransactions, transactions } = useTransactions()
   const { getCards } = useCardStore()
+  const { getUser } = useUserStore()
 
   const data = ref()
   const size = ref(0);

@@ -54,7 +54,7 @@
       </template>
     </v-list-item>
 
-    <v-divider></v-divider>
+    <v-divider v-if="size > 600"></v-divider>
 
     <v-col class="d-flex justify-space-between flex-column h-90 pa-0">
       <v-list density="compact" nav class="ml-3" base-color="black">
