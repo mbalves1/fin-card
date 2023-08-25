@@ -22,10 +22,12 @@ export async function registerUser(payload) {
   return data;
 }
 
-export async function getUser(id) {
-  const response = await fetch(`https://backend-finplan.vercel.app/api/auth/user/${id}`, {
+export async function getUser() {
+  const token = localStorage.getItem("token")
+  const response = await fetch(`https://backend-finplan.vercel.app/api/user`, {
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   });
   const data = await response.json();

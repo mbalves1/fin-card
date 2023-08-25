@@ -17,9 +17,11 @@
           <!-- <div v-if="releasesIn">
             <BarChart :data="chartDataCard" :options="chartOptions" class="doughnut" ></BarChart>
           </div> -->
-          <div v-if="releasesOut" class="mt-10">
-            <BarChart :data="chartData" :options="chartOptions" style="height: 300px"></BarChart>
-          </div>
+          <v-card variant="flat" class="border rounded-lg pa-10">
+            <div v-if="releasesOut" class="mt-10">
+              <BarChart :data="chartData" :options="chartOptions" style="height: 300px"></BarChart>
+            </div>
+          </v-card>
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
@@ -30,7 +32,7 @@
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
         <v-sheet class="">
-          <div class="cardlist">
+          <div class="cardlist mt-8">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class="ml-10"></ListCards>
           </div>
           <div class="">
@@ -72,10 +74,20 @@
   onMounted(async () => {
     try {
       await fetchData()
+      await fecthUser()
     } catch (error) {
       console.error(error)
     }
   });
+
+  const fecthUser = async () => {
+    try {
+      const user = await getUser()
+      console.log(user)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   const fetchData = async () => {
     try {
@@ -194,8 +206,25 @@
 }
 
 .cardlist {
-  height: 400px;
+  height: 500px;
   overflow-y: scroll;
+}
+
+.cardlist::-webkit-scrollbar {
+  width: 2px; /* largura da barra de rolagem */
+  border-radius: 10px;
+}
+
+.cardlist::-webkit-scrollbar-thumb {
+  background-color: #74C27F; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
+}
+
+.cardlist::-webkit-scrollbar-thumb:hover {
+  background-color: #a5daac; /* cor do "polegar" ao passar o mouse por cima */
+}
+
+.cardlist::-webkit-scrollbar-track {
+  background-color: #f2f2f2; /* cor da trilha (fundo da barra de rolagem) */
 }
 
 @media screen and (max-width: 600px) {

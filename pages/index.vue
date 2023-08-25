@@ -5,8 +5,9 @@
         <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
           <div class="custom">
             <div class="animate one">
-              <strong><span>f</span><span>i</span><span>n</span><span>.</span>
-              <span class="custom--subtitle">p</span><span class="custom--subtitle">l</span><span class="custom--subtitle">a</span><span class="custom--subtitle">n</span></strong>
+              <strong><i><span>P</span><span>a</span><span>y</span>
+            <!-- <span>.</span> -->
+              <span class="custom--subtitle">f</span><span class="custom--subtitle">y</span></i></strong>
             </div>
           </div>
           <div class="px-10 d-flex justify-center flex-column mt-5">

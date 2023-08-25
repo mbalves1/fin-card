@@ -24,6 +24,10 @@
   font-size: 10px;
 }
 
+.fs-30 {
+  font-size: 30px;
+}
+
 .mdi-wallet {
   font-size: 36px;
   color: green;

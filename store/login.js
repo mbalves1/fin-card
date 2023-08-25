@@ -32,11 +32,11 @@ export const useUserStore = defineStore('user', {
         throw new Error('Error login');
       }
     },
-    async getUser(id) {
-      console.log("id", id);
+    async getUser() {
       try {
-        const response = await getUser(id)
+        const response = await getUser()
         console.log("respoie", response);
+        localStorage.setItem("User", JSON.stringify(response.user))
         return response
       } catch (error) {
         throw new Error('Error login');

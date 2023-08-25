@@ -37,14 +37,15 @@
   >
     <v-list-item
       prepend-icon="mdi-wallet"
-      title="Manager system"
+      :subtitle="nameUser"
       nav
       absolute
       color="blue"
       class="ml-4 mt-5"
     >
-      <strong>Fin.plan</strong>
+      <strong><i>Payfy</i></strong>
       <!-- <v-img src="/img/coins.gif"></v-img> -->
+      <!-- <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/card-wallet.png" alt="card-wallet"/> -->
       <template v-slot:append>
         <v-btn
           variant="text"
@@ -65,16 +66,20 @@
           <v-list-item prepend-icon="mdi-finance" title="Dashboard" value="account"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/release-register">
-          <v-list-item prepend-icon="mdi-credit-card" title="Add Release" value="release"></v-list-item>
+          <v-list-item prepend-icon="mdi-cogs" title="Settings" value="release"></v-list-item>
         </NuxtLink>
-        <NuxtLink class="list-text" to="/card-register">
+        <!-- <NuxtLink class="list-text" to="/card-register">
           <v-list-item prepend-icon="mdi-credit-card" title="Add Card" value="Card"></v-list-item>
         </NuxtLink>
+        <NuxtLink class="list-text" to="/card-register"> -->
+          <!-- Folder pq quero enviar documentos, input file -->
+          <!-- <v-list-item prepend-icon="mdi-folder-account" title="Profile" value="Card"></v-list-item>
+        </NuxtLink> -->
       </v-list>
 
       <v-list base-color="black" class="pa-0">
         <NuxtLink class="list-text" to="/">
-          <v-list-item prepend-icon="mdi-logout" title="Logout" value="Card"></v-list-item>
+          <v-list-item @click="handleLogout" prepend-icon="mdi-logout" title="Logout" value="Card"></v-list-item>
         </NuxtLink>
       </v-list>
     </v-col>
@@ -88,10 +93,18 @@
   const route = useRoute()
 
   const value = ref(1)
+  const nameUser = ref(null)
+
+  const handleLogout = () => {
+    localStorage.clear();
+    route.push("/")
+  }
 
   onMounted(() => {
     size.value = window.innerWidth
     window.addEventListener('resize', updatesizeValue);
+    nameUser.value = JSON.parse(localStorage.getItem("User"))?.first_name
+    console.log("nameUser", JSON.parse(localStorage.getItem("User")))
   });
 
   const updatesizeValue = () => {

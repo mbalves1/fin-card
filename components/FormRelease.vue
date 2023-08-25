@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container class="mt-6 mx-auto w-100 align-center">
     <v-row class="d-flex justify-center">
-      <v-col cols="12" lg="3" md="12">
-        <form>
+      <v-col cols="12" lg="6" md="12">
+        <form class="px-5 py-10 border rounded-lg" >
           <!-- <v-radio-group inline hide-details="" v-model="form.type">
             <template v-slot:label>
               <div><strong>Tipo de lançamento</strong></div>
