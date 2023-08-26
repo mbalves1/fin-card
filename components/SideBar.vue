@@ -37,13 +37,13 @@
   >
     <v-list-item
       prepend-icon="mdi-wallet"
-      :subtitle="nameUser"
       nav
       absolute
       color="blue"
       class="ml-4 mt-5"
     >
-      <strong><i>Payfy</i></strong>
+    <div class="fs-10"><strong><i>Payfy</i></strong></div>
+    <div><strong>{{ nameUser }}</strong></div>
       <!-- <v-img src="/img/coins.gif"></v-img> -->
       <!-- <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/card-wallet.png" alt="card-wallet"/> -->
       <template v-slot:append>
@@ -64,6 +64,9 @@
         </NuxtLink>
         <NuxtLink class="list-text" to="/dash">
           <v-list-item prepend-icon="mdi-finance" title="Dashboard" value="account"></v-list-item>
+        </NuxtLink>
+        <NuxtLink class="list-text" to="/table">
+          <v-list-item prepend-icon="mdi-table" title="Table" value="table"></v-list-item>
         </NuxtLink>
         <NuxtLink class="list-text" to="/release-register">
           <v-list-item prepend-icon="mdi-cogs" title="Settings" value="release"></v-list-item>
@@ -114,12 +117,6 @@
   onBeforeUnmount(() => {
     window.removeEventListener('resize', updatesizeValue);
   });
-
-  // watch(
-  //   () => route.path,
-  //   (newRoute) => newRoute != "/" ? openMenu.value = false : openMenu.value = true
-
-  // )
 
 </script>
 <style lang="scss">

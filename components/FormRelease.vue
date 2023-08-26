@@ -1,8 +1,8 @@
 <template>
   <v-container class="mt-6 mx-auto w-100 align-center">
     <v-row class="d-flex justify-center">
-      <v-col cols="12" lg="6" md="12">
-        <form class="px-5 py-10 border rounded-lg" >
+      <v-col cols="12" lg="6" md="12">  
+        <form class="px-5 pb-10 border rounded-lg" >
           <!-- <v-radio-group inline hide-details="" v-model="form.type">
             <template v-slot:label>
               <div><strong>Tipo de lançamento</strong></div>
@@ -10,6 +10,8 @@
             <v-radio label="Entrada" value="Entrada"></v-radio>
             <v-radio label="Saída" value="Saída"></v-radio>
           </v-radio-group> -->
+
+          <v-card-title class="py-5">Registration</v-card-title>
 
           <v-text-field
           density="compact"
@@ -69,7 +71,7 @@
             :items="cards"
             item-title="bank"
             item-value="bank"
-            label="Mês"
+            label="Card"
             required
             class="my-1"
             hide-details
@@ -77,6 +79,9 @@
 
           <v-btn
             @click="postReleases"
+            class="w-100 primary-color mt-5"
+            variant="flat"
+            color="#74C27F"
           >
             Send
           </v-btn>

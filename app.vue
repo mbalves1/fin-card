@@ -7,6 +7,15 @@
 <script setup>
 </script>
 <style>
+.primary-bg {
+  background-color: var(--v-primary-base);
+  color: white;
+}
+
+.primary-color {
+  color: var(--v-primary-base);
+}
+
 .app {
   padding: 0px;
   margin: 0px;

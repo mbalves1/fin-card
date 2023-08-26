@@ -1,12 +1,11 @@
 <template>
-  <v-card :width="size ? '100%' : '500'" max-width="500" height="auto" class="pa-3 px-md-5 ml-auto">
-    <div class="d-flex flex-row-reverse">
+  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="pa-3 px-md-5 ml-auto border rounded-lg" :variant="variant">
+    <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
       <v-icon @click="close">mdi-close-circle-outline</v-icon>
     </div>
     <div class="overflow-y-auto py-1">
       <v-menu>
         <template v-slot:activator="{ props }">
-          {{ color }}
           <v-card
             :color="color"
             elevation="10"
@@ -55,8 +54,6 @@
         </v-list>
       </v-menu>
       <form>
-        <v-text-title>Cartão</v-text-title>
-  
         <v-radio-group v-model="card.type" class="d-flex">
           <div class="d-flex" style="width: 250px;">
             <v-radio label="Crédito" value="Crédito"></v-radio>
@@ -120,6 +117,9 @@
   
         <v-btn
           @click="sendCard"
+          class="w-100 primary-color"
+          variant="flat"
+          color="#74C27F"
         >
           Send
         </v-btn>
@@ -130,6 +130,20 @@
 <script setup>
 const { postCard, colorState } = useCardStore()
 const emit = defineEmits()
+defineProps({
+  variant: {
+    type: String,
+    default: "flat"
+  },
+  hasCloseButton: {
+    type: Boolean,
+    default: true
+  },
+  isModal: {
+    type: Boolean,
+    default: true
+  }
+})
 
 const card = ref({
   name: null,

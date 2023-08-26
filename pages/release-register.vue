@@ -1,7 +1,7 @@
 <template>
   <v-container>
 
-  <div class="py-10 ml-10 fs-30">Pagina de cadastros</div>
+  <div class="py-10 ml-10 fs-30">{{ tabTitle }}</div>
   <v-card variant="flat">
     <div class="">
       <v-tabs
@@ -31,30 +31,36 @@
       <v-window v-model="tab">
         <v-window-item value="option-1">
           <v-card flat>
-            <v-card-text>
-              <p>
-                Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.
+            <v-card-text max-width="600">
+              <!-- <p>
+                Atualize Suas Informações com Conveniência - Edite Seu Perfil Pessoal de Forma Rápida e Segura
               </p>
 
               <p>
-                Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse non nisl sit amet velit hendrerit rutrum.
-              </p>
+                Manter suas informações pessoais precisas é essencial. Com nosso formulário de edição de perfil, você pode facilmente atualizar seus detalhes pessoais, garantindo que sua conta esteja sempre correta e atualizada. Nossa prioridade é a sua privacidade e segurança, então fique tranquilo ao fazer qualquer alteração.
+              </p> -->
 
-              <p class="mb-0">
-                <FormRelease></FormRelease> 
-              </p>
             </v-card-text>
+            <div class="mb-0">
+              Em construção...
+              <div class="d-flex justify-center align-center">
+                <v-img style="width: 500px; height: 500px" src="../public/img/building.svg"/>
+
+              </div>
+            </div>
           </v-card>
         </v-window-item>
         <v-window-item value="option-2">
           <v-card flat>
             <v-card-text>
               <div>
-                <v-card-title>Credits cards registration</v-card-title>
                 <p>
-                  Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
+                  Simplificando a Gestão Financeira - Cadastre seus Cartões de Crédito com Facilidade e Segurança
                 </p>
 
+                <p>
+                  Otimize o controle das suas finanças centralizando o cadastro dos seus cartões de crédito em um só lugar. Com nossa plataforma, você pode adicionar e gerenciar informações de seus cartões de crédito, permitindo uma visão abrangente das suas transações e gastos.
+                </p>
               </div>
               <FormCard></FormCard>
             </v-card-text>
@@ -63,9 +69,12 @@
         <v-window-item value="option-3">
           <v-card flat>
             <v-card-text>
-              <v-card-title>Transactions registration</v-card-title>
               <p>
-                Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
+                Mantenha Suas Finanças em Ordem - Registre Suas Transações para um Melhor Acompanhamento Financeiro
+              </p>
+
+              <p>
+                Tenha controle total sobre o seu dinheiro ao registrar cada transação que você realiza. Seja uma compra, um pagamento ou uma receita, registrar suas transações permitirá que você analise e entenda seus hábitos financeiros. Nossa plataforma oferece uma maneira simples e eficaz de manter seus registros financeiros sempre atualizados.
               </p>
 
               <FormRelease></FormRelease> 
@@ -77,10 +86,20 @@
   </v-card>
 </v-container>
 </template>
-<script>
-  export default {
-    data: () => ({
-      tab: 'option-1',
-    }),
-  }
+<script setup>
+
+  const tab = ref("option-1");
+
+  const tabTitle = computed(() => {
+    if (tab.value === "option-1") {
+      return "Editar Perfil Pessoal"
+    }
+    if (tab.value === "option-2") {
+      return "Credits cards registration"
+    }
+    if (tab.value === "option-3") {
+      return "Transactions registration"
+    }
+  })
+
 </script>

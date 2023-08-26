@@ -171,11 +171,11 @@ const expand2 = ref(false)
 const show1 = ref(false)
 const show2 = ref(false)
 const show3 = ref(false)
-const { postLogin, postRegister, user, msgError } = useUserStore()
+const { postLogin, postRegister, getUser, msgError } = useUserStore()
 
 const form = ref({
-  email: "mbalves1@outlook.com",
-  password: '123'
+  email: "",
+  password: ""
 })
 
 const register = ref({
@@ -198,6 +198,7 @@ const loginIn = async () => {
     loading.value = false
     
     if (token) router.push("/home")
+    
   } catch (error) {
     loading.value = false
     messageFail.value = true

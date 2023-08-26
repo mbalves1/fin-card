@@ -38,7 +38,7 @@
           <div class="">
             <v-dialog v-model="openModal"
             class="">
-              <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end"></ModalRegisterCard>
+              <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end" :isModal="true"></ModalRegisterCard>
             </v-dialog>
           </div>
         </v-sheet>
