@@ -42,7 +42,7 @@
       color="blue"
       class="ml-4 mt-5"
     >
-    <div class="fs-10"><strong><i>Payfy</i></strong></div>
+    <div class="fs-10"><strong><i>fin.<span style="color: #74C27F">card</span></i></strong></div>
     <div><strong>{{ nameUser }}</strong></div>
       <!-- <v-img src="/img/coins.gif"></v-img> -->
       <!-- <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/card-wallet.png" alt="card-wallet"/> -->
