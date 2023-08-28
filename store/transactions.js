@@ -17,14 +17,15 @@ export const useTransactions = defineStore('transactions', {
         console.error(error)
       }
     },
-    async getTransactions() {
+    async getTransactions(pages) {
       try {
-        const response = await getTransactions()
+        const response = await getTransactions(pages)
         const data = await response.json()
+        console.log("data", data)
         this.transactions = data
         return data
       } catch (error) {
-        throw new Error('Error to get transactions');
+        console.error(error)
       }
     },
   }

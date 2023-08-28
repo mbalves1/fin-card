@@ -35,7 +35,6 @@ export const useUserStore = defineStore('user', {
     async getUser() {
       try {
         const response = await getUser()
-        console.log("respoie", response);
         localStorage.setItem("User", JSON.stringify(response.user))
         return response
       } catch (error) {

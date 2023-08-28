@@ -16,9 +16,9 @@
       <tr v-for="(item, ix) in data" :key="ix">
         <td data-label="Name">{{item.name}}</td>
         <td data-label="Type">{{ item.type }}</td>
-        <td data-label="Card">{{item.attached[0].flag}}</td>
-        <td data-label="Bank">{{item.attached[0].bank}}</td>
-        <td data-label="Card type">{{item.attached[0].type}}</td>
+        <td data-label="Card">{{ item.attached }}</td>
+        <td data-label="Bank">{{ item.attached }}</td>
+        <td data-label="Card type">{{ item.attached }}</td>
         <td data-label="Value">{{item.value}}</td>
         <td data-label="Date">{{item.createdAt}}</td>
         <td data-label="">
@@ -30,11 +30,13 @@
   </table>
 </template>
 <script setup>
-  defineProps({
+  const props = defineProps({
     data: {
       type: Object
     }
   })
+
+  console.log("daata", props.data)
   
 
 </script>
@@ -117,6 +119,29 @@ table {
           left: 5px;
           position: absolute;
         }        
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  table {
+    border: 1px solid #eee;
+    border-collapse: collapse;
+    // max-width: 1320px;
+    text-align: left;
+    width: 100%;
+    min-width: 360px;
+    
+    thead {
+      th {
+        padding: 10px;
+      }
+    }
+
+    tbody {      
+      tr {
+        padding: 10px !important;
       }
     }
   }

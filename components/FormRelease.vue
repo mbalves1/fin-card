@@ -117,7 +117,6 @@ onMounted(async () => {
 
 const fetchCards = async () => {
   const card = await getCards()
-  console.log('card', card);
   cards.value = card
 }
 
@@ -130,7 +129,7 @@ const postReleases = async () => {
   const payload = {
     ...form.value, attached: card
   }
-  console.log("attached", payload)
+
   try {
     const transaction = await postTransactions(payload);
 

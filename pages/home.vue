@@ -50,7 +50,7 @@
           Transactions
         </v-sheet>
 
-        <TableRelease :data="data"></TableRelease>
+        <Table :hasPagination="false" :hasSearch="false" :data="data"></Table>
       </v-col>
     </v-row>
   </v-container>
@@ -68,6 +68,11 @@
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
+
+  const page = ref({
+    page: 1,
+    perPage: 1000
+  })
 
   // const cardsNumber = computed(() => cards?.value.length)
 
@@ -91,7 +96,7 @@
   
   const fetchData = async () => {
     try {
-      const transations = await getTransactions()
+      const transations = await getTransactions(page.value)
       const fecthCards = await getCards()
       data.value = await transations
       cards.value = fecthCards

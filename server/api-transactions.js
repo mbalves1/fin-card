@@ -11,9 +11,10 @@ export async function postTransactions(payload, token) {
   return data;
 }
 
-export async function getTransactions() {
+export async function getTransactions({ page, perPage }) {
+
   const token = localStorage.getItem("token")
-  return await fetch('https://backend-finplan.vercel.app/api/services', {
+  return await fetch(`https://backend-finplan.vercel.app/api/services?page=${page}&perPage=${perPage}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

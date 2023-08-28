@@ -2,7 +2,7 @@
   <v-container class="mx-auto">
     <v-row class="d-flex justify-center">
       <v-col cols="12" lg="10" md="12">
-        <div>
+        <div v-if="hasSearch">
           <v-text-field placeholder="Search" variant="outlined"></v-text-field>
         </div>
         <table>
@@ -20,13 +20,13 @@
           </thead>
           <tbody>
             <tr v-for="(item, ix) in data" :key="ix">
-              <td data-label="Name">{{item.name}}</td>
+              <td data-label="Name">{{ item.name}}</td>
               <td data-label="Type">{{ item.type }}</td>
-              <td data-label="Card">{{item.attached[0].flag}}</td>
-              <td data-label="Bank">{{item.attached[0].bank}}</td>
-              <td data-label="Card type">{{item.attached[0].type}}</td>
-              <td data-label="Value">{{item.value}}</td>
-              <td data-label="Date">{{item.createdAt}}</td>
+              <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
+              <td data-label="Bank">{{ formatedItem(item.attached, "bank") }}</td>
+              <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td>
+              <td data-label="Value">{{ item.value}}</td>
+              <td data-label="Date">{{ item.createdAt}}</td>
               <td data-label="">
                 <v-icon color="#70BB7B">mdi-delete</v-icon>
                 <v-icon color="#70BB7B">mdi-delete</v-icon>
@@ -34,7 +34,7 @@
             </tr>
           </tbody>
         </table>
-        <v-pagination :length="6">
+        <v-pagination v-if="hasPagination" :length="6">
         </v-pagination>
       </v-col>
     </v-row>
@@ -43,6 +43,18 @@
 <script setup>
   const data = ref()
   const { getTransactions } = useTransactions()
+
+  defineProps({
+    hasPagination: {
+      type: Boolean,
+      default: true
+    },
+    hasSearch: {
+      type: Boolean,
+      default: true
+    }
+  })
+
   onMounted(async () => {
     try {
       await fetchData()
@@ -51,9 +63,29 @@
     }
   });
 
+  const page =ref({
+    page: 1,
+    perPage: 10
+  })
+
+  const formatedItem = (item, params) => {
+    const fieldMapping = {
+      flag: 'flag',
+      bank: 'bank',
+      type: 'type'
+    };
+
+    if (fieldMapping.hasOwnProperty(params)) {
+      return item[0][fieldMapping[params]];
+    } else {
+      return 'Parâmetro inválido';
+    }
+  }
+
+
   const fetchData = async () => {
     try {
-      const transations = await getTransactions()
+      const transations = await getTransactions(page.value)
       data.value = await transations
     } catch (error) {
       console.error(error)
@@ -86,7 +118,7 @@ body {
 
 table {
   font-weight: 400;
-  min-width: 420px;
+  min-width: 360px;
   width: 100%;
   margin: auto;
   
@@ -100,13 +132,14 @@ table {
       border: 1px solid #dad6eb;
       border-radius: 5px;
       display: block;
-      padding: 30px;
+      padding: 10px;
       margin-bottom: 30px;
+      min-width: 360px;
       
       td {
         display: block;
         font-weight: 500;
-        padding: 5px;
+        padding: 0 5px;
         position: relative;
         text-align: right;
         
@@ -145,6 +178,29 @@ table {
   }
 }
 
+@media screen and (max-width: 425px) {
+  table {
+    border: 1px solid #eee;
+    border-collapse: collapse;
+    // max-width: 1320px;
+    text-align: left;
+    width: 100%;
+    min-width: 360px;
+    
+    thead {
+      th {
+        padding: 10px;
+      }
+    }
+
+    tbody {      
+      tr {
+        padding: 10px !important;
+      }
+    }
+  }
+}
+
 @media all and (min-width: 768px) {
   table {
     border: 1px solid #eee;
@@ -157,7 +213,7 @@ table {
       display: table-header-group;
       
       th {
-        padding: 10px;
+        padding: 10px !important;
       }
     }
     
@@ -165,6 +221,7 @@ table {
       font-size: .875em;
       
       tr {
+        padding: 10px !important;
         border: none;
         display: table-row;
         

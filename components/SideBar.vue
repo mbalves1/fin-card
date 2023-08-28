@@ -107,7 +107,6 @@
     size.value = window.innerWidth
     window.addEventListener('resize', updatesizeValue);
     nameUser.value = JSON.parse(localStorage.getItem("User"))?.first_name
-    console.log("nameUser", JSON.parse(localStorage.getItem("User")))
   });
 
   const updatesizeValue = () => {

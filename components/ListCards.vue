@@ -11,8 +11,8 @@
           class="mx-3 rr-2"
           height="145"
           width="100%"
-          min-width="330px"
-          max-width="330px"
+          min-width="300px"
+          max-width="300px"
           elevation="3"
           :card="card"
         >
