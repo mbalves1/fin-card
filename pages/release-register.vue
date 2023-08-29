@@ -44,7 +44,7 @@
             <div class="mb-0">
               Em construção...
               <div class="d-flex justify-center align-center">
-                <v-img style="width: 500px; height: 500px" src="../public/img/building.svg"/>
+                <v-img style="width: 500px; height: 500px" src="/img/building.svg"/>
 
               </div>
             </div>
