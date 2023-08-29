@@ -1,3 +1,3 @@
 <template>
-  <Table></Table>
+  <Table :hasSpacing="true"></Table>
 </template>

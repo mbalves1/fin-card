@@ -1,41 +1,69 @@
 <template>
   <v-container class="mx-auto">
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" lg="10" md="12">
-        <div v-if="hasSearch">
-          <v-text-field placeholder="Search" variant="outlined"></v-text-field>
+
+    <div v-if="hasSearch" class="py-10 ml-10 fs-30 mx-auto">Transactions</div>
+
+    <v-row class="d-flex justify-center" style="height: 70vh;">
+      <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th style="color: black">Name</th>
+                <th>Type</th>
+                <th>Card</th>
+                <!-- <th>Bank</th>
+                <th>Card type</th>
+                <th>Month</th> -->
+                <th>Value</th>
+                <th>Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- <pre>
+                {{ data.transactions }}
+              </pre> -->
+              <tr v-for="(item, ix) in data" :key="ix">
+                <td data-label="Name">{{ item.name}}</td>
+                <td data-label="Type">{{ item.type }}</td>
+                <!-- <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
+                <td data-label="Bank">{{ formatedItem(item.attached, "bank") }}</td>
+                <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td> -->
+                <td data-label="Month">{{ item.month }}</td>
+                <td data-label="Value">{{ item.value}}</td>
+                <td data-label="Date">{{ item.createdAt}}</td>
+                <td data-label="">
+                  <v-icon color="#70BB7B">mdi-delete</v-icon>
+                  <v-icon color="#70BB7B">mdi-delete</v-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="color: black">Name</th>
-              <th>Type</th>
-              <th>Card</th>
-              <th>Bank</th>
-              <th>Card type</th>
-              <th>Value</th>
-              <th>Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, ix) in data" :key="ix">
-              <td data-label="Name">{{ item.name}}</td>
-              <td data-label="Type">{{ item.type }}</td>
-              <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
-              <td data-label="Bank">{{ formatedItem(item.attached, "bank") }}</td>
-              <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td>
-              <td data-label="Value">{{ item.value}}</td>
-              <td data-label="Date">{{ item.createdAt}}</td>
-              <td data-label="">
-                <v-icon color="#70BB7B">mdi-delete</v-icon>
-                <v-icon color="#70BB7B">mdi-delete</v-icon>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <v-pagination v-if="hasPagination" :length="6">
-        </v-pagination>
+
+        <div v-if="hasPagination" class="d-flex justify-space-between align-center mt-5" density="compact">
+          <div style="height: 30px;" class="d-flex align-center">
+            <v-select
+              v-model="perPageSize"
+              label="Size"
+              density="compact"
+              variant="flat"
+              :items="[2, 5, 10, 15]"
+              class="fs-10 border rounded-lg"
+              hide-details
+              style="width: 85px;">
+            </v-select>
+          </div>
+          <v-pagination
+            v-model="pagination"
+            :length="6"
+            @update:model-value="paginationNext"
+            density="compact"
+          >
+          </v-pagination>
+          <div></div>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -52,6 +80,10 @@
     hasSearch: {
       type: Boolean,
       default: true
+    },
+    hasSpacing: {
+      type: Boolean,
+      default: true
     }
   })
 
@@ -63,10 +95,16 @@
     }
   });
 
+  const totalCount = ref(0)
+
+  const perPageSize = ref(10)
+
   const page =ref({
     page: 1,
     perPage: 10
   })
+
+  const pagination = ref(1)
 
   const formatedItem = (item, params) => {
     const fieldMapping = {
@@ -82,11 +120,25 @@
     }
   }
 
+  const paginationNext = async () => {
+    try {
+      const transations = await getTransactions({
+        page: pagination.value,
+        perPage: perPageSize.value
+      })
+      data.value = await transations
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
 
   const fetchData = async () => {
     try {
-      const transations = await getTransactions(page.value)
-      data.value = await transations
+      const transactions = await getTransactions(page.value)
+      console.log("trras", transactions)
+      data.value = await transactions.transactions
+      totalCount.value = await transactions.totalCount
     } catch (error) {
       console.error(error)
     }
@@ -110,6 +162,10 @@ body {
   justify-content: center;
   padding: 30px;
   width: 100vw;
+}
+
+::v-deep .v-field__input {
+  padding: 10px;
 }
 
 /******

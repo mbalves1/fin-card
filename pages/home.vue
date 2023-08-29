@@ -50,7 +50,13 @@
           Transactions
         </v-sheet>
 
-        <Table :hasPagination="false" :hasSearch="false" :data="data"></Table>
+        <Table
+          :hasSpacing="false"
+          :hasPagination="false"
+          :hasSearch="false"
+          :data="data"
+        >
+        </Table>
       </v-col>
     </v-row>
   </v-container>
@@ -87,8 +93,7 @@
 
   const fecthUser = async () => {
     try {
-      const user = await getUser()
-      console.log(user)
+      await getUser()
     } catch (error) {
       console.error(error)
     }
@@ -98,7 +103,7 @@
     try {
       const transations = await getTransactions(page.value)
       const fecthCards = await getCards()
-      data.value = await transations
+      data.value = await transations.transactions
       cards.value = fecthCards
       cardsNumber.value = cards?.value.length 
 

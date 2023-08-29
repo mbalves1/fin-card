@@ -1,5 +1,5 @@
 export async function postTransactions(payload, token) {
-  const response = await fetch('https://backend-finplan.vercel.app/api/services', {
+  const response = await fetch('https://backend-finplan.vercel.app/api/transactions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ export async function postTransactions(payload, token) {
 export async function getTransactions({ page, perPage }) {
 
   const token = localStorage.getItem("token")
-  return await fetch(`https://backend-finplan.vercel.app/api/services?page=${page}&perPage=${perPage}`, {
+  return await fetch(`https://backend-finplan.vercel.app/api/transactions?page=${page}&perPage=${perPage}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

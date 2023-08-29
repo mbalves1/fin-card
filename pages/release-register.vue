@@ -32,14 +32,6 @@
         <v-window-item value="option-1">
           <v-card flat>
             <v-card-text max-width="600">
-              <!-- <p>
-                Atualize Suas Informações com Conveniência - Edite Seu Perfil Pessoal de Forma Rápida e Segura
-              </p>
-
-              <p>
-                Manter suas informações pessoais precisas é essencial. Com nosso formulário de edição de perfil, você pode facilmente atualizar seus detalhes pessoais, garantindo que sua conta esteja sempre correta e atualizada. Nossa prioridade é a sua privacidade e segurança, então fique tranquilo ao fazer qualquer alteração.
-              </p> -->
-
             </v-card-text>
             <div class="mb-0">
               Em construção...
