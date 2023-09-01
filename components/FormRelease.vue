@@ -2,19 +2,22 @@
   <v-container class="mt-6 mx-auto w-100 align-center">
     <v-row class="d-flex justify-center">
       <v-col cols="12" lg="6" md="12">  
-        <form class="px-5 pb-10 border rounded-lg" >
-          <!-- <v-radio-group inline hide-details="" v-model="form.type">
-            <template v-slot:label>
-              <div><strong>Tipo de lançamento</strong></div>
-            </template>
-            <v-radio label="Entrada" value="Entrada"></v-radio>
-            <v-radio label="Saída" value="Saída"></v-radio>
-          </v-radio-group> -->
+        <v-form ref="formRef" class="px-5 pb-10 border rounded-lg" >
 
           <v-card-title class="py-5">Registration</v-card-title>
 
+          <v-snackbar
+            v-model="snackbar.visible"
+            :timeout="3000"
+            :location="snackbar.position"
+            :color="snackbar.color"
+          >
+            {{ snackbar.title }}
+            <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
+          </v-snackbar>
+
           <v-text-field
-          density="compact"
+            density="compact"
             variant="outlined"
             v-model="form.name"
             class="my-1"
@@ -25,16 +28,15 @@
           ></v-text-field>
 
           <v-text-field
-          density="compact"
+            density="compact"
             variant="outlined"
             v-model="form.description"
             label="Descrição"
-            required
             class="my-1"
           ></v-text-field>
 
           <v-text-field
-          density="compact"
+            density="compact"
             variant="outlined"
             v-model="form.value"
             label="Valor"
@@ -45,7 +47,7 @@
           ></v-text-field>
 
           <v-select
-          density="compact"
+            density="compact"
             variant="outlined"
             v-model="form.month"
             :items="items"
@@ -75,6 +77,7 @@
             required
             class="my-1"
             hide-details
+            :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-select>
 
           <v-btn
@@ -85,21 +88,21 @@
           >
             Send
           </v-btn>
-        </form>
+        </v-form>
       </v-col>
     </v-row>
 
   </v-container>
 </template>
 <script setup>
-const { postTransactions, getTransactions } = useTransactions()
+const { postTransactions } = useTransactions()
 const { getCards } = useCardStore()
 
 const form = ref({
   name: null,
   description: null,
   value: null,
-  month: null,
+  month: 'Janeiro',
   type: "Saída",
   attached: null
 })
@@ -108,10 +111,22 @@ const items = ref([
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ])
 
+const snackbar = ref({
+  color: null,
+  icon: null,
+  mode: null,
+  position: "top",
+  text: null,
+  timeout: 7500,
+  title: null,
+  visible: false,
+  icon: null
+})
+
 const cards = ref([])
+const formRef = ref(null);
 
 onMounted(async () => {
-  await fetchTransactions()
   await fetchCards()
 })
 
@@ -120,22 +135,51 @@ const fetchCards = async () => {
   cards.value = card
 }
 
-const fetchTransactions = async () => {
-  await getTransactions()
-}
+const resetFormValues = () => {
+  form.value = {
+    name: null,
+    description: null,
+    value: null,
+    month: 'Janeiro',
+    type: "Saída",
+    attached: null
+  };
+};
 
 const postReleases = async () => {
-  const card = cards.value.filter(item => item.bank === form.value.attached)
-  const payload = {
-    ...form.value, attached: card
+  const { valid } = await formRef.value.validate();
+  if (valid) {
+    const card = cards.value.filter(item => item.bank === form.value.attached)
+    const payload = {
+      ...form.value, attached: card
+    }
+    
+    try {
+      await postTransactions(payload);
+      form.value = { ...form.value }
+      console.log("payload", form.value)
+      resetFormValues();
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Registration completed successfully!",
+        icon: "mdi-check-circle"
+      }
+    } catch (error) {
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: "Error occurred during registration!",
+        icon: "mdi-close-circle"
+      }
+      console.error(error);
+    }
+  } else {
+    return;
   }
 
-  try {
-    const transaction = await postTransactions(payload);
-
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 
