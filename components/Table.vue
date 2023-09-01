@@ -5,18 +5,27 @@
 
     <v-row class="d-flex justify-center" style="height: 70vh;">
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
+
         <div>
+          <SearchTable v-if="hasSearch"></SearchTable>
           <table>
             <thead>
               <tr>
                 <th style="color: black">Name</th>
                 <th>Type</th>
                 <th>Card</th>
-                <!-- <th>Bank</th>
+                <th>Bank</th>
                 <th>Card type</th>
-                <th>Month</th> -->
+                <th>Month</th>
                 <th>Value</th>
-                <th>Date</th>
+                <th style="width: 50px;">Date
+                  <v-icon size="13">mdi-alert-circle-outline</v-icon>
+                  <v-tooltip
+                    activator="parent"
+                    location="top"
+                  >Registration date
+                  </v-tooltip>
+                </th>
                 <th></th>
               </tr>
             </thead>
@@ -27,15 +36,15 @@
               <tr v-for="(item, ix) in data" :key="ix">
                 <td data-label="Name">{{ item.name}}</td>
                 <td data-label="Type">{{ item.type }}</td>
-                <!-- <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
+                <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
                 <td data-label="Bank">{{ formatedItem(item.attached, "bank") }}</td>
-                <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td> -->
+                <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td>
                 <td data-label="Month">{{ item.month }}</td>
-                <td data-label="Value">{{ item.value}}</td>
-                <td data-label="Date">{{ item.createdAt}}</td>
+                <td data-label="Value">{{ formatCurrency(item.value)}}</td>
+                <td data-label="Date">{{ formatDate(item.createdAt)}}</td>
                 <td data-label="">
-                  <v-icon color="#70BB7B">mdi-delete</v-icon>
-                  <v-icon color="#70BB7B">mdi-delete</v-icon>
+                  <v-icon color="#70BB7B" class="mr-2">mdi-pencil</v-icon>
+                  <v-icon color="grey" class="">mdi-delete</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -52,12 +61,14 @@
               :items="[2, 5, 10, 15]"
               class="fs-10 border rounded-lg"
               hide-details
-              style="width: 85px;">
+              style="width: 85px; padding: 0;"
+              @update:modelValue="paginationNext(1)">
             </v-select>
           </div>
           <v-pagination
             v-model="pagination"
-            :length="6"
+            :length="pageLength"
+            total-visible="3"
             @update:model-value="paginationNext"
             density="compact"
           >
@@ -96,7 +107,7 @@
   });
 
   const totalCount = ref(0)
-
+  const pageLength = ref(3)
   const perPageSize = ref(10)
 
   const page =ref({
@@ -113,20 +124,25 @@
       type: 'type'
     };
 
-    if (fieldMapping.hasOwnProperty(params)) {
-      return item[0][fieldMapping[params]];
-    } else {
-      return 'Parâmetro inválido';
-    }
+    if (params === "flag") return item[0].flag
+    if (params === "bank") return item[0].bank
+    if (params === "type") return item[0].type
+    // if (fieldMapping.hasOwnProperty(params)) {
+    //   return item[0][fieldMapping[params]];
+    // }
   }
 
-  const paginationNext = async () => {
+  const paginationNext = async params => {
     try {
       const transations = await getTransactions({
-        page: pagination.value,
+        page: params ? params : pagination.value,
         perPage: perPageSize.value
       })
-      data.value = await transations
+      console.log("transations", transations.transactions)
+      data.value = await transations.transactions
+      totalCount.value = await transations.totalCount
+      pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+      console.log("pageSze", pageLength.value)
     } catch (error) {
       console.error(error)
     }
@@ -139,6 +155,7 @@
       console.log("trras", transactions)
       data.value = await transactions.transactions
       totalCount.value = await transactions.totalCount
+      pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
     } catch (error) {
       console.error(error)
     }
@@ -164,8 +181,16 @@ body {
   width: 100vw;
 }
 
-::v-deep .v-field__input {
-  padding: 10px;
+:deep .v-field__input {
+  padding: 0px;
+}
+
+:deep .v-input__control {
+  padding: 0px 5px;
+  padding-left: 10px;
+  height: 35px;
+  display: flex;
+  align-items: center;
 }
 
 /******
@@ -234,14 +259,14 @@ table {
   }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (min-width: 425px) {
   table {
     border: 1px solid #eee;
     border-collapse: collapse;
     // max-width: 1320px;
     text-align: left;
     width: 100%;
-    min-width: 360px;
+    min-width: 300px;
     
     thead {
       th {
@@ -249,9 +274,11 @@ table {
       }
     }
 
-    tbody {      
+    tbody {
+      margin: 0;
       tr {
         padding: 10px !important;
+        margin: 15px 20px;
       }
     }
   }
