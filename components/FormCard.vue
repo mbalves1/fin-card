@@ -13,12 +13,10 @@ const { postCard } = useCardStore()
 
 const card = ref({
   name: null,
-  number_card: "",
   bank: null,
   type: null,
   flag: null,
   expiration: null,
-  code: null
 })
 
 const flagCard = ref(null)

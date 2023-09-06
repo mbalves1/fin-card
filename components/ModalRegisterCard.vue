@@ -19,7 +19,7 @@
                 {{ card.type || 'Credito' }}
               </div>
               <div style="font-size: 13px;">
-                <v-img v-if="flagCard === 'Mastercard' || flagCard === 'Visa'" :src="`/img/${flagCard}.svg`" alt="" width="40"/>
+                <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag}.svg`" alt="" width="40"/>
               </div>
             </div>
             <div class="mt-10">
@@ -53,7 +53,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <form>
+      <v-form ref="formRef">
         <v-radio-group v-model="card.type" class="d-flex">
           <div class="d-flex" style="width: 250px;">
             <v-radio label="Crédito" value="Crédito"></v-radio>
@@ -84,34 +84,23 @@
         <v-text-field
           density="compact"
           variant="outlined"
-          v-model="card.number_card"
-          :rules="[(v) => v.length < 17 || 'Number invalid']"
-          type="number"
-          label="Numero do cartão"
-          required
-          class="my-1"
-        ></v-text-field>
-  
-        <v-text-field
-          density="compact"
-          variant="outlined"
-          v-model="card.code"
-          label="Code"
-          required
-          class="my-1"
-          type="number"
-          :rules="[v => !!v || 'O valor é obrigatório']"
-        ></v-text-field>
-  
-        <v-text-field
-          density="compact"
-          variant="outlined"
           v-model="card.expiration"
           label="Code"
           required
           class="my-1"
           type="date"
           mask="DD/MM"
+          :rules="[v => !!v || 'O valor é obrigatório']"
+        ></v-text-field>
+
+        <v-text-field
+          density="compact"
+          variant="outlined"
+          v-model="card.flag"
+          label="Bandeira"
+          required
+          class="my-1"
+          type="string"
           :rules="[v => !!v || 'O valor é obrigatório']"
         ></v-text-field>
   
@@ -123,7 +112,7 @@
         >
           Send
         </v-btn>
-      </form>
+      </v-form>
     </div>
   </v-card>
 </template>
@@ -156,6 +145,7 @@ const card = ref({
 })
 
 const size = ref(true)
+const formRef = ref(null);
 
 onMounted(() => {
   size.value = window.innerWidth
@@ -170,17 +160,35 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updatesizeValue);
 });
 
-const openMenu = ref(false)
-
 const flagCard = ref(null)
 
-const sendCard = () => {
-  card.value = {
-    ...card.value,
-    flag: flagCard,
-    color: color.value
+const sendCard = async () => {
+  const { valid } = await formRef.value.validate();
+  if (valid) {
+    try {
+      card.value = {
+        ...card.value,
+        flag: flagCard,
+        color: color.value
+      }
+      await postCard(card.value)
+      form.value = { ...form.value }
+      console.log("payload", form.value)
+      resetFormValues();
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Registration completed successfully!",
+        icon: "mdi-check-circle"
+      }
+  
+    } catch (error) {
+  
+    }
+  } else {
+    return;
   }
-  postCard(card.value)
 }
 
 const color = ref(null)
@@ -197,29 +205,4 @@ const colors = ref([
   {label: "purple", value: "purple"},
 ])
 
-watch(
-  () => card.value.number_card,
-  (numberCard) => {
-    const cardNumberStr = Number(numberCard)
-    const firstDigit = parseInt(cardNumberStr.toString()[0]);
-    const firstTwoDigits = parseInt(cardNumberStr.toString().substring(0, 2));
-    const firstFourDigits = parseInt(cardNumberStr.toString().substring(0, 2));
-
-  if (firstDigit === 4) {
-    return flagCard.value = 'Visa';
-    } else if ([51, 52, 53, 54, 55].includes(firstTwoDigits)) {
-      return flagCard.value = 'Mastercard';
-    } else if ([36, 38].includes(firstTwoDigits)) {
-      return flagCard.value = 'Diners Club';
-    } else if ([6011, 65].includes(firstFourDigits)) {
-      return flagCard.value = 'Discover';
-    } else if (firstTwoDigits === 65) {
-      return flagCard.value = 'JCB';
-    } else if ([34, 37].includes(firstTwoDigits)) {
-      return flagCard.value = 'American Express';
-    } else {
-      return flagCard.value = card.type;
-    }
-  }
-)
 </script>
