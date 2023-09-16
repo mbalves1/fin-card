@@ -55,7 +55,7 @@
                     variant="flat"
                     class="text-capitalize mt-5"
                     color="#74C27F"
-                    @click="loginIn"
+                    @click="resetPassword"
                     :loading="loading"
                     height="40"
                     >
@@ -80,11 +80,27 @@ definePageMeta({
   layout: 'layout'
 })
 
+const { postResetPass } = useUserStore()
+
 const show1 = ref(false)
 const show2 = ref(false)
 
 const form = ref({
-  password: "",
-  passwordConfirm: ""
+  password: ""
 })
+
+console.log("$rou te", $route)
+
+const resetPassword = async () => {
+  loading.value = true
+  try {
+    const resp = await postResetPass(form.value)
+    loading.value = false
+
+  } catch (error) {
+    loading.value = false
+    messageFailRegister.value = true
+    console.error(error)
+  }
+}
 </script>
