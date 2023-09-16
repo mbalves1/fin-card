@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postLogin, registerUser, getUser } from "../server/api-login.js"
+import { postLogin, registerUser, getUser, forgotPass } from "../server/api-login.js"
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -36,6 +36,16 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await getUser()
         localStorage.setItem("User", JSON.stringify(response.user))
+        return response
+      } catch (error) {
+        throw new Error('Error login');
+      }
+    },
+    async postForgotPass(payload) {
+      try {
+        console.log("aqui actions");
+        const response = await forgotPass(payload)
+
         return response
       } catch (error) {
         throw new Error('Error login');
