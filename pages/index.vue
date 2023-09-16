@@ -1,12 +1,21 @@
 <template>
   <v-container class="pa-0 mx-auto">
     <v-row>
+      <v-snackbar
+        v-model="snackbar.visible"
+        :timeout="3000"
+        :location="snackbar.position"
+        :color="snackbar.color"
+      >
+        {{ snackbar.title }}
+        <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
+      </v-snackbar>
       <v-col cols="12" col="2" class="d-flex justify-center align-center">
         <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
           <div class="custom">
             <div class="animate one">
               <strong><i><span>f</span><span>i</span><span>n</span><span>.</span>
-                <span class="custom--subtitle">c</span><span class="custom--subtitle">a</span><span class="custom--subtitle">r</span><span class="custom--subtitle">d</span></i></strong>
+                <span class="custom--subtitle text-black">c</span><span class="custom--subtitle text-black">a</span><span class="custom--subtitle text-black">r</span><span class="custom--subtitle text-black">d</span></i></strong>
               </div>
             </div>
             <div class="px-10 d-flex justify-center flex-column mt-5">
@@ -43,7 +52,7 @@
                       <v-alert
                       type="error"
                       icon="mdi-alert-circle-outline"
-                      text="Desculpe! Cadastro não encontrado."
+                      :text="messagetext"
                       variant="tonal"
                       ></v-alert>
                     </div>
@@ -204,12 +213,6 @@ definePageMeta({
 
 const router = useRouter()
 
-const expand1 = ref(true)
-const expand2 = ref(false)
-const expand3 = ref(false)
-const show1 = ref(false)
-const show2 = ref(false)
-const show3 = ref(false)
 const {
   postLogin,
   postRegister,
@@ -217,6 +220,25 @@ const {
   msgError,
   postForgotPass
 } = useUserStore()
+
+const expand1 = ref(true)
+const expand2 = ref(false)
+const expand3 = ref(false)
+const show1 = ref(false)
+const show2 = ref(false)
+const show3 = ref(false)
+
+const snackbar = ref({
+  color: null,
+  icon: null,
+  mode: null,
+  position: "top",
+  text: null,
+  timeout: 7500,
+  title: null,
+  visible: false,
+  icon: null
+})
 
 const form = ref({
   email: "",
@@ -274,18 +296,46 @@ const registerUser = async () => {
 }
 
 const forgotPassword = async () => {
-  loading.value = true
+  loading.value = true;
   try {
-    const resp = await postForgotPass(forgotPasswordEmail.value)
-    loading.value = false
+    const response = await postForgotPass(forgotPasswordEmail.value);
+    loading.value = false;
+    console.log("Response:", response);
 
+    if (response.error) {
+      // Exibe snackbar com a mensagem de erro
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: response.error, // Correção: Use response.error para exibir a mensagem de erro
+        icon: "mdi-close-circle"
+      };
+    } else {
+      // Exibe snackbar com a mensagem de sucesso
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: response.message, // Correção: Use response.message para exibir a mensagem de sucesso
+        icon: "mdi-check-circle"
+      };
+      changeView(1);
+    }
   } catch (error) {
-    loading.value = false
-    messageFailRegister.value = true
-    console.error(error)
-  }
-}
+    loading.value = false;
+    console.error("Erro ao chamar a API:", error);
 
+    // Exibe snackbar com a mensagem de erro
+    snackbar.value = {
+      visible: true,
+      color: "red",
+      position: "top",
+      title: "Ocorreu um erro ao processar a solicitação.",
+      icon: "mdi-close-circle"
+    };
+  }
+};
 const changeView = (index) => {
   expand1.value = index === 1
   expand2.value = index === 2

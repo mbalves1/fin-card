@@ -76,6 +76,8 @@
   </v-container>
 </template>
 <script setup>
+const route = useRoute();
+
 definePageMeta({
   layout: 'layout'
 })
@@ -86,20 +88,22 @@ const show1 = ref(false)
 const show2 = ref(false)
 
 const form = ref({
-  password: ""
+  password: "",
+  token: null,
+  email: null
 })
 
-console.log("$rou te", $route)
-
 const resetPassword = async () => {
-  loading.value = true
+
+  form.value = {
+    password: form.value.password,
+    token: route.params.reset,
+    email: route.params.email
+  }
   try {
     const resp = await postResetPass(form.value)
-    loading.value = false
 
   } catch (error) {
-    loading.value = false
-    messageFailRegister.value = true
     console.error(error)
   }
 }
