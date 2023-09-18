@@ -1,15 +1,17 @@
 <template>
   <v-container class="pa-0 mx-auto">
-    <v-row>
-      <v-snackbar
-        v-model="snackbar.visible"
-        :timeout="3000"
-        :location="snackbar.position"
-        :color="snackbar.color"
-      >
-        {{ snackbar.title }}
-        <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
-      </v-snackbar>
+    <v-snackbar
+      v-model="snackbar.visible"
+      :timeout="3000"
+      :location="snackbar.position"
+      :color="snackbar.color"
+    >
+      <div class="flex">
+        <v-icon class="mr-2">{{ snackbar.icon }}</v-icon>
+        <div>{{ snackbar.title }}</div>
+      </div>
+    </v-snackbar>
+    <v-row >
       <v-col cols="12" col="2" class="d-flex justify-center align-center">
         <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
           <div class="custom">
@@ -22,186 +24,42 @@
               <span class="text-align">Seu Guia para a Saúde Financeira</span>
               <strong class="text-align" >Todas as Suas Contas, Um Único Lugar.</strong>
             </div>
-            <!-- v-if="messageFail" -->
+
             <v-form class="mx-10">
               <v-slide-y-reverse-transition hide-on-leave>
                 <div v-if="expand1">
-                  <v-text-field
-                  prepend-inner-icon="mdi-email-outline"
-                  density="compact"
-                  class="mt-5"
-                  label="email"
-                  variant="outlined"
-                  v-model="form.email"
-                  color="#74C27F"
-                  ></v-text-field>
-                  <v-text-field
-                  density="compact"
-                  v-model="form.password"
-                  :type="show1 ? 'text' : 'password'"
-                  variant="outlined"
-                  label="senha"
-                  color="#74C27F"
-                  :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
-                  prepend-inner-icon="mdi-lock-outline"
-                  @click:append-inner="show1 = !show1"
-                  ></v-text-field>
-                  
-                  <v-row v-if="messageFail" class="rounded-sm errorMessage">
-                    <div transition="scale-transition">
-                      <v-alert
-                      type="error"
-                      icon="mdi-alert-circle-outline"
-                      :text="messagetext"
-                      variant="tonal"
-                      ></v-alert>
-                    </div>
-                  </v-row>
-                  
-                  <div class="d-flex justify-end fs-10 text-decoration-underline" style="cursor: pointer" @click="changeView(3)">
-                    Esqueci minha senha
-                  </div>
-                  
-                  <div class="d-flex flex-column my-10">
-                    <v-btn
-                    variant="flat"
-                    class="text-capitalize mt-5"
-                    color="#74C27F"
-                    @click="loginIn"
+                  <FormLogin
                     :loading="loading"
-                    height="40"
-                    >
-                    Entrar
-                  </v-btn>
-                  <v-btn
-                  variant="plain"
-                  class="text-capitalize mt-3"
-                  v-ripple="false"
-                  @click="changeView(2)"
-                  > Criar conta
-                </v-btn>
-              </div>
-            </div>
+                    :messagetext="messagetext"
+                    @loginIn="loginIn"
+                    @forgotPassword="changeView(3)"
+                    @createAccount="changeView(2)"
+                  ></FormLogin>
+                </div>
             
-            <div v-if="expand3">
-              <div class="mt-10">Digite o e-mail cadastrado!</div>
-                <v-text-field
-                  prepend-inner-icon="mdi-email-outline"
-                  density="compact"
-                  class="mt-5"
-                  label="email"
-                  variant="outlined"
-                  v-model="forgotPasswordEmail.email"
-                  color="#74C27F"
-                ></v-text-field>
-                <div v-if="expand3" class="fs-10 mt-5 d-flex justify-end" @click="changeView(1)">
-                  <v-icon>mdi-arrow-left</v-icon><span class="text-decoration-underline ml-1">voltar</span>
-                </div>
-                <div class="d-flex flex-column mb-2">
-                  <v-btn
-                    variant="flat"
-                    class="text-capitalize mt-5"
-                    color="#74C27F"
-                    @click="forgotPassword"
-                    :loading="loading"
-                    height="40"
-                  >
-                    Reset password
-                  </v-btn>
-                  <v-btn
-                    variant="plain"
-                    class="text-capitalize mt-3"
-                    v-ripple="false"
-                    @click="changeView(2)"
-                  > Não tenho conta
-                  </v-btn>
-                </div>
+              <div v-if="expand3">
+                <FormForgotPass
+                  :loading="loading"
+                  @createAccount="changeView(2)"
+                  @loginForm="changeView(1)"
+                  @forgotPassword="forgotPassword"
+                ></FormForgotPass>  
               </div>
 
               <div v-if="expand2">
-                <v-text-field
-                density="compact"
-                class="mt-5"
-                variant="outlined"
-                label="Primeiro nome"
-                color="#74C27F"
-                v-model="register.first_name"
-                ></v-text-field>
-                <v-text-field
-                density="compact"
-                variant="outlined"
-                label="Último nome"
-                color="#74C27F"
-                v-model="register.last_name"
-                ></v-text-field>
-                <v-text-field
-                density="compact"
-                variant="outlined"
-                label="e-mail"
-                color="#74C27F"
-                v-model="register.email"
-                ></v-text-field>
-                <v-text-field
-                density="compact"
-                :type="show2 ? 'text' : 'password'"
-                :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
-                @click:append-inner="show2 = !show2"
-                class=""
-                variant="outlined"
-                label="senha"
-                color="#74C27F"
-                v-model="register.password"
-                ></v-text-field>
-                <v-text-field
-                  density="compact"
-                  :type="show3 ? 'text' : 'password'"
-                  :append-inner-icon="show3 ? 'mdi-eye-off' : 'mdi-eye'"
-                  @click:append-inner="show3 = !show3"
-                  class=""
-                  variant="outlined"
-                  label="Confirme a senha"
-                  color="#74C27F"
-                  v-model="register.confirmpassword"
-                ></v-text-field>
-
-                <v-row v-if="messageFailRegister" class="rounded-sm errorMessage">
-                  <div transition="scale-transition">
-                    <v-alert
-                      type="error"
-                      icon="mdi-alert-circle-outline"
-                      :text="msgError"
-                      variant="tonal"
-                      closable
-                    ></v-alert>
-                  </div>
-                </v-row>
-                  
-                  <div class="d-flex flex-column my-10">
-                    <v-btn
-                      height="40"
-                      variant="flat"
-                      class="text-capitalize mt-5"
-                      color="#74C27F"
-                      @click="registerUser"
-                      :loading="loading"
-                      >
-                      Registrar
-                    </v-btn>
-                    <v-btn
-                      height="40"
-                      variant="flat"
-                      class="text-capitalize mt-5"
-                      color="grey"
-                      @click="changeView(1)"
-                      >
-                      Voltar
-                    </v-btn>
-                  </div>
+                <FormCreateAccount
+                  :loading="loading"
+                  @loginForm="changeView(1)"
+                  @registerUser="registerUser"
+                ></FormCreateAccount>
               </div>
             </v-slide-y-reverse-transition>
           </v-form>
         </v-card>
       </v-col>
+      <!-- <v-col>
+        <v-img src="/img/creditcard.gif"></v-img>
+      </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -224,9 +82,6 @@ const {
 const expand1 = ref(true)
 const expand2 = ref(false)
 const expand3 = ref(false)
-const show1 = ref(false)
-const show2 = ref(false)
-const show3 = ref(false)
 
 const snackbar = ref({
   color: null,
@@ -240,65 +95,65 @@ const snackbar = ref({
   icon: null
 })
 
-const form = ref({
-  email: "",
-  password: ""
-})
-
-const register = ref({
-  first_name: null,
-  last_name: null,
-  email: null,
-  password: null,
-  confirmpassword: null
-})
-
-const forgotPasswordEmail = ref({
-  email: null
-})
-
-const messageFail = ref(false)
 const messageFailRegister = ref(false)
 const loading = ref(false)
 
 
-const loginIn = async () => {
+const loginIn = async (item) => {
   loading.value = true
   try {
-    const { token } = await postLogin(form.value)
+    const { token } = await postLogin(item)
     loading.value = false
     
     if (token) router.push("/home")
-    
   } catch (error) {
+    console.log(error)
+    snackbar.value = {
+      visible: true,
+      color: "red",
+      position: "top",
+      title: "E-mail ou senha incorreto", // Correção: Use response.error para exibir a mensagem de erro
+      icon: "mdi-close-circle"
+    };
     loading.value = false
-    messageFail.value = true
-    setTimeout(() => {
-      messageFail.value = false
-    }, 5000)
     console.error(error)
   }
 }
 
-const registerUser = async () => {
-  loading.value = true
-  try {
-    const resp = await postRegister(register.value)
-    loading.value = false
-
-    // if (token) router.push("/home")
-  } catch (error) {
-    let m = await msgError
-    loading.value = false
-    messageFailRegister.value = true
-    console.error(error)
+const registerUser = async (item, valid) => {
+  if (valid) {
+    loading.value = true
+    try {
+      const resp = await postRegister(item)
+      loading.value = false
+      // if (token) router.push("/home")
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Usuário criado com sucesso!",
+        icon: "mdi-check-circle"
+      };
+      changeView(1)
+    } catch (error) {
+  
+      loading.value = false
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: "Ocorreu um erro ao processar a solicitação.",
+        icon: "mdi-close-circle"
+      };
+      console.error(error)
+    }
   }
 }
 
-const forgotPassword = async () => {
+const forgotPassword = async item => {
   loading.value = true;
   try {
-    const response = await postForgotPass(forgotPasswordEmail.value);
+    const response = await postForgotPass(item);
     loading.value = false;
     console.log("Response:", response);
 

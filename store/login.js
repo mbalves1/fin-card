@@ -16,8 +16,7 @@ export const useUserStore = defineStore('user', {
         
         return data
       } catch (error) {
-        this.msgError = 'Error while registering user'
-        throw new Error('Error while registering user');
+        console.error("Erro ao criar usuário")
       }
     },
     async postLogin(payload) {

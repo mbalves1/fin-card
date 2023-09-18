@@ -226,11 +226,11 @@
 }
 
 .cardlist::-webkit-scrollbar-thumb {
-  background-color: #74C27F; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
+  background-color: white; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
 }
 
 .cardlist::-webkit-scrollbar-thumb:hover {
-  background-color: #a5daac; /* cor do "polegar" ao passar o mouse por cima */
+  background-color: white; /* cor do "polegar" ao passar o mouse por cima */
 }
 
 .cardlist::-webkit-scrollbar-track {
