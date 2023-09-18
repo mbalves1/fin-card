@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       }
     ],
     '@nuxtjs/google-fonts',
+    '@unocss/nuxt',
   ],
   imports: {
     dirs: [
