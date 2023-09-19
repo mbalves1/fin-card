@@ -13,7 +13,7 @@
     </v-snackbar>
     <v-row >
       <v-col cols="12" col="2" class="d-flex justify-center align-center">
-        <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
+        <v-card elevation="0" height="auto" width="400" class="rounded-xl bg-transparent">
           <div class="custom">
             <div class="animate one">
               <strong><i><span>f</span><span>i</span><span>n</span><span>.</span>
@@ -65,8 +65,12 @@
 </template>
 <script setup>
 
+// definePageMeta({
+//   layout: 'layout'
+// })
+
 definePageMeta({
-  layout: 'layout'
+  layout: 'login'
 })
 
 const router = useRouter()
