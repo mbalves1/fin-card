@@ -14,14 +14,7 @@
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
 
-          <!-- <div v-if="releasesIn">
-            <BarChart :data="chartDataCard" :options="chartOptions" class="doughnut" ></BarChart>
-          </div> -->
-          <v-card variant="flat" class="border rounded-lg pa-10">
-            <div v-if="releasesOut" class="mt-10">
-              <BarChart :data="chartData" :options="chartOptions" style="height: 300px"></BarChart>
-            </div>
-          </v-card>
+        
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
@@ -101,8 +94,8 @@
   
   const fetchData = async () => {
     try {
-      const transations = await getTransactions(page.value)
       const fecthCards = await getCards()
+      const transations = await getTransactions(page.value)
       data.value = await transations.transactions
       cards.value = fecthCards
       cardsNumber.value = cards?.value.length 
@@ -125,31 +118,7 @@
     return formatCurrency(total)
   })
 
-  const chartData = computed(() => {
 
-    const releases = releasesOut.value;
-    const filledValues = Array(12).fill(0);
-    const monthMap = {
-      "Janeiro": 0, "Fevereiro": 1, "Março": 2, "Abril": 3, "Maio": 4, "Junho": 5,
-      "Julho": 6, "Agosto": 7, "Setembro": 8, "Outubro": 9, "Novembro": 10, "Dezembro": 11
-    };
-
-    releases.forEach(rel => {
-      const monthIndex = monthMap[rel.month];
-      filledValues[monthIndex] += rel.value;
-    });
-    
-    return {
-      labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-      datasets: [
-        {
-          backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-          data: filledValues,
-          borderRadius: 5
-        }
-      ]
-    };
-  });
 
   const chartDataCard = computed(() => {
 
@@ -169,36 +138,7 @@
     };
   });
 
-    const chartOptions = computed(() => {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: false,
-          filler: {
-            propagate: false
-          },
-          // legend: {
-            //   position: 'right',
-            //   labels: {
-              //     usePointStyle: true
-              //   }
-              // }
-        },
-        scales: {
-          y: {
-            grid: {
-              display: false
-            }
-          },
-          x: {
-            grid: {
-              display: false
-            }
-          }
-        },
-      };
-    });
+
 
     const openModal = ref(false);
 

@@ -173,7 +173,7 @@ const sendCard = async () => {
       }
       await postCard(card.value)
       form.value = { ...form.value }
-      console.log("payload", form.value)
+
       resetFormValues();
       snackbar.value = {
         visible: true,
