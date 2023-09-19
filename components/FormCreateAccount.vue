@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-dialog v-model="openTerms" class="flex justify-center items-center">
-      <v-card height="auto">
+    <v-dialog v-model="openTerms" v-position="center" class="flex justify-center items-center">
+      <v-card height="auto" class="w-500px mx-auto">
         <Term @close="openModal"></Term>
       </v-card>
     </v-dialog>
@@ -69,7 +69,9 @@
         density="compact"
         color="#74C27F"
         required
-        :rules="[v => !!v || 'O aceite de termos é obrigatória']">
+        :rules="[v => !!v || 'O aceite de termos é obrigatória']"
+        :disabled="openTerms"  
+      >
         <template #label>
           <div class="text-sm underline underline-offset-3 cursor-pointer" @click="openTerms = !openTerms">Aceito os termos e política de privacidade</div>
         </template>
