@@ -30,9 +30,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <pre>
-                {{ data.transactions }}
-              </pre> -->
               <tr v-for="(item, ix) in data" :key="ix">
                 <td data-label="Name">{{ item.name}}</td>
                 <td data-label="Type">{{ item.type }}</td>

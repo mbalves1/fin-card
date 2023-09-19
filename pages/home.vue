@@ -8,25 +8,55 @@
         </v-sheet>
         <div>
           <v-sheet class="d-flex justify-space-between align-center">
-            <h3 class="ml-3">Dashboard</h3>
+            <h3 class="ml-3"></h3>
             <p class="fs-10">Number of financial postings {{ size || 0 }}</p>
             <!-- <v-icon>mdi-arrow-bottom-left</v-icon> -->
           </v-sheet>
           <v-divider class="my-2 mb-5"></v-divider>
 
-        
+          <v-row>
+            <v-col>
+              <v-card variant="flat" class="border">
+                <div class="text-lg font-bold pt-3 px-5">Cards</div>
+                <v-divider class="mx-4 my-2"></v-divider>
+                <div v-for="(card, cx) in cards" :key="cx" class="px-6 py-1">
+                  <div class="flex flex-row justify-between">
+                    <div class="text-sm">{{ card.name }}</div>
+                    <div class="text-sm">{{ card.bank }}</div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card variant="flat" class="border">
+                <div v-for="(release, cx) in releasesOut" :key="cx" class="px-6 py-1">
+                  {{ release.name }}
+                </div>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card variant="flat" class="border">
+                {{chartDataCard}}
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card variant="flat" class="border">Aqui</v-card>
+            </v-col>
+          </v-row>
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
         <v-sheet class="text-h4 d-flex px-5 align-center" style="">
           <v-chip>{{ cardsNumber }}</v-chip>
-          <v-title class="mx-2">Credits cards</v-title>
+          <v-title class="mx-2 font-bold">Credits cards</v-title>
           <!-- <span class="fs-10">{{ cardsNumber }} cards</span> -->
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
-        <v-sheet class="">
-          <div class="cardlist mt-8">
-            <ListCards :data="cards" @openModalCard="openModalToRegister" class="ml-10"></ListCards>
+        <v-sheet class="mx-10">
+          <div class="cardlist mt-8 sm:ml-0">
+            <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
           <div class="">
             <v-dialog v-model="openModal"
@@ -37,9 +67,9 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row class="mt-6">
-      <v-col class="wrapper rounded-xl mt-6 pa-5 mx-auto">
-        <v-sheet class="text-h4 d-flex px-5" style="">
+    <v-row class="mt-0 sm:mt-6">
+      <v-col class="wrapper rounded-xl pa-5 mx-auto sm:mt-6">
+        <v-sheet class="text-h4 d-flex px-5 py-0 pb-6 text-center font-bold sm:py-8 sm:pb-0" style="">
           Transactions
         </v-sheet>
 
@@ -165,17 +195,17 @@
   border-radius: 10px;
 }
 
-.cardlist::-webkit-scrollbar-thumb {
-  background-color: white; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
-}
+// .cardlist::-webkit-scrollbar-thumb {
+//   background-color: white; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
+// }
 
-.cardlist::-webkit-scrollbar-thumb:hover {
-  background-color: white; /* cor do "polegar" ao passar o mouse por cima */
-}
+// .cardlist::-webkit-scrollbar-thumb:hover {
+//   background-color: white; /* cor do "polegar" ao passar o mouse por cima */
+// }
 
-.cardlist::-webkit-scrollbar-track {
-  background-color: #f2f2f2; /* cor da trilha (fundo da barra de rolagem) */
-}
+// .cardlist::-webkit-scrollbar-track {
+//   background-color: #f2f2f2; /* cor da trilha (fundo da barra de rolagem) */
+// }
 
 @media screen and (max-width: 600px) {
   .cardlist {

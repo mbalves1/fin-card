@@ -6,13 +6,13 @@
       v-for="(card, cardx) in data"
       :key="cardx"
     >
-      <div class="">
+      <div>
         <Card
-          class="mx-3 rr-2"
+          class="mx-3 mr-1"
           height="145"
           width="100%"
-          min-width="300px"
-          max-width="300px"
+          min-width="250px"
+          max-width="250px"
           elevation="3"
           :card="card"
         >

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-row class="background flex-row" :class="{ 'reverse-order': expand2, 'reverse-order-mobile': expand1 || expand3 }">
+    <v-row class="background flex-row">
       <v-col xs="12" md="6" lg="6" col="12" class="left-col d-flex justify-center align-center">
         <slot></slot>
       </v-col>
@@ -27,14 +27,6 @@
   background-color: #74C27F;
   background-image: url('img/credit.gif');
   background-position: center;
-}
-
-.reverse-order {
-  flex-direction: row-reverse;
-}
-
-.reverse-order-mobile {
-  flex-direction: column-reverse;
 }
 
 @media screen and (max-width: 425px) {
