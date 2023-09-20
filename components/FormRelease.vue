@@ -2,7 +2,7 @@
   <v-container class="mt-6 mx-auto w-100 align-center">
     <v-row class="d-flex justify-center">
       <v-col cols="12" lg="6" md="12">  
-        <v-form ref="formRef" class="px-5 pb-10 border rounded-lg" >
+        <v-form ref="formRef" class="px-5 pb-10 rounded-lg" >
 
           <v-card-title class="py-5">Registration</v-card-title>
 
@@ -15,6 +15,11 @@
             {{ snackbar.title }}
             <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
           </v-snackbar>
+
+          <v-radio-group class="py-2" v-model="form.type" inline hide-details="">
+            <v-radio label="Saída" value="Saída"></v-radio>
+            <v-radio label="Entrada" value="Entrada"></v-radio>
+          </v-radio-group>
 
           <v-text-field
             density="compact"
@@ -57,7 +62,7 @@
             hide-details
           ></v-select>
 
-          <v-radio-group inline hide-details="">
+          <v-radio-group v-model="form.method_payment" inline hide-details="">
             <template v-slot:label>
               <div><strong>Metodo de pagamento</strong></div>
             </template>
@@ -73,7 +78,7 @@
             :items="cards"
             item-title="bank"
             item-value="bank"
-            label="Card"
+            label="Banco"
             required
             class="my-1"
             hide-details
@@ -104,6 +109,7 @@ const form = ref({
   value: null,
   month: 'Janeiro',
   type: "Saída",
+  method_payment: null,
   attached: null
 })
 
@@ -157,7 +163,7 @@ const postReleases = async () => {
     try {
       await postTransactions(payload);
       form.value = { ...form.value }
-      console.log("payload", form.value)
+
       resetFormValues();
       snackbar.value = {
         visible: true,

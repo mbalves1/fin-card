@@ -4,7 +4,7 @@
       <v-col cols="12" md="8" sm="12">
         <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
           <p><strong>Total balance</strong></p>
-          <h2 class="ml-5">{{ totalBalance || "R$ 00,00" }}</h2>
+          <h2 class="ml-5">{{ totalBalance(releasesOut, releasesIn) || "R$ 00,00" }}</h2>
           <v-sheet class="d-flex justify-space-between align-center" style="background: #f2f2f2">
             <h3 class="ml-3"></h3>
             <p class="fs-10" >Number of financial postings {{ size || 0 }}</p>
@@ -19,12 +19,17 @@
               <v-card variant="flat" class="border pb-3">
                 <div class="flex justify-between items-center text-sm">
                   <div class="text-lg font-bold pt-3 px-5">Janeiro</div>
-                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Janeiro'))}}</div>
+                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Janeiro')}}</div>
                 </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Janeiro')" :key="cx" class="px-6 py-1 text-sm">
                   <div class="flex justify-between">
-                    <div class="">{{ release.name }}</div>
+                    <div>
+                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
+                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
+                      </v-icon>
+                        <span>{{ release.name }}</span>
+                    </div>
                     <div>{{ formatCurrency(release.value) }}</div>
                   </div>
                 </div>
@@ -34,12 +39,17 @@
               <v-card variant="flat" class="border pb-3">
                 <div class="flex justify-between items-center text-sm">
                   <div class="text-lg font-bold pt-3 px-5">Fevereiro</div>
-                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Fevereiro'))}}</div>
+                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Fevereiro')}}</div>
                 </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Fevereiro')" :key="cx" class="px-6 py-1 text-sm">
                   <div class="flex justify-between">
-                    <div class="">{{ release.name }}</div>
+                    <div>
+                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
+                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
+                      </v-icon>
+                      <span>{{ release.name }}</span>
+                    </div>
                     <div>{{ formatCurrency(release.value) }}</div>
                   </div>
                 </div>
@@ -49,19 +59,24 @@
               <v-card variant="flat" class="border pb-3">
                 <div class="flex justify-between items-center text-sm">
                   <div class="text-lg font-bold pt-3 px-5">Março</div>
-                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Março'))}}</div>
+                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Março')}}</div>
                 </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Março')" :key="cx" class="px-6 py-1 text-sm">
                   <div class="flex justify-between">
-                    <div class="">{{ release.name }}</div>
+                    <div>
+                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
+                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
+                      </v-icon>
+                      <span>{{ release.name }}</span>
+                    </div>
                     <div>{{ formatCurrency(release.value) }}</div>
                   </div>
                 </div>
               </v-card>
             </v-col>
           </v-row>
-          <v-row>
+          <!-- <v-row>
             <v-col></v-col>
             <v-col cols="12" lg="4" md="6" sm="12">
               <v-card variant="flat" class="border">
@@ -75,8 +90,7 @@
                 </div>
               </v-card>
             </v-col>
-              <!-- <v-card variant="flat" class="border">{{filteredByMonth('Janeiro')}}</v-card> -->
-          </v-row>
+          </v-row> -->
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="px-3 d-flex flex-column align-center">
@@ -87,7 +101,7 @@
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
         <v-sheet class="mx-10">
-          <div class="cardlist mt-8 sm:ml-0">
+          <div class="cardlist sm:ml-0">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
           <div class="">
@@ -165,7 +179,7 @@
       cards.value = fecthCards
       cardsNumber.value = cards?.value.length 
 
-      totalBalance
+      totalBalance(releasesOut.value, releasesIn.value)
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
       releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
     } catch (error) {
@@ -173,15 +187,15 @@
     }
   }
 
-  const totalBalance = computed(() => {
-    const out = releasesOut.value.map(i => i.value)
-    const inRel = releasesIn.value.map(i => i.value)
+  const totalBalance = (expanse, revenue) => {
+    const out = expanse.map(i => i.value)
+    const inRel = revenue.map(i => i.value)
 
     size.value = out.length + inRel.length
 
     const total = (inRel.reduce((accumulator, currentValue) => accumulator + currentValue, 0) - out.reduce((accumulator, currentValue) => accumulator + currentValue, 0));
     return formatCurrency(total)
-  })
+  }
 
   const openModal = ref(false);
 
@@ -191,15 +205,19 @@
 
 
   const filteredByMonth = (month) => {
-    const release = releasesOut.value.filter(item => item.month === month)
+    if (!data.value) {
+      return [];
+    }
+    const releases = data.value.filter(item => item.month === month && (item.type === 'Entrada' || item.type === 'Saída'));
     
-    return release
+    return releases
   }
 
   const reduceMonthValue = (month) => {
-    const releases = releasesOut.value.filter(item => item.month === month)
-    const totalValue = releases.reduce((total, item) => total + item.value, 0);
-    return totalValue
+    const expense = releasesOut.value.filter(item => item.month === month)
+    const revenues = releasesIn.value.filter(item => item.month === month)
+    const total = totalBalance(expense, revenues)
+    return total
   }
 </script>
 <style scoped lang="scss">
