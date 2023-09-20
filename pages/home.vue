@@ -101,12 +101,13 @@
     </v-row>
 
   </v-container>
-  <v-row class="mt-0 sm:mt-6">
+  <v-row class="mt-10 sm:mt-6">
     <v-col class="">
-      <v-sheet class="text-h4 d-flex px-5 py-0 pb-6 text-center font-bold sm:py-8 sm:pb-0" style="">
-        Transactions
+      <v-sheet class="text-h4 px-5 py-0 pb-6 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
+        <div class="text-center">
+          <span>Transactions</span>
+        </div>
       </v-sheet>
-      <v-divider class="py-3"></v-divider>
 
       <Table
         :hasSpacing="false"

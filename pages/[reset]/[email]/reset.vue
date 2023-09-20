@@ -1,5 +1,16 @@
 <template>
   <v-container class="mx-auto">
+    <v-snackbar
+      v-model="snackbar.visible"
+      :timeout="3000"
+      :location="snackbar.position"
+      :color="snackbar.color"
+    >
+      <div class="flex">
+        <v-icon class="mr-2">{{ snackbar.icon }}</v-icon>
+        <div>{{ snackbar.title }}</div>
+      </div>
+    </v-snackbar>
     <v-row>
       <v-col cols="12" col="2" class="d-flex justify-center align-center">
         <v-card elevation="0" border height="auto" width="400" class="rounded-xl">
@@ -13,10 +24,10 @@
               <span class="text-align">Seu Guia para a Saúde Financeira</span>
               <strong class="text-align" >Todas as Suas Contas, Um Único Lugar.</strong>
             </div>
-            <!-- v-if="messageFail" -->
-            <v-form class="mx-10">
+
+              <v-form ref="formRef" class="mx-10">
                 <div class="mt-20">
-                  <v-text-field
+                <v-text-field
                   density="compact"
                   v-model="form.password"
                   :type="show1 ? 'text' : 'password'"
@@ -26,8 +37,9 @@
                   :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
                   prepend-inner-icon="mdi-lock-outline"
                   @click:append-inner="show1 = !show1"
-                  ></v-text-field>
-                  <v-text-field
+                  :rules="[v => !!v || 'O valor é obrigatório']"
+                ></v-text-field>
+                <v-text-field
                   density="compact"
                   v-model="form.passwordConfirm"
                   :type="show2 ? 'text' : 'password'"
@@ -37,18 +49,8 @@
                   :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
                   prepend-inner-icon="mdi-lock-outline"
                   @click:append-inner="show2 = !show2"
-                  ></v-text-field>
-                  
-                  <v-row class="rounded-sm errorMessage">
-                    <div transition="scale-transition">
-                      <v-alert
-                      type="error"
-                      icon="mdi-alert-circle-outline"
-                      text="Desculpe! Cadastro não encontrado."
-                      variant="tonal"
-                      ></v-alert>
-                    </div>
-                  </v-row>
+                  :rules="[v => !!v || 'O valor é obrigatório', confirmPass]"
+                ></v-text-field>
                   
                   <div class="d-flex flex-column my-10">
                     <v-btn
@@ -62,9 +64,9 @@
                     Salvar
                   </v-btn>
                   <v-btn
-                  variant="plain"
-                  class="text-capitalize mt-3"
-                  v-ripple="false"
+                    variant="plain"
+                    class="text-capitalize mt-3"
+                    v-ripple="false"
                   > Criar conta
                 </v-btn>
               </div>
@@ -77,6 +79,7 @@
 </template>
 <script setup>
 const route = useRoute();
+const router = useRouter();
 
 definePageMeta({
   layout: 'layout'
@@ -86,25 +89,66 @@ const { postResetPass } = useUserStore()
 
 const show1 = ref(false)
 const show2 = ref(false)
+const formRef = ref(null);
+const loading = ref(false) 
+
+const snackbar = ref({
+  color: null,
+  icon: null,
+  mode: null,
+  position: "top",
+  text: null,
+  timeout: 7500,
+  title: null,
+  visible: false,
+  icon: null
+})
 
 const form = ref({
   password: "",
   token: null,
-  email: null
+  email: null,
+  passwordConfirm: null
 })
 
-const resetPassword = async () => {
+const confirmPass = (v) => {
+  return v == form.value.password || 'As senhas não coincidem'
+};
 
+const resetPassword = async () => {
+  loading.value = true
   form.value = {
     password: form.value.password,
     token: route.params.reset,
-    email: route.params.email
+    email: route.params.email,
+    passwordConfirm: form.value.passwordConfirm
   }
-  try {
-    const resp = await postResetPass(form.value)
+  const { valid } = await formRef.value.validate();
 
-  } catch (error) {
-    console.error(error)
+  if (confirmPass) {
+    try {
+      await postResetPass(form.value)
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Registration completed successfully!",
+        icon: "mdi-check-circle"
+      }
+      loading.value = false
+      router.push('/');
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    loading.value = false
+    snackbar.value = {
+      visible: true,
+      color: "red",
+      position: "top",
+      title: "Error occurred during registration!",
+      icon: "mdi-close-circle"
+    }
   }
 }
 </script>

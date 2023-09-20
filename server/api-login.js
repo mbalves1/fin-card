@@ -57,5 +57,6 @@ export async function resetPass(payload) {
     body: JSON.stringify(payload),
   });
   const data = await response.json();
+  console.log("data", data)
   return data;
 }
