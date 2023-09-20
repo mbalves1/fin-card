@@ -2,20 +2,62 @@
   <v-container class="mt-6 mx-auto w-100">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
-        <v-sheet class="me-auto">
-           <p><strong>Total balance</strong></p>
+        <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
+          <p><strong>Total balance</strong></p>
           <h2 class="ml-5">{{ totalBalance || "R$ 00,00" }}</h2>
-        </v-sheet>
-        <div>
-          <v-sheet class="d-flex justify-space-between align-center">
+          <v-sheet class="d-flex justify-space-between align-center" style="background: #f2f2f2">
             <h3 class="ml-3"></h3>
-            <p class="fs-10">Number of financial postings {{ size || 0 }}</p>
+            <p class="fs-10" >Number of financial postings {{ size || 0 }}</p>
             <!-- <v-icon>mdi-arrow-bottom-left</v-icon> -->
           </v-sheet>
+        </v-sheet>
+        <div>
           <v-divider class="my-2 mb-5"></v-divider>
 
           <v-row>
             <v-col>
+              <v-card variant="flat" class="border pb-3">
+                <div class="flex justify-between items-center text-sm">
+                  <div class="text-lg font-bold pt-3 px-5">Janeiro</div>
+                  <div class="pr-5 text-xs">10</div>
+                </div>
+                <v-divider class="mx-4 my-2"></v-divider>
+                <div v-for="(release, cx) in filteredByMonth('Janeiro')" :key="cx" class="px-6 py-1 text-sm">
+                  <div class="flex justify-between">
+                    <div class="">{{ release.name }}</div>
+                    <div>{{ formatCurrency(release.value) }}</div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card variant="flat" class="border pb-3">
+                <div class="text-lg font-bold pt-3 px-5">Fevereiro</div>
+                <v-divider class="mx-4 my-2"></v-divider>
+                <div v-for="(release, cx) in filteredByMonth('Fevereiro')" :key="cx" class="px-6 py-1 text-sm">
+                  <div class="flex justify-between">
+                    <div class="">{{ release.name }}</div>
+                    <div>{{ formatCurrency(release.value) }}</div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card variant="flat" class="border pb-3">
+                <div class="text-lg font-bold pt-3 px-5">Março</div>
+                <v-divider class="mx-4 my-2"></v-divider>
+                <div v-for="(release, cx) in filteredByMonth('Março')" :key="cx" class="px-6 py-1 text-sm">
+                  <div class="flex justify-between">
+                    <div class="">{{ release.name }}</div>
+                    <div>{{ formatCurrency(release.value) }}</div>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col></v-col>
+            <v-col cols="12" lg="4" md="6" sm="12">
               <v-card variant="flat" class="border">
                 <div class="text-lg font-bold pt-3 px-5">Cards</div>
                 <v-divider class="mx-4 my-2"></v-divider>
@@ -27,28 +69,12 @@
                 </div>
               </v-card>
             </v-col>
-            <v-col>
-              <v-card variant="flat" class="border">
-                <div v-for="(release, cx) in releasesOut" :key="cx" class="px-6 py-1">
-                  {{ release.name }}
-                </div>
-              </v-card>
-            </v-col>
-            <v-col>
-              <v-card variant="flat" class="border">
-                {{chartDataCard}}
-              </v-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card variant="flat" class="border">Aqui</v-card>
-            </v-col>
+              <!-- <v-card variant="flat" class="border">{{filteredByMonth('Janeiro')}}</v-card> -->
           </v-row>
         </div>
       </v-col>
-      <v-col cols="12" lg="4" sm="12" class="pa-5 d-flex flex-column align-center">
-        <v-sheet class="text-h4 d-flex px-5 align-center" style="">
+      <v-col cols="12" lg="4" sm="12" class="px-3 d-flex flex-column align-center">
+        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded" style="background: #f2f2f2">
           <v-chip>{{ cardsNumber }}</v-chip>
           <v-title class="mx-2 font-bold">Credits cards</v-title>
           <!-- <span class="fs-10">{{ cardsNumber }} cards</span> -->
@@ -168,13 +194,18 @@
     };
   });
 
+  const openModal = ref(false);
 
+  const openModalToRegister = (event) => {
+    openModal.value = event
+  };
 
-    const openModal = ref(false);
-
-    const openModalToRegister = (event) => {
-      openModal.value = event
-    };
+  const monthRelease = ref(null)
+  const filteredByMonth = (month) => {
+    const release = releasesOut.value.filter(item => item.month === month)
+    monthRelease.value = release
+    return release
+  }
 </script>
 <style scoped lang="scss">
 .wrapper {

@@ -1,38 +1,33 @@
 <template>
-  <v-layout class="overflow-visible responsive" style="height: 56px;">
-    <v-bottom-navigation
-      v-model="value"
-      color="primary"
-      horizontal
-      bg-color="#f2f2f2"
-    >
-      <v-btn>
+  <!-- <div class="overflow-visible responsive" style="height: 56px;">
+    <v-bottom-navigation mode="shift">
+      <v-btn value="recent">
         <v-icon>mdi-history</v-icon>
 
-        Recents
+        <span>Recent</span>
       </v-btn>
 
-      <v-btn>
+      <v-btn value="favorites">
         <v-icon>mdi-heart</v-icon>
 
-        Favorites
+        <span>Favorites</span>
       </v-btn>
 
-      <v-btn>
+      <v-btn value="nearby">
         <v-icon>mdi-map-marker</v-icon>
 
-        Nearby
+        <span>Nearby</span>
       </v-btn>
     </v-bottom-navigation>
-  </v-layout>
+  </div> -->
   <v-navigation-drawer
     style="background: #f2f2f2;"
     v-model="drawer"
     :rail="rail"
     permanent
-    :location="size < 600 ? 'top' : 'left'"
+    :location="size < 600 ? '' : 'left'"
     @click="rail = false"
-    class="rounded-xl"
+    class="rounded-xl navBarLeft"
     rail-width="85"
   >
     <v-list-item
@@ -147,6 +142,9 @@
 
 .responsive {
   display: none;
+  @media screen and (max-width:425px) {
+    display: block;
+  }
 }
 
 .navBarLeft {
