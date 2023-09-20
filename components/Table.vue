@@ -39,8 +39,8 @@
                 <td data-label="Value">{{ formatCurrency(item.value)}}</td>
                 <td data-label="Date">{{ formatDate(item.createdAt)}}</td>
                 <td data-label="">
-                  <v-icon color="#70BB7B" class="mr-2">mdi-pencil</v-icon>
-                  <v-icon color="grey" class="">mdi-delete</v-icon>
+                  <v-icon color="#70BB7B" class="mr-2 cursor-pointer" @click="openModalToEdit(item)">mdi-pencil</v-icon>
+                  <v-icon color="grey" class="cursor-pointer" @click="openModalToDelete(item)">mdi-delete</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -73,11 +73,68 @@
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="openModalEdit">
+      <div class="flex justify-center">
+        <v-card class="w-500px h-500px overflow-y-auto">
+          <pre>{{ itemToEdit }}</pre>
+          <v-btn @click="openModalToEdit">Fechar</v-btn>
+        </v-card>
+      </div>
+    </v-dialog>
+
+    <v-dialog v-model="openModalDelete">
+      <div class="flex justify-center">
+        <v-card variant="flat" class="w-500px h-auto px-5 pt-5">
+          <div class="font-bold">Deseja deletar o lançamento ?</div>
+          <v-row class="border pa-3 my-2 text-sm">
+            <v-col>
+              <div>{{ itemToEdit.name }}</div>
+              <div>{{ itemToEdit.month }}</div>
+            </v-col>
+            <v-col>
+              <div>{{ formatCurrency(itemToEdit.value) }}</div>
+              <div>{{ itemToEdit.type }}</div>
+            </v-col>
+          </v-row>
+          
+          <!-- <pre>{{ itemToEdit }}</pre> -->
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              variant="text"
+              color="grey"
+              @click="openModalDelete = !openModalDelete"
+              class="text-capitalize"
+              append-icon="mdi-close"
+            >
+              Fechar
+            </v-btn>
+            <v-btn
+              color="red"
+              variant="text"
+              class="text-capitalize"
+              append-icon="mdi-delete"
+              @click="deleteItem(item)"
+              :loading="loading"
+            >
+              Deletar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </v-dialog>
   </v-container>
 </template>
 <script setup>
   const data = ref()
-  const { getTransactions } = useTransactions()
+  const { getTransactions, deleteTransaction } = useTransactions()
+
+  const openModalEdit = ref(false)
+  const openModalDelete = ref(false)
+  const itemToEdit = ref({})
+  const loading = ref(false)
 
   defineProps({
     hasPagination: {
@@ -144,16 +201,39 @@
     }
   }
 
-
   const fetchData = async () => {
     try {
       const transactions = await getTransactions(page.value)
-      console.log("trras", transactions)
       data.value = await transactions.transactions
       totalCount.value = await transactions.totalCount
       pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const openModalToEdit = item => {
+    openModalEdit.value = !openModalEdit.value
+    itemToEdit.value = item
+    console.log(item)
+  }
+
+  const openModalToDelete = async item => {
+    openModalDelete.value = !openModalDelete.value
+    itemToEdit.value = item
+  }
+
+  const deleteItem = async () => {
+    loading.value = true
+    try {
+      await deleteTransaction(itemToEdit.value._id)
+      loading.value = false
+      await fetchData()
+      openModalDelete.value = !openModalDelete.value
+      return
+    } catch (error) {
+      loading.value = false
+      console.error(error);
     }
   }
 

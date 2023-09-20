@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="pa-3 px-md-5 ml-auto border rounded-lg" :variant="variant">
+  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg" :variant="variant">
     <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
       <v-icon @click="close">mdi-close-circle-outline</v-icon>
     </div>
@@ -7,11 +7,11 @@
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-card
+            variant="flat"
             :color="color"
-            elevation="10"
-            width="320"
+            width="310"
             height="200"
-            class="rounded-lg mx-auto pa-4 pt-3 d-flex flex-column justify-space-around"
+            class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0"
             v-bind="props"
           >
             <div class="d-flex align-center justify-space-between">

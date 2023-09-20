@@ -1,12 +1,12 @@
 <template>
-  <v-container>
+  <div>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" lg="6" md="12">
-        <modal-register-card :hasCloseButton="false" :isModal="false"></modal-register-card>
+      <v-col cols="12" lg="6" xs="12">
+        <modal-register-card class="mt-10" :hasCloseButton="false" :isModal="false"></modal-register-card>
       </v-col>
     </v-row>
 
-  </v-container>
+  </div>
 </template>
 <script setup>
 const { postCard } = useCardStore()
