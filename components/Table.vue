@@ -1,6 +1,5 @@
 <template>
   <v-container class="mx-auto">
-
     <div v-if="hasSearch" class="py-10 ml-10 fs-30 mx-auto">Transactions</div>
 
     <v-row class="d-flex justify-center" style="height: 70vh;">

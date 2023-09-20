@@ -19,7 +19,7 @@
               <v-card variant="flat" class="border pb-3">
                 <div class="flex justify-between items-center text-sm">
                   <div class="text-lg font-bold pt-3 px-5">Janeiro</div>
-                  <div class="pr-5 text-xs">10</div>
+                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Janeiro'))}}</div>
                 </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Janeiro')" :key="cx" class="px-6 py-1 text-sm">
@@ -32,7 +32,10 @@
             </v-col>
             <v-col>
               <v-card variant="flat" class="border pb-3">
-                <div class="text-lg font-bold pt-3 px-5">Fevereiro</div>
+                <div class="flex justify-between items-center text-sm">
+                  <div class="text-lg font-bold pt-3 px-5">Fevereiro</div>
+                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Fevereiro'))}}</div>
+                </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Fevereiro')" :key="cx" class="px-6 py-1 text-sm">
                   <div class="flex justify-between">
@@ -44,7 +47,10 @@
             </v-col>
             <v-col>
               <v-card variant="flat" class="border pb-3">
-                <div class="text-lg font-bold pt-3 px-5">Março</div>
+                <div class="flex justify-between items-center text-sm">
+                  <div class="text-lg font-bold pt-3 px-5">Março</div>
+                  <div class="pr-5 mt-3 text-xs">{{formatCurrency(reduceMonthValue('Março'))}}</div>
+                </div>
                 <v-divider class="mx-4 my-2"></v-divider>
                 <div v-for="(release, cx) in filteredByMonth('Março')" :key="cx" class="px-6 py-1 text-sm">
                   <div class="flex justify-between">
@@ -93,22 +99,24 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row class="mt-0 sm:mt-6">
-      <v-col class="wrapper rounded-xl pa-5 mx-auto sm:mt-6">
-        <v-sheet class="text-h4 d-flex px-5 py-0 pb-6 text-center font-bold sm:py-8 sm:pb-0" style="">
-          Transactions
-        </v-sheet>
 
-        <Table
-          :hasSpacing="false"
-          :hasPagination="false"
-          :hasSearch="false"
-          :data="data"
-        >
-        </Table>
-      </v-col>
-    </v-row>
   </v-container>
+  <v-row class="mt-0 sm:mt-6">
+    <v-col class="">
+      <v-sheet class="text-h4 d-flex px-5 py-0 pb-6 text-center font-bold sm:py-8 sm:pb-0" style="">
+        Transactions
+      </v-sheet>
+      <v-divider class="py-3"></v-divider>
+
+      <Table
+        :hasSpacing="false"
+        :hasPagination="false"
+        :hasSearch="false"
+        :data="data"
+      >
+      </Table>
+    </v-col>
+  </v-row>
 </template>
 <script setup>
 
@@ -174,37 +182,23 @@
     return formatCurrency(total)
   })
 
-
-
-  const chartDataCard = computed(() => {
-
-    return {
-      labels: releasesIn.value.map(rel => rel.name),
-      datasets: [
-        {
-          label: 'Entradas',
-          backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
-          // backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-          minBarLength: 10,
-          fill: 'origin',
-          borderRadius: 10,
-          data: releasesIn.value.map(rel => rel.value)
-        },
-      ]
-    };
-  });
-
   const openModal = ref(false);
 
   const openModalToRegister = (event) => {
     openModal.value = event
   };
 
-  const monthRelease = ref(null)
+
   const filteredByMonth = (month) => {
     const release = releasesOut.value.filter(item => item.month === month)
-    monthRelease.value = release
+    
     return release
+  }
+
+  const reduceMonthValue = (month) => {
+    const releases = releasesOut.value.filter(item => item.month === month)
+    const totalValue = releases.reduce((total, item) => total + item.value, 0);
+    return totalValue
   }
 </script>
 <style scoped lang="scss">
@@ -225,18 +219,6 @@
   width: 2px; /* largura da barra de rolagem */
   border-radius: 10px;
 }
-
-// .cardlist::-webkit-scrollbar-thumb {
-//   background-color: white; /* cor do "polegar" (a parte da barra de rolagem que você arrasta) */
-// }
-
-// .cardlist::-webkit-scrollbar-thumb:hover {
-//   background-color: white; /* cor do "polegar" ao passar o mouse por cima */
-// }
-
-// .cardlist::-webkit-scrollbar-track {
-//   background-color: #f2f2f2; /* cor da trilha (fundo da barra de rolagem) */
-// }
 
 @media screen and (max-width: 600px) {
   .cardlist {

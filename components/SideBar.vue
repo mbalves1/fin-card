@@ -1,25 +1,4 @@
 <template>
-  <!-- <div class="overflow-visible responsive" style="height: 56px;">
-    <v-bottom-navigation mode="shift">
-      <v-btn value="recent">
-        <v-icon>mdi-history</v-icon>
-
-        <span>Recent</span>
-      </v-btn>
-
-      <v-btn value="favorites">
-        <v-icon>mdi-heart</v-icon>
-
-        <span>Favorites</span>
-      </v-btn>
-
-      <v-btn value="nearby">
-        <v-icon>mdi-map-marker</v-icon>
-
-        <span>Nearby</span>
-      </v-btn>
-    </v-bottom-navigation>
-  </div> -->
   <v-navigation-drawer
     style="background: #f2f2f2;"
     v-model="drawer"

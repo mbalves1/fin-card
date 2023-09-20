@@ -25,7 +25,7 @@
 .right-col {
   flex: 1;
   background-color: #74C27F;
-  background-image: url('img/credit.gif');
+  background-image: url('/img/credit.gif');
   background-position: center;
 }
 
