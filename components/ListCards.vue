@@ -7,21 +7,24 @@
       :key="cardx"
     >
       <div>
-        <Card
-          class="mx-3 mr-1"
-          height="145"
-          width="100%"
-          min-width="250px"
-          max-width="250px"
-          elevation="3"
-          :card="card"
-        >
-        </Card>
+        <Tilt>
+          <Card
+            class="mx-3 mr-1"
+            height="145"
+            width="100%"
+            min-width="250px"
+            max-width="250px"
+            elevation="3"
+            :card="card"
+            >
+          </Card>
+        </Tilt>
       </div>
     </v-list>
   </div>
 </template>
 <script setup>
+import Tilt from 'vanilla-tilt-vue'
 defineProps({
   data: {
     type: [Array, Object]
