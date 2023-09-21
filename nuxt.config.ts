@@ -16,8 +16,7 @@ export default defineNuxtConfig({
     dirs: [
       'store',
       'composables',
-      'composables/*/index.{ts,js,mjs,mts}',
-      'plugins'
+      'composables/*/index.{ts,js,mjs,mts}'
     ],
   },
   pinia: {
@@ -36,9 +35,6 @@ export default defineNuxtConfig({
       // Você pode adicionar outras fontes aqui
     }
   },
-  plugins: [
-    '~/plugins/tilt.js'
-  ],
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     'vuetify/dist/vuetify.css',
