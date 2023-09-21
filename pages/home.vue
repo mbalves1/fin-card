@@ -76,21 +76,6 @@
               </v-card>
             </v-col>
           </v-row>
-          <!-- <v-row>
-            <v-col></v-col>
-            <v-col cols="12" lg="4" md="6" sm="12">
-              <v-card variant="flat" class="border">
-                <div class="text-lg font-bold pt-3 px-5">Cards</div>
-                <v-divider class="mx-4 my-2"></v-divider>
-                <div v-for="(card, cx) in cards" :key="cx" class="px-6 py-1">
-                  <div class="flex flex-row justify-between">
-                    <div class="text-sm">{{ card.name }}</div>
-                    <div class="text-sm">{{ card.bank }}</div>
-                  </div>
-                </div>
-              </v-card>
-            </v-col>
-          </v-row> -->
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="px-3 d-flex flex-column align-center">
@@ -247,6 +232,7 @@
     white-space: nowrap;
     display: flex;
     flex-direction: row;
+    max-width: 375px
   }
 }
 </style>

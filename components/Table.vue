@@ -1,11 +1,20 @@
 <template>
+  <v-snackbar
+    v-model="snackbar.visible"
+    :timeout="3000"
+    :location="snackbar.position"
+    :color="snackbar.color"
+  >
+    {{ snackbar.title }}
+    <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
+  </v-snackbar>
   <v-container class="mx-auto">
-    <div v-if="hasSearch" class="py-10 ml-10 fs-30 mx-auto">Transactions</div>
-
+    <div v-if="hasSearch" class="py-10 ml-10 fs-30 mx-auto flex justify-start">Transactions</div>
+    <v-divider></v-divider>
     <v-row class="d-flex justify-center" style="height: 70vh;">
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
 
-        <div>
+        <div class="" >
           <SearchTable v-if="hasSearch"></SearchTable>
           <table>
             <thead>
@@ -47,7 +56,7 @@
           </table>
         </div>
 
-        <div v-if="hasPagination" class="d-flex justify-space-between align-center mt-5" density="compact">
+        <div v-if="hasPagination" class="d-flex justify-space-between align-center mt-0 sm:mt-2 sm:mb-0" style="margin-bottom: 70px !important" density="compact">
           <div style="height: 30px;" class="d-flex align-center">
             <v-select
               v-model="perPageSize"
@@ -168,6 +177,18 @@
     perPage: 10
   })
 
+  const snackbar = ref({
+    color: null,
+    icon: null,
+    mode: null,
+    position: "top",
+    text: null,
+    timeout: 7500,
+    title: null,
+    visible: false,
+    icon: null
+  })
+
   const pagination = ref(1)
 
   const formatedItem = (item, params) => {
@@ -228,10 +249,24 @@
     try {
       await deleteTransaction(itemToEdit.value._id)
       loading.value = false
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Registro deletado com sucesso!",
+        icon: "mdi-check-circle"
+      }
       await fetchData()
       openModalDelete.value = !openModalDelete.value
       return
     } catch (error) {
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: "Error occurred during delete!",
+        icon: "mdi-close-circle"
+      }
       loading.value = false
       console.error(error);
     }
@@ -290,7 +325,7 @@ table {
       border-radius: 5px;
       display: block;
       padding: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 15px;
       min-width: 360px;
       
       td {

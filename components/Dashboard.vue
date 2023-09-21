@@ -1,5 +1,7 @@
 <template>
   <v-container class="mt-6 mx-auto w-100">
+    <div class="py-10 ml-10 fs-30 mx-auto flex justify-start">Dashboard</div>
+    <v-divider class="mb-10"></v-divider>
     <v-row>
       <v-col>
         <v-card variant="flat" class="border rounded-lg pa-10">
