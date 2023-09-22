@@ -85,9 +85,8 @@
 
     <v-dialog v-model="openModalEdit">
       <div class="flex justify-center">
-        <v-card class="w-500px h-500px overflow-y-auto">
-          <EditModalTable :edit-item="itemToEdit"></EditModalTable>
-          <v-btn @click="openModalToEdit">Fechar</v-btn>
+        <v-card class="w-500px h-auto overflow-y-auto px-3 py-2">
+          <EditModalTable :item-edit="itemToEdit"></EditModalTable>
         </v-card>
       </div>
     </v-dialog>

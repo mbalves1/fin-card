@@ -13,6 +13,7 @@
       </div>
     </div>
     <div class="mt-2">
+      <div class="text-sm">{{ card.bank }}</div>
       <div style="font-size: 16px;"> ***...***</div>
       <div class="" style="font-size: 13px;">{{ card.name }}</div>
     

@@ -37,22 +37,22 @@
                   ></FormLogin>
                 </div>
             
-              <div v-if="expand3">
-                <FormForgotPass
-                  :loading="loading"
-                  @createAccount="changeView(2)"
-                  @loginForm="changeView(1)"
-                  @forgotPassword="forgotPassword"
-                ></FormForgotPass>  
-              </div>
+                <div v-if="expand3">
+                  <FormForgotPass
+                    :loading="loading"
+                    @createAccount="changeView(2)"
+                    @loginForm="changeView(1)"
+                    @forgotPassword="forgotPassword"
+                  ></FormForgotPass>  
+                </div>
 
-              <div v-if="expand2">
-                <FormCreateAccount
-                  :loading="loading"
-                  @loginForm="changeView(1)"
-                  @registerUser="registerUser"
-                ></FormCreateAccount>
-              </div>
+                <div v-if="expand2">
+                  <FormCreateAccount
+                    :loading="loading"
+                    @loginForm="changeView(1)"
+                    @registerUser="registerUser"
+                  ></FormCreateAccount>
+                </div>
             </v-slide-y-reverse-transition>
           </v-form>
         </v-card>
