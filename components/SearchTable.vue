@@ -30,36 +30,42 @@
               :items="items"
               v-model="item"
               rounded="full"
+              item-title="name"
+              item-value="value"
+              :return-object="false"
               hide-details
             ></v-select>
           </v-list-item>
 
           <v-list-item>
             <v-select
-              v-if="item === 'Card'"
-              density="compact"
-              variant="outlined"
-              :items="itemsCard"
-              rounded="full"
-              hide-details
-            ></v-select>
-
-            <v-select
-              v-if="item === 'Bank'"
+              v-if="item === 'bank'"
               density="compact"
               variant="outlined"
               :items="itemsBank"
               rounded="full"
               hide-details
+              v-model="itemSearch"
             ></v-select>
 
             <v-select
-              v-if="item === 'Month'"
+              v-if="item === 'month'"
               density="compact"
               variant="outlined"
               :items="itemsMonth"
               rounded="full"
               hide-details
+              v-model="itemSearch"
+            ></v-select>
+
+            <v-select
+              v-if="item === 'type'"
+              density="compact"
+              variant="outlined"
+              :items="['Saída', 'Entrada']"
+              rounded="full"
+              hide-details
+              v-model="itemSearch"
             ></v-select>
           </v-list-item>
         </v-list>
@@ -81,7 +87,7 @@
             variant="text"
             class="text-capitalize"
             append-icon="mdi-send"
-            @click="menu = false"
+            @click="search"
           >
             Save
           </v-btn>
@@ -89,42 +95,28 @@
       </v-card>
     </v-menu>
 
-      <!-- <v-select
-        density="compact"
-        rounded="full"
-        variant="outlined"
-        class="rounded-lg"
-        label="Month"
-        :items="['Janeiro', 'Novembro']"
-        hide-details
-        height=""></v-select>
-      <v-select
-        density="compact"
-        rounded="full"
-        variant="outlined"
-        class="rounded-lg"
-        label="Bank"
-        :items="items"
-        hide-details
-        height=""></v-select>
-      <v-select
-        density="compact"
-        rounded="full"
-        variant="outlined"
-        class="rounded-lg"
-        label="Type"
-        :items="['Crédito', 'Débito']"
-        hide-details
-        height=""></v-select> -->
     </v-col>
   </v-row>
 </template>
 <script setup>
-const items = ref(["Card", "Bank", "Month"])
+const items = ref([
+  { name: "Bank", value: "bank" },
+  { name: "Month", value: "month" },
+  { name: "Type", value: "type" }
+])
+const itemsMonth = ref(["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"])
+const itemSearch = ref(null)
 const fav = ref(true)
 const menu = ref(false)
 const message = ref(false)
 const hints = ref(true)
 
 const item = ref(null)
+
+const emit = defineEmits(['getFilter'])
+
+const search = () => {
+  menu.value = false
+  emit('getFilter', {item: item.value, value: itemSearch.value})
+}
 </script>

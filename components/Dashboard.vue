@@ -4,27 +4,28 @@
     <v-divider class="mb-10"></v-divider>
     <v-row>
       <v-col>
-        <v-card variant="flat" class="border rounded-lg pa-10">
+        <div class=" bg-fincardsecondary border rounded-lg pa-10">
           <div class="font-bold text-2xl text-center">Transações por mês</div>
           <div v-if="releasesOut" class="mt-10">
             <BarChart :data="chartDataBar" :options="chartOptions" style="height: 300px"></BarChart>
           </div>
-        </v-card>
+        </div>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-card variant="flat" class="border rounded-lg pa-10">
+        <div class="border rounded-lg pa-10 bg-fincardsecondary">
           <div class="font-bold">Transações por cartão</div>
           <div v-if="releasesIn">
             <DoughnutChart :data="chartData" :options="chartOptionsDoughnut" class="doughnut" ></DoughnutChart>
           </div>
-        </v-card>
+        </div>
       </v-col>
       <v-col>
-        <v-card variant="flat" class="border rounded-lg pa-10">
-          aqui
-        </v-card>
+        <div class="border rounded-lg pa-10 bg-fincardsecondary">
+          <div class="font-bold text-center">Transações por mês</div>
+          <LineChart :data="chartDataBar" :options="chartOptions"></LineChart>
+        </div>
       </v-col>
     </v-row>
   </v-container>

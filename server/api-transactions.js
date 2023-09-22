@@ -25,6 +25,18 @@ export async function getTransactions({ page, perPage }) {
   })
 }
 
+export async function getTransactionsFilters({item, value}, { page, perPage }) {
+
+  const token = localStorage.getItem("token")
+  return await fetch(`${URL_BASE}transactions/filter/${item}=${value}?page=${page}&perPage=${perPage}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+}
+
 export async function deleteTransaction(id) {
   const token = localStorage.getItem("token")
   return await fetch(`${URL_BASE}transactions/${id}`, {

@@ -15,7 +15,7 @@
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
 
         <div class="" >
-          <SearchTable v-if="hasSearch"></SearchTable>
+          <SearchTable v-if="hasSearch" @getFilter="filterTransactions"></SearchTable>
           <table>
             <thead>
               <tr>
@@ -86,7 +86,7 @@
     <v-dialog v-model="openModalEdit">
       <div class="flex justify-center">
         <v-card class="w-500px h-500px overflow-y-auto">
-          <pre>{{ itemToEdit }}</pre>
+          <EditModalTable :edit-item="itemToEdit"></EditModalTable>
           <v-btn @click="openModalToEdit">Fechar</v-btn>
         </v-card>
       </div>
@@ -138,7 +138,11 @@
 </template>
 <script setup>
   const data = ref()
-  const { getTransactions, deleteTransaction } = useTransactions()
+  const {
+    getTransactions,
+    getFiltersTransactions,
+    deleteTransaction
+  } = useTransactions()
 
   const openModalEdit = ref(false)
   const openModalDelete = ref(false)
@@ -212,11 +216,10 @@
         page: params ? params : pagination.value,
         perPage: perPageSize.value
       })
-      console.log("transations", transations.transactions)
+
       data.value = await transations.transactions
       totalCount.value = await transations.totalCount
       pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
-      console.log("pageSze", pageLength.value)
     } catch (error) {
       console.error(error)
     }
@@ -231,6 +234,14 @@
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const filterTransactions = async (item) => {
+    console.log("item", item)
+    const filter = await getFiltersTransactions(item, page.value)
+    data.value = filter.transactions
+    totalCount.value = filter.totalCount
+    pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
   }
 
   const openModalToEdit = item => {
@@ -313,6 +324,7 @@ table {
   min-width: 360px;
   width: 100%;
   margin: auto;
+  margin-bottom: 20px;
   
   thead {
     display: none;

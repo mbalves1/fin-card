@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postTransactions, getTransactions, deleteTransaction } from "../server/api-transactions.js"
+import { postTransactions, getTransactions, deleteTransaction, getTransactionsFilters } from "../server/api-transactions.js"
 
 export const useTransactions = defineStore('transactions', {
   state: () => ({
@@ -20,6 +20,17 @@ export const useTransactions = defineStore('transactions', {
     async getTransactions(pages) {
       try {
         const response = await getTransactions(pages)
+        const data = await response.json()
+        this.transactions = data
+        return data
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async getFiltersTransactions(filter, pages) {
+      console.log("aquiu", filter)
+      try {
+        const response = await getTransactionsFilters(filter, pages)
         const data = await response.json()
         this.transactions = data
         return data

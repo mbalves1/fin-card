@@ -1,4 +1,15 @@
 <template>
+  <v-dialog v-model="welcome">
+    <div class="flex justify-center">
+      <v-card elevation="10" class="w-500px h-500px overflow-y-auto flex justify-between">
+        <v-card-title>Updates</v-card-title>
+        <v-card-text>1.0: Atualizações nas página de tabelas com filtros</v-card-text>
+        <v-card-text>1.1: Atualizações nas página de tabelas: deletar transações</v-card-text>
+        <v-card-text>1.1: Atualizações nas página de tabelas: deletar editar transações</v-card-text>
+        <v-btn @click="welcome = !welcome">Fechar</v-btn>
+      </v-card>
+    </div>
+  </v-dialog>
   <v-container class="mt-6 mx-auto w-100">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
@@ -137,9 +148,12 @@
     perPage: 1000
   })
 
+  const welcome = ref(false)
+
   // const cardsNumber = computed(() => cards?.value.length)
 
   onMounted(async () => {
+    welcome.value = true
     try {
       await fetchData()
       await fecthUser()

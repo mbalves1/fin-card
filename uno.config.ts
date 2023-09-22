@@ -11,7 +11,8 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      // ...
+      fincard: '#74C27F',
+      fincardsecondary: '#f2f2f2',
     }
   },
   presets: [
