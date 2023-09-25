@@ -61,8 +61,6 @@
     }
   }
 
-  console.log("ee", releasesOut.value)
-
   const chartData = computed(() => {
     const releases = releasesOut.value;
 
@@ -84,7 +82,6 @@
       }
     }
 
-    console.log(releases)
     const labels = Object.keys(sumBank);
     const backgroundColors = labels.map(label => colorsCard[label]);
     return {
@@ -128,23 +125,6 @@
         },
       };
     });
-
-  // const chartDataCard = computed(() => {
-  //   return {
-  //     labels: releasesIn.value.map(rel => rel.name),
-  //     datasets: [
-  //       {
-  //         label: 'Entradas',
-  //         backgroundColor: ['#D8F5B5', '#536955', '#336939', '#8FB593', '#B9E9BF', '#74EC82'],
-  //         // backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
-  //         minBarLength: 10,
-  //         fill: 'origin',
-  //         borderRadius: 10,
-  //         data: releasesIn.value.map(rel => rel.value)
-  //       },
-  //     ]
-  //   };
-  // });
 
   const chartOptionsDoughnut = computed(() => {
     return {

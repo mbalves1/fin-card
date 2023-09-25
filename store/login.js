@@ -52,11 +52,8 @@ export const useUserStore = defineStore('user', {
     async postResetPass(payload) {
       try {
         const response = await resetPass(payload)
-
-        console.log("response", response)
         return response
       } catch (error) {
-        console.log("error", error)
         console.error('Error reset password');
       }
     }

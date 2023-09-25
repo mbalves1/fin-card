@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg" :variant="variant">
+  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg pa-3" :variant="variant">
     <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
       <v-icon @click="close">mdi-close-circle-outline</v-icon>
     </div>
@@ -9,9 +9,8 @@
           <v-card
             variant="flat"
             :color="color"
-            width="310"
-            height="200"
-            class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0"
+
+            class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0 w-280px sm:w-310px"
             v-bind="props"
           >
             <div class="d-flex align-center justify-space-between">

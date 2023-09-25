@@ -1,15 +1,18 @@
-export const formatCurrency = (valor = 0) => {
+export const formatCurrency = (valor) => {
+  // Converte para número, se possível
+  const valorNumerico = typeof valor === 'string' ? parseFloat(valor) : valor;
+
   // Verifica se o valor é um número
-  if (typeof valor !== "number") {
-    throw new Error("O valor informado não é um número.");
+  if (isNaN(valorNumerico)) {
+    throw new Error('O valor informado não é um número ou uma string numérica válida.');
   }
 
   // Formata o valor em reais
-  const numeroFormatado = valor.toFixed(2).replace(".", ",");
+  const numeroFormatado = valorNumerico.toFixed(2).replace('.', ',');
 
   // Adiciona o símbolo "R$" e formata os milhares
-  return `R$ ${numeroFormatado.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-}
+  return `R$ ${numeroFormatado.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+};
 
 export const inOut = (valor) => {
   return valor === 'Saída' ? 'red' : 'green'

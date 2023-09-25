@@ -1,3 +1,4 @@
+
 .custom {
   // background-image: url("../assets/Revenue-bro.svg");
   // background-size: cover; /* ajusta o tamanho da imagem para cobrir todo o elemento */
@@ -61,22 +62,35 @@
 	animation-delay: 1.05s;
 }
 .animate span:nth-of-type(3) {
-	animation-delay: 1.1s;
+	animation-delay: 1.09s;
 }
 .animate span:nth-of-type(4) {
-	animation-delay: 2.9s;
+	// animation-delay: 2.9s;
+	animation-delay: 1.1s;
 }
 .animate span:nth-of-type(5) {
-	animation-delay: 2.00s;
+	animation-delay: 2s;
 }
 .animate span:nth-of-type(6) {
-	animation-delay: 2.05s;
+	animation-delay: 3s;
 }
 .animate span:nth-of-type(7) {
-	animation-delay: 2.15s;
+	animation-delay: 2.05s;
 }
 .animate span:nth-of-type(8) {
+	animation-delay: 2.15s;
+}
+.animate span:nth-of-type(9) {
 	animation-delay: 2.5s;
+}
+.animate span:nth-of-type(10) {
+	animation-delay: 2.7s;
+}
+.animate span:nth-of-type(11) {
+	animation-delay: 2.9s;
+}
+.animate span:nth-of-type(12) {
+	animation-delay: 2.93s;
 }
 
 @keyframes revolveScale {

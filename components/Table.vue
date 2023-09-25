@@ -86,7 +86,12 @@
     <v-dialog v-model="openModalEdit">
       <div class="flex justify-center">
         <v-card class="w-500px h-auto overflow-y-auto px-3 py-2">
-          <EditModalTable :item-edit="itemToEdit"></EditModalTable>
+          <EditModalTable
+            :item-edit="itemToEdit"
+            @close-edit-modal="closeModal"
+            @saveEditItem="saveEdit"
+            :loading="loading"
+            ></EditModalTable>
         </v-card>
       </div>
     </v-dialog>
@@ -140,7 +145,8 @@
   const {
     getTransactions,
     getFiltersTransactions,
-    deleteTransaction
+    deleteTransaction,
+    putTransactions
   } = useTransactions()
 
   const openModalEdit = ref(false)
@@ -236,7 +242,6 @@
   }
 
   const filterTransactions = async (item) => {
-    console.log("item", item)
     const filter = await getFiltersTransactions(item, page.value)
     data.value = filter.transactions
     totalCount.value = filter.totalCount
@@ -246,13 +251,14 @@
   const openModalToEdit = item => {
     openModalEdit.value = !openModalEdit.value
     itemToEdit.value = item
-    console.log(item)
   }
 
   const openModalToDelete = async item => {
     openModalDelete.value = !openModalDelete.value
     itemToEdit.value = item
   }
+
+  const closeModal = item => openModalEdit.value = item
 
   const deleteItem = async () => {
     loading.value = true
@@ -275,6 +281,35 @@
         color: "red",
         position: "top",
         title: "Error occurred during delete!",
+        icon: "mdi-close-circle"
+      }
+      loading.value = false
+      console.error(error);
+    }
+  }
+
+  const saveEdit = async item => {
+    console.log("edfit tabel", item)
+    loading.value = true
+    try {
+      await putTransactions(item)
+      loading.value = false
+      snackbar.value = {
+        visible: true,
+        color: "#74C27F",
+        position: "top",
+        title: "Registro salvo com sucesso!",
+        icon: "mdi-check-circle"
+      }
+      await fetchData()
+      openModalEdit.value = !openModalEdit.value
+      return
+    } catch (error) {
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: "Error occurred during edit item!",
         icon: "mdi-close-circle"
       }
       loading.value = false

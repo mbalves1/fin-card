@@ -32,7 +32,6 @@
         label="Valor"
         required
         class="my-1"
-        type="number"
         :rules="[v => !!v || 'O valor é obrigatório']"
       ></v-text-field>
   
@@ -40,7 +39,7 @@
         density="compact"
         variant="outlined"
         v-model="itemEdit.month"
-        :items="items"
+        :items="itemsMonth"
         label="Mês"
         required
         class="my-1"
@@ -65,7 +64,7 @@
         >
           Send
         </v-btn>
-        <v-btn @click="openModalToEdit" class="w-49%"
+        <v-btn @click="closeModal" class="w-49%"
           variant="flat" color="#f2f2f2">Fechar</v-btn>
       </div>
     </div>
@@ -74,36 +73,58 @@
       <div class="font-bold">Deseja editar esse lançamento?</div>
       <v-row class="border pa-3 my-2 text-sm">
         <v-col>
-          <div class="font-bold">{{ itemEdit.name }}</div>
-          <div class="font-bold">{{ itemEdit.month }}</div>
+          <div class="flex">
+            <div class="font-bold mr-2">Nome:</div><span>{{ itemEdit.name }}</span>
+          </div>
+          <div class="flex">
+            <div class="font-bold mr-2">Mês:</div><span>{{ itemEdit.month }}</span>
+          </div>
         </v-col>
         <v-col>
-          <div class="font-bold">{{ formatCurrency(itemEdit.value) }}</div>
-          <div class="font-bold">{{ itemEdit.type }}</div>
+          <div class="flex">
+            <div class="font-bold mr-2">Valor:</div><span>{{ formatCurrency(itemEdit.value) }}</span>
+          </div>
+          <div class="flex">
+            <div class="font-bold mr-2">Tipo:</div> <span>{{ itemEdit.type }}</span>
+          </div>
         </v-col>
       </v-row>
 
       <v-btn
-        class="w-49% bg-fincard mr-2"
+        class="w-49% bg-fincard mr-2 text-normal"
         variant="flat"
         color="#74C27F"
         prepend-icon="mdi-save"
-        @click=""
+        @click="saveEditItem"
+        :loading="loading"
       >
         Salvar
       </v-btn>
-      <v-btn @click="openModalToEdit" class="w-49%"
+      <v-btn @click="closeModal" class="w-49%"
         variant="flat" color="#f2f2f2">Cancelar</v-btn>
     </div>
   </v-slide-y-reverse-transition>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   itemEdit: {
     type: Object,
     default: {}
+  },
+  loading: {
+    type: Boolean,
+    ddfault: false
   }
 })
-
 const formEdit = ref(true)
+const itemsMonth = ref(["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"])
+const emit = defineEmits(['closeEditModal', 'saveEditItem'])
+
+const closeModal = () => emit('closeEditModal', false)
+
+const saveEditItem = () => {
+  console.log("props.itemEdit", props.itemEdit)
+  emit('saveEditItem', props.itemEdit)
+}
+
 </script>

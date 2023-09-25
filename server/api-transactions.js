@@ -14,8 +14,8 @@ export async function postTransactions(payload, token) {
 }
 
 export async function getTransactions({ page, perPage }) {
-
   const token = localStorage.getItem("token")
+
   return await fetch(`${URL_BASE}transactions?page=${page}&perPage=${perPage}`, {
     method: 'GET',
     headers: {
@@ -46,4 +46,18 @@ export async function deleteTransaction(id) {
       'Authorization': `Bearer ${token}`
     },
   })
+}
+
+export async function putTransaction(payload) {
+  const token = localStorage.getItem("token")
+  const response = await fetch(`${URL_BASE}transactions/${payload._id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  return data;
 }

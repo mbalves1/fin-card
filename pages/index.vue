@@ -15,9 +15,9 @@
       <v-col cols="12" col="2" class="d-flex justify-center align-center">
         <v-card elevation="0" height="auto" width="400" class="rounded-xl bg-transparent">
           <div class="custom">
-            <div class="animate one">
-              <strong><i><span>f</span><span>i</span><span>n</span><span>.</span>
-                <span class="custom--subtitle text-black">c</span><span class="custom--subtitle text-black">a</span><span class="custom--subtitle text-black">r</span><span class="custom--subtitle text-black">d</span></i></strong>
+            <div class="animate one customFont">
+              <strong><i><span>m</span><span>i</span><span>n</span><span>n</span><span>e</span><span>.</span>
+                <span class="custom--subtitle text-black">w</span><span class="custom--subtitle text-black">a</span><span class="custom--subtitle text-black">l</span><span class="custom--subtitle text-black">l</span><span class="custom--subtitle text-black">e</span><span class="custom--subtitle text-black">t</span></i></strong>
               </div>
             </div>
             <div class="px-10 d-flex justify-center flex-column mt-5">
@@ -111,7 +111,6 @@ const loginIn = async (item) => {
     
     if (token) router.push("/home")
   } catch (error) {
-    console.log(error)
     snackbar.value = {
       visible: true,
       color: "red",
@@ -159,7 +158,6 @@ const forgotPassword = async item => {
   try {
     const response = await postForgotPass(item);
     loading.value = false;
-    console.log("Response:", response);
 
     if (response.error) {
       // Exibe snackbar com a mensagem de erro

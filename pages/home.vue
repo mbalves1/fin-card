@@ -1,12 +1,21 @@
 <template>
   <v-dialog v-model="welcome">
     <div class="flex justify-center">
-      <v-card elevation="10" class="w-500px h-500px overflow-y-auto flex justify-between">
-        <v-card-title>Updates</v-card-title>
-        <v-card-text>1.0: Atualizações nas página de tabelas com filtros</v-card-text>
-        <v-card-text>1.1: Atualizações nas página de tabelas: deletar transações</v-card-text>
-        <v-card-text>1.1: Atualizações nas página de tabelas: deletar editar transações</v-card-text>
-        <v-btn @click="welcome = !welcome">Fechar</v-btn>
+      <v-card elevation="10" class="w-500px h-auto overflow-y-auto flex justify-between">
+        <v-card-title class="bg-fincard text-center">
+        <div class="font-bold">
+          Updates
+        </div>
+        </v-card-title>
+        <div class="ma-2">
+          <div class="mt-2 ml-5">1.0: Atualizações nas página de tabelas com filtros</div>
+          <div class="mt-2 ml-5">1.1: Atualizações nas página de tabelas: deletar transações</div>
+          <div class="mt-2 ml-5">1.1: Atualizações nas página de tabelas: deletar editar transações</div>
+        </div>
+        <v-divider class="mx-5"></v-divider>
+        <div class="text-center">
+          <v-btn variant="flat" class="border my-3 w-92% mx-2" @click="welcome = !welcome">Fechar</v-btn>
+        </div>
       </v-card>
     </div>
   </v-dialog>
@@ -153,7 +162,17 @@
   // const cardsNumber = computed(() => cards?.value.length)
 
   onMounted(async () => {
-    welcome.value = true
+    const WELCOME_KEY = 'hasShownWelcome';
+    const hasShownWelcome = JSON.parse(localStorage.getItem(WELCOME_KEY))
+    if (!hasShownWelcome) {
+    // Exibe a mensagem de boas-vindas
+    welcome.value = true;
+    localStorage.setItem(WELCOME_KEY, JSON.stringify(true));
+
+    setTimeout(() => {
+      welcome.value = false;
+    }, 4000);
+  }
     try {
       await fetchData()
       await fecthUser()
