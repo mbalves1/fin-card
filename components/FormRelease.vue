@@ -90,6 +90,7 @@
             class="w-100 primary-color mt-5"
             variant="flat"
             color="#74C27F"
+            :loading="loading"
           >
             Send
           </v-btn>
@@ -131,6 +132,7 @@ const snackbar = ref({
 
 const cards = ref([])
 const formRef = ref(null);
+const loading = ref(false)
 
 onMounted(async () => {
   await fetchCards()
@@ -153,6 +155,7 @@ const resetFormValues = () => {
 };
 
 const postReleases = async () => {
+  loading.value = true
   const { valid } = await formRef.value.validate();
   if (valid) {
     const card = cards.value.filter(item => item.bank === form.value.attached)
@@ -163,7 +166,7 @@ const postReleases = async () => {
     try {
       await postTransactions(payload);
       form.value = { ...form.value }
-
+      
       resetFormValues();
       snackbar.value = {
         visible: true,
@@ -172,6 +175,7 @@ const postReleases = async () => {
         title: "Registration completed successfully!",
         icon: "mdi-check-circle"
       }
+      loading.value = false
     } catch (error) {
       snackbar.value = {
         visible: true,
@@ -181,6 +185,7 @@ const postReleases = async () => {
         icon: "mdi-close-circle"
       }
       console.error(error);
+      loading.value = false
     }
   } else {
     return;

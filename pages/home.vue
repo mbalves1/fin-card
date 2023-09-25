@@ -34,68 +34,51 @@
         <div>
           <v-divider class="my-2 mb-5"></v-divider>
 
-          <v-row>
-            <v-col>
-              <v-card variant="flat" class="border pb-3">
-                <div class="flex justify-between items-center text-sm">
-                  <div class="text-lg font-bold pt-3 px-5">Janeiro</div>
-                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Janeiro')}}</div>
-                </div>
-                <v-divider class="mx-4 my-2"></v-divider>
-                <div v-for="(release, cx) in filteredByMonth('Janeiro')" :key="cx" class="px-6 py-1 text-sm">
-                  <div class="flex justify-between">
-                    <div>
-                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
-                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
-                      </v-icon>
-                        <span>{{ release.name }}</span>
-                    </div>
-                    <div>{{ formatCurrency(release.value) }}</div>
+          <div class="bg-fincardsecondary pa-3 border rounded">
+            <div class="flex gap-4 w-full overflow-scroll mb-4">
+              <div v-for="(month, mx) in array" :key="mx">
+                <v-card variant="flat" class="border pb-3 w-300px sm:w-230px">
+                  <div class="flex justify-between items-center text-sm">
+                    <div class="text-lg font-bold pt-3 px-5">{{month}}</div>
+                    <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue(month)}}</div>
                   </div>
-                </div>
-              </v-card>
-            </v-col>
-            <v-col>
-              <v-card variant="flat" class="border pb-3">
-                <div class="flex justify-between items-center text-sm">
-                  <div class="text-lg font-bold pt-3 px-5">Fevereiro</div>
-                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Fevereiro')}}</div>
-                </div>
-                <v-divider class="mx-4 my-2"></v-divider>
-                <div v-for="(release, cx) in filteredByMonth('Fevereiro')" :key="cx" class="px-6 py-1 text-sm">
-                  <div class="flex justify-between">
-                    <div>
-                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
-                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
-                      </v-icon>
-                      <span>{{ release.name }}</span>
+                  <v-divider class="mx-4 my-2"></v-divider>
+                  <div class="h-230px overflow-y-auto scrollbar">
+                    <div v-for="(release, cx) in filteredByMonth(month)" :key="cx" class="px-6 py-1 text-sm">
+                      <div class="flex justify-between">
+                        <div>
+                          <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
+                            {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
+                          </v-icon>
+                            <span>{{ release.name }}</span>
+                        </div>
+                        <div>{{ formatCurrency(release.value) }}</div>
+                      </div>
                     </div>
-                    <div>{{ formatCurrency(release.value) }}</div>
                   </div>
-                </div>
-              </v-card>
-            </v-col>
-            <v-col>
-              <v-card variant="flat" class="border pb-3">
-                <div class="flex justify-between items-center text-sm">
-                  <div class="text-lg font-bold pt-3 px-5">Março</div>
-                  <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue('Março')}}</div>
-                </div>
-                <v-divider class="mx-4 my-2"></v-divider>
-                <div v-for="(release, cx) in filteredByMonth('Março')" :key="cx" class="px-6 py-1 text-sm">
-                  <div class="flex justify-between">
-                    <div>
-                      <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
-                        {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
-                      </v-icon>
-                      <span>{{ release.name }}</span>
+                </v-card>
+              </div>
+            </div>
+            <v-row>
+              <v-col cols="12" sm="12" lg="6">
+                <v-card class="border" variant="flat">
+                  <div class="flex justify-between items-center text-sm">
+                    <div class="text-lg font-bold pt-3 px-5">Bancos</div>
+                  </div>
+                  <v-divider class="mx-4 my-2"></v-divider>
+                  <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
+                    <div class="flex justify-between px-5 text-xs sm:text-base">
+                      <div>{{ card.bank }}</div>
+                      <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
                     </div>
-                    <div>{{ formatCurrency(release.value) }}</div>
                   </div>
-                </div>
-              </v-card>
-            </v-col>
-          </v-row>
+                </v-card>
+              </v-col>
+              <v-col>
+                <v-card class="border" variant="flat">Aqui</v-card>
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="12" class="px-3 d-flex flex-column align-center">
@@ -158,6 +141,10 @@
   })
 
   const welcome = ref(false)
+
+  const array = ref([
+    'Janeiro', 'Fevereiro', 'Março'
+  ])
 
   // const cardsNumber = computed(() => cards?.value.length)
 
@@ -231,6 +218,18 @@
     return releases
   }
 
+  const filteredByBank = (bank) => {
+    if (!data.value) {
+      return [];
+    }
+    
+    const releases = data.value.filter(item => {
+      return item.attached[0].bank === bank
+    })
+
+    return releases.reduce((acc, obj) => acc + obj.value, 0);
+  }
+
   const reduceMonthValue = (month) => {
     const expense = releasesOut.value.filter(item => item.month === month)
     const revenues = releasesIn.value.filter(item => item.month === month)
@@ -248,13 +247,34 @@
 }
 
 .cardlist {
-  height: 500px;
+  height: 576px;
   overflow-y: scroll;
 }
 
 .cardlist::-webkit-scrollbar {
   width: 2px; /* largura da barra de rolagem */
   border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.scrollbar::-webkit-scrollbar
+{
+	width: 2px;
+  margin-right: 2px;
+	background-color: #F5F5F5;
+}
+
+.scrollbar::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
 }
 
 @media screen and (max-width: 600px) {
