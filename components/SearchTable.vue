@@ -2,10 +2,10 @@
   <v-row>
     <v-col cols="12" lg="12" md="12" xs="11" class="d-flex">
       <v-menu
-      v-model="menu"
-      :close-on-content-click="false"
-      location="end"
-    >
+        v-model="menu"
+        :close-on-content-click="false"
+        location="end"
+      >
       <template v-slot:activator="{ props }">
         <v-btn
           color="indigo"
@@ -104,7 +104,7 @@ const items = ref([
   { name: "Month", value: "month" },
   { name: "Type", value: "type" }
 ])
-const itemsMonth = ref(["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"])
+const itemsMonth = useMonths()
 const itemSearch = ref(null)
 const fav = ref(true)
 const menu = ref(false)

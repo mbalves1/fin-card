@@ -41,3 +41,12 @@ export const formatDate = (dataUTC, formato = "dd/MM/yyyy") => {
 }
 
 export const formattedNumber = (number) => number.toString().match(/.{1,4}/g)?.join(' ');
+
+export const useMonths = () => {
+  const months = ref([
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+    'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ]);
+
+  return months;
+};

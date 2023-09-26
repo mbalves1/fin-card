@@ -35,9 +35,42 @@
           <v-divider class="my-2 mb-5"></v-divider>
 
           <div class="bg-fincardsecondary pa-3 border rounded">
+            <div class="flex items-center justify-between pb-2">
+              <div class="text-sm">Overview</div>
+              <div class="flex text-xs justify-end items-start cursor-pointer">
+                <v-menu
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  location="bottom center">
+                  <template v-slot:activator="{ props }">
+                    <v-icon v-bind="props">mdi-cog-outline</v-icon>
+                  </template>
+                  <v-card min-width="300">
+                    <p class="text-sm pa-2">Mês</p>
+                    <v-divider></v-divider>
+                    <v-list>
+                      <v-list-item>
+                        <v-combobox
+                          v-model="monthView"
+                          :items="months"
+                          multiple
+                          chips
+                          density="compact"
+                          variant="outlined"
+                          item-value="value"
+                          item-title="name"
+                          :return-object="false"
+                          hide-details
+                        ></v-combobox>
+                      </v-list-item>
+                    </v-list>
+                  </v-card>
+                </v-menu>
+              </div>
+            </div>
             <div class="flex gap-4 w-full overflow-scroll mb-4">
-              <div v-for="(month, mx) in array" :key="mx">
-                <v-card variant="flat" class="border pb-3 w-300px sm:w-230px">
+              <div v-for="(month, mx) in monthView" :key="mx">
+                <v-card v-if="reduceMonthValue(month) != 0" variant="flat" class="border pb-3 w-300px sm:w-230px">
                   <div class="flex justify-between items-center text-sm">
                     <div class="text-lg font-bold pt-3 px-5">{{month}}</div>
                     <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue(month)}}</div>
@@ -67,8 +100,10 @@
                   </div>
                   <v-divider class="mx-4 my-2"></v-divider>
                   <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
-                    <div class="flex justify-between px-5 text-xs sm:text-base">
-                      <div>{{ card.bank }}</div>
+                    <div class="flex justify-between px-5 text-xs sm:text-base" >
+                      <div class="">
+                        <v-icon :class="`text-${card.color}`">mdi-credit-card</v-icon>
+                        {{ card.bank }}</div>
                       <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
                     </div>
                   </div>
@@ -141,10 +176,10 @@
   })
 
   const welcome = ref(false)
+  const menu = ref(false)
 
-  const array = ref([
-    'Janeiro', 'Fevereiro', 'Março'
-  ])
+  const monthView = ref(['Janeiro', 'Fevereiro', 'Março']) 
+  const months = useMonths()
 
   // const cardsNumber = computed(() => cards?.value.length)
 

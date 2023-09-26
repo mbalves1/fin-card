@@ -114,9 +114,7 @@ const form = ref({
   attached: null
 })
 
-const items = ref([
-  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-])
+const items = useMonths()
 
 const snackbar = ref({
   color: null,
