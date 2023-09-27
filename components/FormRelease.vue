@@ -1,8 +1,31 @@
 <template>
-  <v-container class="mt-6 mx-auto w-100 align-center">
+  <v-container class="mt-6 sm:mx-auto w-100 align-center">
+    <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
+      <div class="capitalize items-center flex">
+        <v-icon class="mr-2">mdi-plus-circle-outline</v-icon>
+        <span>Category</span>
+      </div>
+    </v-btn>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" lg="6" md="12">  
-        <v-form ref="formRef" class="px-5 pb-10 rounded-lg" >
+      <v-col v-if="registerCategory" cols="12" lg="3" md="12">
+        <v-form>
+          <div class="py-5 text-base">Registration category</div>
+
+          <v-text-field
+            v-model="categoryField"
+            label="Nome da categorias"
+            density="compact"
+            variant="outlined"
+          ></v-text-field>
+          <v-btn class="w-100 primary-color mt-5"
+            variant="flat"
+            color="#74C27F" @click="postCategory"
+            :loading="loadingCategory"
+            >Salvar</v-btn>
+        </v-form>
+      </v-col>
+      <v-col cols="12" lg="6" md="12">
+        <v-form ref="formRef" class="pb-10 rounded-lg" >
 
           <v-card-title class="py-5">Registration</v-card-title>
 
@@ -59,17 +82,19 @@
             label="Mês"
             required
             class="my-1"
-            hide-details
           ></v-select>
 
-          <v-radio-group v-model="form.method_payment" inline hide-details="">
-            <template v-slot:label>
-              <div><strong>Metodo de pagamento</strong></div>
-            </template>
-            <v-radio label="Cartão" value="1"></v-radio>
-            <v-radio label="Dinheiro" value="2"></v-radio>
-            <v-radio label="Pix" value="3"></v-radio>
-          </v-radio-group>
+          <v-select
+            density="compact"
+            variant="outlined"
+            v-model="form.category"
+            :items="categorys"
+            item-title="categoryname"
+            item-value="category"
+            label="Categoria"
+            required
+            class="my-1"
+          ></v-select>
 
           <v-select
             density="compact"
@@ -84,6 +109,12 @@
             hide-details
             :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-select>
+
+          <v-radio-group v-model="form.method_payment" inline hide-details="">
+            <v-radio label="Cartão" value="1"></v-radio>
+            <v-radio label="Dinheiro" value="2"></v-radio>
+            <v-radio label="Pix" value="3"></v-radio>
+          </v-radio-group>
 
           <v-btn
             @click="postReleases"
@@ -103,6 +134,7 @@
 <script setup>
 const { postTransactions } = useTransactions()
 const { getCards } = useCardStore()
+const { postNewCategory, getAllCategory } = useCategory()
 
 const form = ref({
   name: null,
@@ -111,8 +143,11 @@ const form = ref({
   month: 'Janeiro',
   type: "Saída",
   method_payment: null,
-  attached: null
+  attached: null,
+  category: null
 })
+
+const categoryField = ref(null)
 
 const items = useMonths()
 
@@ -129,8 +164,11 @@ const snackbar = ref({
 })
 
 const cards = ref([])
+const categorys = ref([])
 const formRef = ref(null);
 const loading = ref(false)
+const loadingCategory = ref(false)
+const registerCategory = ref(false)
 
 onMounted(async () => {
   await fetchCards()
@@ -138,7 +176,9 @@ onMounted(async () => {
 
 const fetchCards = async () => {
   const card = await getCards()
+  const category = await getAllCategory()
   cards.value = card
+  categorys.value = category
 }
 
 const resetFormValues = () => {
@@ -152,13 +192,41 @@ const resetFormValues = () => {
   };
 };
 
+const postCategory = async () => {
+  loadingCategory.value = true
+  if (!categoryField.value) {
+    loadingCategory.value = false
+    snackbar.value = {
+      visible: true,
+      color: "red",
+      position: "top",
+      title: "Error occurred during registration!",
+      icon: "mdi-close-circle"
+    }
+  } else {
+    try {
+      const response = await postNewCategory({categoryname: categoryField.value})
+      const category = await getAllCategory()
+      categorys.value = category
+      loadingCategory.value = false
+      categoryField.value = null
+      return response
+    } catch (error) {
+      console.error('error', error)
+    }
+  }
+}
+
 const postReleases = async () => {
   loading.value = true
   const { valid } = await formRef.value.validate();
   if (valid) {
     const card = cards.value.filter(item => item.bank === form.value.attached)
+    const category = categorys.value.filter(item => item.categoryname === form.value.category)
     const payload = {
-      ...form.value, attached: card
+      ...form.value,
+      attached: card,
+      category: category
     }
     
     try {
