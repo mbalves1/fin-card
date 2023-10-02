@@ -16,9 +16,7 @@ export const useTransactions = defineStore('transactions', {
       const token = localStorage.getItem("token")
       try {
         const response = await postTransactions(payload, token)
-        const data = await response.json()
-        this.transactions = data
-        return
+        return response
       } catch (error) {
         console.error(error)
       }

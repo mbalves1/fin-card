@@ -15,7 +15,11 @@
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
 
         <div class="" >
-          <SearchTable v-if="hasSearch" @getFilter="filterTransactions"></SearchTable>
+          <SearchTable
+            v-if="hasSearch"
+            @getFilter="filterTransactions"
+            @clean="refresh"
+          ></SearchTable>
           <table>
             <thead>
               <tr>
@@ -199,6 +203,7 @@
   })
 
   const pagination = ref(1)
+  let currentFilter = ref(null);
 
   const formatedItem = (item, params) => {
     const fieldMapping = {
@@ -217,15 +222,36 @@
 
   const paginationNext = async params => {
     try {
-      const transations = await getTransactions({
-        page: params ? params : pagination.value,
-        perPage: perPageSize.value
-      })
+      if (!currentFilter.value) {
+        const transations = await getTransactions({
+          page: params ? params : pagination.value,
+          perPage: perPageSize.value
+        })
 
-      data.value = await transations.transactions
-      totalCount.value = await transations.totalCount
-      pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+        data.value = await transations.transactions
+        totalCount.value = await transations.totalCount
+        pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+      } else {
+        const transations = await getFiltersTransactions(currentFilter.value, {
+          page: params ? params : pagination.value,
+          perPage: perPageSize.value
+        })
+
+        data.value = await transations.transactions
+        totalCount.value = await transations.totalCount
+        pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+      }
+
     } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const refresh = async item => {
+    try {
+      await fetchData()
+    }
+    catch(error) {
       console.error(error)
     }
   }
@@ -242,6 +268,7 @@
   }
 
   const filterTransactions = async (item) => {
+    currentFilter.value = item
     const filter = await getFiltersTransactions(item, page.value)
     data.value = filter.transactions
     totalCount.value = filter.totalCount

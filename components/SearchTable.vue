@@ -8,12 +8,24 @@
       >
       <template v-slot:activator="{ props }">
         <v-btn
-          color="indigo"
+          color="green"
           v-bind="props"
           variant="text"
           class="text-capitalize"
         >
+          <v-icon class="mr-2">mdi-filter</v-icon>
           Filtros
+        </v-btn>
+
+        <v-btn
+          color="grey"
+          @click="cleanFilter"
+          variant="text"
+          class="text-capitalize"
+
+        >
+          <v-icon class="mr-2">mdi-refresh</v-icon>
+          Limpar filtros
         </v-btn>
       </template>
 
@@ -119,4 +131,6 @@ const search = () => {
   menu.value = false
   emit('getFilter', {item: item.value, value: itemSearch.value})
 }
+
+const cleanFilter = () => emit("clean")
 </script>
