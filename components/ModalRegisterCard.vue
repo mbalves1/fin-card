@@ -1,4 +1,15 @@
 <template>
+  <v-snackbar
+    v-model="snackbar.visible"
+    :timeout="3000"
+    :location="snackbar.position"
+    :color="snackbar.color"
+  >
+    <div class="flex">
+      <v-icon class="mr-2">{{ snackbar.icon }}</v-icon>
+      <div>{{ snackbar.title }}</div>
+    </div>
+  </v-snackbar>
   <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg pa-3" :variant="variant">
     <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
       <v-icon @click="close">mdi-close-circle-outline</v-icon>
@@ -22,7 +33,7 @@
               </div>
             </div>
             <div class="mt-10">
-              <div style="font-size: 16px;">{{ formattedNumber(card.number_card )|| '000' }}</div>
+              <div style="font-size: 16px;">***</div>
               <div class="" style="font-size: 13px;">{{card.name || 'Joao Silva'}}</div>
             
               <v-row no-gutters class="pt-5">
@@ -108,6 +119,7 @@
           class="w-100 primary-color"
           variant="flat"
           color="#74C27F"
+          :loading="loading"
         >
           Send
         </v-btn>
@@ -133,16 +145,26 @@ defineProps({
   }
 })
 
+const snackbar = ref({
+  color: null,
+  icon: null,
+  mode: null,
+  position: "top",
+  text: null,
+  timeout: 7500,
+  title: null,
+  visible: false,
+  icon: null
+})
+
 const card = ref({
   name: null,
-  number_card: "",
   bank: null,
   type: null,
   flag: null,
-  expiration: null,
-  code: null
+  expiration: null
 })
-
+const loading = ref(false)
 const size = ref(true)
 const formRef = ref(null);
 
@@ -161,7 +183,18 @@ onBeforeUnmount(() => {
 
 const flagCard = ref(null)
 
+const resetFormValues = () => {
+  card.value = {
+    name: null,
+    bank: null,
+    type: null,
+    flag: null,
+    expiration: null
+  };
+};
+
 const sendCard = async () => {
+  loading.value = true
   const { valid } = await formRef.value.validate();
   if (valid) {
     try {
@@ -171,8 +204,8 @@ const sendCard = async () => {
         color: color.value
       }
       await postCard(card.value)
-      form.value = { ...form.value }
-
+      card.value = { ...card.value }
+      
       resetFormValues();
       snackbar.value = {
         visible: true,
@@ -181,11 +214,12 @@ const sendCard = async () => {
         title: "Registration completed successfully!",
         icon: "mdi-check-circle"
       }
-  
+      loading.value = false
     } catch (error) {
-  
+      loading.value = false
     }
   } else {
+    loading.value = false
     return;
   }
 }
@@ -195,13 +229,13 @@ const color = ref(null)
 const close = () => emit("closeModal", false)
 
 const colors = ref([
-  {label: "red", value: "red"},
-  {label: "blue", value: "blue"},
-  {label: "orange", value: "orange"},
-  {label: "yellow", value: "yellow"},
-  {label: "green", value: "green"},
-  {label: "silver", value: "silver"},
-  {label: "purple", value: "purple"},
+  {label: "Vermelho", value: "red"},
+  {label: "Azul", value: "blue"},
+  {label: "Laranja", value: "orange"},
+  {label: "Amarelo", value: "yellow"},
+  {label: "Verde", value: "green"},
+  {label: "Prata", value: "silver"},
+  {label: "Roxo", value: "purple"},
 ])
 
 </script>
