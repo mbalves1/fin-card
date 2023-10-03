@@ -118,11 +118,7 @@ const items = ref([
 ])
 const itemsMonth = useMonths()
 const itemSearch = ref(null)
-const fav = ref(true)
 const menu = ref(false)
-const message = ref(false)
-const hints = ref(true)
-
 const item = ref(null)
 
 const emit = defineEmits(['getFilter'])
