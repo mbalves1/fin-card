@@ -74,6 +74,16 @@
             :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-text-field>
 
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            v-model="form.installment"
+            label="Parcela"
+            required
+            class="my-1"
+            type="number"
+          ></v-text-field>
+
           <v-select
             density="compact"
             variant="outlined"
@@ -140,6 +150,7 @@ const form = ref({
   name: null,
   description: null,
   value: null,
+  installment: null,
   month: 'Janeiro',
   type: "Saída",
   method_payment: null,
@@ -169,6 +180,7 @@ const formRef = ref(null);
 const loading = ref(false)
 const loadingCategory = ref(false)
 const registerCategory = ref(false)
+const itemsMonth = useMonths()
 
 onMounted(async () => {
   await fetchCards()
@@ -186,6 +198,7 @@ const resetFormValues = () => {
     name: null,
     description: null,
     value: null,
+    installment: null,
     month: 'Janeiro',
     type: "Saída",
     attached: null
@@ -223,16 +236,24 @@ const postReleases = async () => {
   if (valid) {
     const card = cards.value.filter(item => item.bank === form.value.attached)
     const category = categorys.value.filter(item => item.categoryname === form.value.category)
-    const payload = {
-      ...form.value,
-      attached: card,
-      category: category
-    }
+    const installment = Number(form.value.installment)
+    const installments = Array.from({ length: installment }, (_, i) => i + 1);
     
     try {
-      await postTransactions(payload);
+      installments.map(i => {
+        const payload = {
+          ...form.value,
+          attached: card,
+          category: category,
+          installment: i,
+          month: itemsMonth.value[i],
+          value: form.value.value / installment
+        }
+        postTransactions(payload);
+      })
+     
       form.value = { ...form.value }
-      
+
       resetFormValues();
       snackbar.value = {
         visible: true,
