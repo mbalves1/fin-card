@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-6 mx-auto w-100 ">
-    <div class="py-10 ml-10 text-lg sm:text-3xl mx-auto flex justify-start">Dashboard</div>
+  <div class="mx-auto w-full">
+    <div class="py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start bg-#f2f2f2">Dashboard</div>
     <v-divider class="mb-10"></v-divider>
     <v-container>
       <v-row>

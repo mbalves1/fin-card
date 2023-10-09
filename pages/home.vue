@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-dialog v-model="welcome">
     <div class="flex justify-center">
       <v-card elevation="10" class="w-500px h-auto overflow-y-auto flex justify-between">
@@ -19,7 +20,7 @@
       </v-card>
     </div>
   </v-dialog>
-  <v-container class="mt-6 mx-auto w-100">
+  <v-container class="mx-auto w-100">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
         <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
@@ -99,28 +100,45 @@
                     <div class="text-lg font-bold pt-3 px-5">Bancos</div>
                   </div>
                   <v-divider class="mx-4 my-2"></v-divider>
-                  <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
-                    <div class="flex justify-between px-5 text-xs sm:text-base" >
-                      <div class="">
-                        <v-icon :class="`text-${card.color}`">mdi-credit-card</v-icon>
-                        {{ card.bank }}</div>
-                      <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
+                  <div class="h-180px overflow-y-auto scrollbar">
+                    <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
+                      <div class="flex justify-between px-5 text-xs sm:text-base" >
+                        <div class="">
+                          <v-icon :class="`text-${card.color}`">mdi-credit-card</v-icon>
+                          {{ card.bank }}</div>
+                          <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
+                      </div>
                     </div>
                   </div>
                 </v-card>
               </v-col>
               <v-col>
-                <v-card class="border" variant="flat">Aqui</v-card>
+                <v-card class="border" variant="flat">
+                  <div class="flex justify-between items-center text-sm">
+                    <div class="text-lg font-bold pt-3 px-5">Categorias</div>
+                  </div>
+                  <v-divider class="mx-4 my-2"></v-divider>
+                  <div class="h-180px overflow-y-auto scrollbar">
+                    <div v-for="(release, rx) in category" :key="rx" class="pb-2">
+                      <div class="flex justify-between px-5 text-xs sm:text-base flex-col">
+                        <div v-for="(rel, cx) in release.category" :key="cx" class="pb-2 flex justify-between">
+                          <div v-if="rel">{{ rel }}</div>
+                            <i v-else class="text-grey text-sm">sem categoria</i>
+                            <div>{{ formatCurrency(filteredCategoryValue(rel)) }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </v-card>
               </v-col>
             </v-row>
           </div>
         </div>
       </v-col>
-      <v-col cols="12" lg="4" sm="12" class="px-3 d-flex flex-column align-center">
-        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded" style="background: #f2f2f2">
+      <v-col cols="12" lg="4" sm="4" class="px-3 d-flex flex-column align-center">
+        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full" style="background: #f2f2f2">
           <v-chip>{{ cardsNumber }}</v-chip>
-          <v-title class="mx-2 font-bold">Credits cards</v-title>
-          <!-- <span class="fs-10">{{ cardsNumber }} cards</span> -->
+          <div class="mx-2 font-bold text-xl sm:text-3xl">Credits cards</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
         <v-sheet class="mx-10">
@@ -138,23 +156,27 @@
     </v-row>
 
   </v-container>
-  <v-row class="mt-10 sm:mt-6">
-    <v-col class="">
-      <v-sheet class="text-h4 px-5 py-0 pb-6 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
-        <div class="text-center">
-          <span>Transactions</span>
-        </div>
-      </v-sheet>
-
-      <Table
-        :hasSpacing="false"
-        :hasPagination="false"
-        :hasSearch="false"
-        :data="data"
-      >
-      </Table>
-    </v-col>
-  </v-row>
+  <div class="max-w-1200px mx-auto">
+    <v-row class="mt-10 sm:mt-6">
+      <v-col class="">
+        <v-sheet class="text-h4 px-5 py-0 pb-6 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
+          <div class="text-center">
+            <span>Transactions</span>
+            <div class="font-normal text-sm">Últimas 10 transações, para maiores informações acessar página de <RouterLink to="table">tabela</RouterLink></div>
+          </div>
+        </v-sheet>
+  
+        <Table
+          :hasSpacing="false"
+          :hasPagination="false"
+          :hasSearch="false"
+          :data="data"
+        >
+        </Table>
+      </v-col>
+    </v-row>
+  </div>
+</div>
 </template>
 <script setup>
 
@@ -163,6 +185,7 @@
   const { getUser } = useUserStore()
 
   const data = ref()
+  const category = ref()
   const size = ref(0);
   const cards = ref(null)
   const cardsNumber = ref(0)
@@ -177,11 +200,8 @@
 
   const welcome = ref(false)
   const menu = ref(false)
-
   const monthView = ref(['Janeiro', 'Fevereiro', 'Março']) 
   const months = useMonths()
-
-  // const cardsNumber = computed(() => cards?.value.length)
 
   onMounted(async () => {
     const WELCOME_KEY = 'hasShownWelcome';
@@ -222,6 +242,8 @@
       totalBalance(releasesOut.value, releasesIn.value)
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
       releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
+
+      filteredByCategory()
     } catch (error) {
       console.error(error)
     }
@@ -257,19 +279,45 @@
     if (!data.value) {
       return [];
     }
-    
-    const releases = data.value.filter(item => {
-      return item.attached[0].bank === bank
-    })
-
+    const releases = data.value.filter(item => item.attached[0].bank === bank)
     return releases.reduce((acc, obj) => acc + obj.value, 0);
+  }
+
+  const filteredCategoryValue = (label) => {
+    if (!data.value) {
+      return [];
+    }
+    const items = data.value.reduce((prev, cur) => {
+      const categoryName = cur.category.map(i => i.categoryname);
+      if (!prev[categoryName]) {
+        prev[categoryName] = 0;
+      }
+      prev[categoryName] += cur.value;
+      return prev
+    }, {});
+    return items[label]
+  }
+
+  const filteredByCategory = async () => {
+    data.value.reduce((prev, cur) => {
+      const categoryName = cur.category.map(i => i.categoryname);
+      if (!prev[categoryName]) {
+        prev[categoryName] = 0;
+      }
+      prev[categoryName] += cur.value;
+      category.value = [{
+          category: Object.keys(prev),
+          val: Object.values(prev)
+        }
+      ]
+      return prev
+    }, {});
   }
 
   const reduceMonthValue = (month) => {
     const expense = releasesOut.value.filter(item => item.month === month)
     const revenues = releasesIn.value.filter(item => item.month === month)
-    const total = totalBalance(expense, revenues)
-    return total
+    return totalBalance(expense, revenues)
   }
 </script>
 <style scoped lang="scss">
@@ -282,7 +330,7 @@
 }
 
 .cardlist {
-  height: 576px;
+  height: 660px;
   overflow-y: scroll;
 }
 
