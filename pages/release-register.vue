@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <div>
 
-  <div class="py-10 ml-10 fs-30">{{ tabTitle }}</div>
+  <div class="py-10 ml-10 text-lg sm:text-3xl">{{ tabTitle }}</div>
   <v-card variant="flat">
     <div class="">
       <v-tabs
@@ -76,7 +76,7 @@
       </v-window>
     </div>
   </v-card>
-</v-container>
+</div>
 </template>
 <script setup>
 

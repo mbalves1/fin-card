@@ -8,8 +8,8 @@
     {{ snackbar.title }}
     <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
   </v-snackbar>
-  <v-container class="mx-auto">
-    <div v-if="hasSearch" class="py-10 ml-10 fs-30 mx-auto flex justify-start">Transactions</div>
+  <div class="mx-auto">
+    <div v-if="hasSearch" class="py-10 ml-10 text-lg sm:text-3xl mx-auto flex justify-start">Transactions</div>
     <v-divider></v-divider>
     <v-row class="d-flex justify-center" style="height: 70vh;">
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
@@ -142,7 +142,7 @@
         </v-card>
       </div>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 <script setup>
   const data = ref()
