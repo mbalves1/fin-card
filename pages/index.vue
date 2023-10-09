@@ -30,7 +30,6 @@
                 <div v-if="expand1">
                   <FormLogin
                     :loading="loading"
-                    :messagetext="messagetext"
                     @loginIn="loginIn"
                     @forgotPassword="changeView(3)"
                     @createAccount="changeView(2)"

@@ -29,12 +29,6 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify', 'chart.js'],
   },
-  googleFonts: {
-    families: {
-      Montserrat: true // Importa a fonte Montserrat
-      // Você pode adicionar outras fontes aqui
-    }
-  },
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     'vuetify/dist/vuetify.css',

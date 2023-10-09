@@ -133,7 +133,7 @@
             color="#74C27F"
             :loading="loading"
           >
-            Send
+            Salvar
           </v-btn>
         </v-form>
       </v-col>
@@ -236,9 +236,10 @@ const postReleases = async () => {
   if (valid) {
     const card = cards.value.filter(item => item.bank === form.value.attached)
     const category = categorys.value.filter(item => item.categoryname === form.value.category)
-    const installment = Number(form.value.installment)
+    const installment = Number(form.value.installment) || 1
     const installments = Array.from({ length: installment }, (_, i) => i + 1);
-    
+    const indexMonth = itemsMonth.value.indexOf(form.value.month)
+
     try {
       installments.map(i => {
         const payload = {
@@ -246,7 +247,7 @@ const postReleases = async () => {
           attached: card,
           category: category,
           installment: i,
-          month: itemsMonth.value[i],
+          month: itemsMonth.value[[(indexMonth + i) % 12]],
           value: form.value.value / installment
         }
         postTransactions(payload);

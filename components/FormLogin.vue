@@ -21,17 +21,6 @@
       @click:append-inner="show1 = !show1"
     ></v-text-field>
       
-    <v-row v-if="messageFail" class="rounded-sm errorMessage">
-      <div transition="scale-transition">
-        <v-alert
-        type="error"
-        icon="mdi-alert-circle-outline"
-        :text="messagetext"
-        variant="tonal"
-        ></v-alert>
-      </div>
-    </v-row>
-      
     <div class="d-flex justify-end fs-10 text-decoration-underline" style="cursor: pointer" @click="$emit('forgotPassword')">
       Esqueci minha senha
     </div>
@@ -61,10 +50,6 @@
 defineProps({
   loading: {
     type: Boolean,
-    default: false
-  },
-  messagetext: {
-    type: String,
     default: false
   }
 })
