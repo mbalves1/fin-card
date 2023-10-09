@@ -10,122 +10,125 @@
       <div>{{ snackbar.title }}</div>
     </div>
   </v-snackbar>
-  <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg pa-3" :variant="variant">
-    <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
-      <v-icon @click="close">mdi-close-circle-outline</v-icon>
-    </div>
-    <div class="overflow-y-auto py-1">
-      <v-menu>
-        <template v-slot:activator="{ props }">
-          <v-card
-            variant="flat"
-            :color="color"
+  <div class="flex justify-center">
 
-            class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0 w-280px sm:w-310px"
-            v-bind="props"
-          >
-            <div class="d-flex align-center justify-space-between">
-              <div style="font-size: 13px;">
-                {{ card.type || 'Credito' }}
+    <v-card :width="size ? '100%' : '500'" :max-width="isModal ? 500 : ''" height="auto" class="rounded-lg pa-3" :variant="variant">
+      <div class="d-flex flex-row-reverse" v-if="hasCloseButton">
+        <v-icon @click="close">mdi-close-circle-outline</v-icon>
+      </div>
+      <div class="overflow-y-auto py-1">
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-card
+              variant="flat"
+              :color="color"
+  
+              class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0 w-280px sm:w-310px"
+              v-bind="props"
+            >
+              <div class="d-flex align-center justify-space-between">
+                <div style="font-size: 13px;">
+                  {{ card.type || 'Credito' }}
+                </div>
+                <div style="font-size: 13px;">
+                  <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag}.svg`" alt="" width="40"/>
+                </div>
               </div>
-              <div style="font-size: 13px;">
-                <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag}.svg`" alt="" width="40"/>
+              <div class="mt-10">
+                <div style="font-size: 16px;">***</div>
+                <div class="" style="font-size: 13px;">{{card.name || 'Joao Silva'}}</div>
+              
+                <v-row no-gutters class="pt-5">
+                  <v-col class="">
+                    <div style="font-size: 8px;">Data</div>
+                    <div style="font-size: 10px;">{{ card.expiration }}</div>
+                  </v-col>
+                  <v-col class="">
+                    <div style="font-size: 8px;">code</div>
+                    <div style="font-size: 10px;">{{ card.code }}</div>
+                  </v-col>
+                </v-row>
               </div>
-            </div>
-            <div class="mt-10">
-              <div style="font-size: 16px;">***</div>
-              <div class="" style="font-size: 13px;">{{card.name || 'Joao Silva'}}</div>
+            </v-card>
             
-              <v-row no-gutters class="pt-5">
-                <v-col class="">
-                  <div style="font-size: 8px;">Data</div>
-                  <div style="font-size: 10px;">{{ card.expiration }}</div>
-                </v-col>
-                <v-col class="">
-                  <div style="font-size: 8px;">code</div>
-                  <div style="font-size: 10px;">{{ card.code }}</div>
-                </v-col>
-              </v-row>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in colors"
+              :key="index"
+              :value="index"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-radio-group hide-details v-model="color">
+                <v-radio :label="item.label" :value="item.value"></v-radio>
+              </v-radio-group>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-form ref="formRef">
+          <v-radio-group v-model="card.type" class="d-flex">
+            <div class="d-flex" style="width: 250px;">
+              <v-radio label="Crédito" value="Crédito"></v-radio>
+              <v-radio label="Débito" value="Débito"></v-radio>
             </div>
-          </v-card>
-          
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in colors"
-            :key="index"
-            :value="index"
+          </v-radio-group>
+    
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            v-model="card.bank"
+            class="my-1"
+            label="Nome do banco"
+            required
+            :rules="[v => !!v || 'O nome é obrigatório']"
+          ></v-text-field>
+    
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            v-model="card.name"
+            class="my-1"
+            label="Nome no cartão"
+            required
+            :rules="[v => !!v || 'O nome é obrigatório']"
+          ></v-text-field>
+    
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            v-model="card.expiration"
+            label="Code"
+            required
+            class="my-1"
+            type="date"
+            mask="DD/MM"
+            :rules="[v => !!v || 'O valor é obrigatório']"
+          ></v-text-field>
+  
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            v-model="card.flag"
+            label="Bandeira"
+            required
+            class="my-1"
+            type="string"
+            :rules="[v => !!v || 'O valor é obrigatório']"
+          ></v-text-field>
+    
+          <v-btn
+            @click="sendCard"
+            class="w-100 primary-color"
+            variant="flat"
+            color="#74C27F"
+            :loading="loading"
           >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-            <v-radio-group hide-details v-model="color">
-              <v-radio :label="item.label" :value="item.value"></v-radio>
-            </v-radio-group>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-form ref="formRef">
-        <v-radio-group v-model="card.type" class="d-flex">
-          <div class="d-flex" style="width: 250px;">
-            <v-radio label="Crédito" value="Crédito"></v-radio>
-            <v-radio label="Debito" value="Dábito"></v-radio>
-          </div>
-        </v-radio-group>
-  
-        <v-text-field
-          density="compact"
-          variant="outlined"
-          v-model="card.bank"
-          class="my-1"
-          label="Nome do banco"
-          required
-          :rules="[v => !!v || 'O nome é obrigatório']"
-        ></v-text-field>
-  
-        <v-text-field
-          density="compact"
-          variant="outlined"
-          v-model="card.name"
-          class="my-1"
-          label="Nome no cartão"
-          required
-          :rules="[v => !!v || 'O nome é obrigatório']"
-        ></v-text-field>
-  
-        <v-text-field
-          density="compact"
-          variant="outlined"
-          v-model="card.expiration"
-          label="Code"
-          required
-          class="my-1"
-          type="date"
-          mask="DD/MM"
-          :rules="[v => !!v || 'O valor é obrigatório']"
-        ></v-text-field>
-
-        <v-text-field
-          density="compact"
-          variant="outlined"
-          v-model="card.flag"
-          label="Bandeira"
-          required
-          class="my-1"
-          type="string"
-          :rules="[v => !!v || 'O valor é obrigatório']"
-        ></v-text-field>
-  
-        <v-btn
-          @click="sendCard"
-          class="w-100 primary-color"
-          variant="flat"
-          color="#74C27F"
-          :loading="loading"
-        >
-          Send
-        </v-btn>
-      </v-form>
-    </div>
-  </v-card>
+            Send
+          </v-btn>
+        </v-form>
+      </div>
+    </v-card>
+  </div>
 </template>
 <script setup>
 const { postCard, colorState } = useCardStore()
@@ -181,8 +184,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updatesizeValue);
 });
 
-const flagCard = ref(null)
-
 const resetFormValues = () => {
   card.value = {
     name: null,
@@ -200,7 +201,6 @@ const sendCard = async () => {
     try {
       card.value = {
         ...card.value,
-        flag: flagCard,
         color: color.value
       }
       await postCard(card.value)

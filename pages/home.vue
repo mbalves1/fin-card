@@ -145,7 +145,7 @@
           <div class="cardlist sm:ml-0">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
-          <div class="">
+          <div class="flex justify-center">
             <v-dialog v-model="openModal"
             class="">
               <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end" :isModal="true"></ModalRegisterCard>
