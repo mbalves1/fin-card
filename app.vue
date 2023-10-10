@@ -38,6 +38,10 @@
   font-size: 10px;
 }
 
+.fs-13 {
+  font-size: 13px;
+}
+
 .fs-20 {
   font-size: 20px;
 }
