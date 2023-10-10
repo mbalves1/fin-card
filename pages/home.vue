@@ -20,7 +20,7 @@
       </v-card>
     </div>
   </v-dialog>
-  <v-container class="mx-auto w-100">
+  <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
         <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
@@ -39,6 +39,7 @@
             <div class="flex items-center justify-between pb-2">
               <div class="text-sm">Overview</div>
               <div class="flex text-xs justify-end items-start cursor-pointer">
+                <v-icon class="mr-2">mdi-plus-circle-outline</v-icon>
                 <v-menu
                   v-model="menu"
                   :close-on-content-click="false"
@@ -135,13 +136,13 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" lg="4" sm="4" class="px-3 d-flex flex-column align-center">
+      <v-col cols="12" lg="4" sm="8" class="px-3 d-flex flex-column align-center items-center">
         <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full" style="background: #f2f2f2">
           <v-chip>{{ cardsNumber }}</v-chip>
           <div class="mx-2 font-bold text-xl sm:text-3xl">Credits cards</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
-        <v-sheet class="mx-10">
+        <div class="">
           <div class="cardlist sm:ml-0">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
@@ -151,7 +152,7 @@
               <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end" :isModal="true"></ModalRegisterCard>
             </v-dialog>
           </div>
-        </v-sheet>
+        </div>
       </v-col>
     </v-row>
 
@@ -200,7 +201,7 @@
 
   const welcome = ref(false)
   const menu = ref(false)
-  const monthView = ref(['Janeiro', 'Fevereiro', 'Março']) 
+  const monthView = ref(['Janeiro', 'Fevereiro', 'Março', 'Abril']) 
   const months = useMonths()
 
   onMounted(async () => {
@@ -368,7 +369,7 @@
     white-space: nowrap;
     display: flex;
     flex-direction: row;
-    max-width: 375px
+    max-width: 345px
   }
 }
 </style>
