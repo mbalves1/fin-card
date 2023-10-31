@@ -10,8 +10,9 @@
         </v-card-title>
         <div class="ma-2">
           <div class="mt-2 ml-5">1.0: Atualizações nas página de tabelas com filtros</div>
-          <div class="mt-2 ml-5">1.1: Atualizações nas página de tabelas: deletar transações</div>
+          <div class="mt-2 ml-5">1.0: Atualizações nas página de tabelas: deletar transações</div>
           <div class="mt-2 ml-5">1.1: Atualizações nas página de tabelas: deletar editar transações</div>
+          <div class="mt-2 ml-5">2.0: Atualizações nas página de tabelas: opção de download em xlsx</div>
         </div>
         <v-divider class="mx-5"></v-divider>
         <div class="text-center">

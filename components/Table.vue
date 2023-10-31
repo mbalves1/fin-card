@@ -14,12 +14,19 @@
     <v-row class="d-flex justify-center" style="height: 70vh;">
       <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
 
-        <div class="" >
-          <SearchTable
-            v-if="hasSearch"
-            @getFilter="filterTransactions"
-            @clean="refresh"
-          ></SearchTable>
+        <div>
+          <div class="flex">
+            <SearchTable
+              v-if="hasSearch"
+              @getFilter="filterTransactions"
+              @clean="refresh"
+            ></SearchTable>
+  
+            <div class="flex cursor-pointer">
+              <IconDownload class="ma-3" @click="download"></IconDownload>
+            </div>
+          </div>
+
           <table>
             <thead>
               <tr>
@@ -265,6 +272,52 @@
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const datta = ref([
+    {name: 'hhv', email: 'muril@emewil', age: 34},
+    {name: 'hhv', email: 'muril@emewil', age: 34},
+    {name: 'hhv', email: 'muril@emewil', age: 34},
+    {name: 'hhv', email: 'muril@emewil', age: 34},
+  ])
+
+
+  const download = async () => {
+
+    const transactions = await getTransactions({
+      page: 1,
+      perPage: 100000
+    })
+
+    data.value = await transactions.transactions
+    const csvContent = convertCSV(transactions.transactions)
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'export_data.csv')
+    link.click()
+  }
+
+  const convertCSV = (item) => {
+    const allHeaders = Object.keys(item[0]);
+    const headers = allHeaders.filter(header => header !== 'attached')
+    const rows = data.value.map(obj => {
+      return headers.map(header => {
+        if (header === 'attached') return
+        if (obj[header] instanceof Object) {
+          if (typeof obj[header][0] === 'undefined') {
+            return 'default'
+          }
+          const resp = obj[header].map(h => h.categoryname)[0]
+          return resp
+        }
+        return obj[header]
+      })
+    })
+    const headerRow = headers.join(',')
+    const csvRows = [headerRow, ...rows.map(row => row.join(','))]
+    return csvRows.join('\n')
   }
 
   const filterTransactions = async (item) => {
