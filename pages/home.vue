@@ -20,6 +20,19 @@
       </v-card>
     </div>
   </v-dialog>
+
+  <div class="flex">
+    <div class="flex justify-center items-center z-2">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="#74C27F"
+        indeterminate
+      ></v-progress-circular>
+    </div>
+  </div>
+
+
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
