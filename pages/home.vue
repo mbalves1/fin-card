@@ -9,10 +9,12 @@
         </div>
         </v-card-title>
         <div class="ma-2">
-          <div class="mt-2 ml-5">1.0: Atualizações nas página de tabelas com filtros</div>
-          <div class="mt-2 ml-5">1.0: Atualizações nas página de tabelas: deletar transações</div>
-          <div class="mt-2 ml-5">1.1: Atualizações nas página de tabelas: deletar editar transações</div>
-          <div class="mt-2 ml-5">2.0: Atualizações nas página de tabelas: opção de download em xlsx</div>
+          <div v-for="(update, upx) in updates" :key="upx">
+            <div class="mt-2 ml-5 flex items-center">
+              <v-icon class="text-yellow pr-5">mdi-creation</v-icon>
+              {{ update.text }}
+            </div>
+          </div>
         </div>
         <v-divider class="mx-5"></v-divider>
         <div class="text-center">
@@ -41,7 +43,16 @@
             <div class="flex items-center justify-between pb-2">
               <div class="text-sm">Overview</div>
               <div class="flex text-xs justify-end items-start cursor-pointer">
-                <v-icon class="mr-2">mdi-plus-circle-outline</v-icon>
+                <v-icon class="mr-2" @click="openModalToRegister(event, true)">mdi-plus-circle-outline</v-icon>
+                <div class="flex justify-center">
+                  <v-dialog v-model="openModalRelease">
+                    <v-card class="w-100% sm:w-50%">
+                      <ModalRegisterRelease
+                        @closeModal="closeModal"
+                        @fetchTransactions="updateTransactions"></ModalRegisterRelease>
+                    </v-card>
+                  </v-dialog>
+                </div>
                 <v-menu
                   v-model="menu"
                   :close-on-content-click="false"
@@ -140,7 +151,7 @@
       </v-col>
       <v-col cols="12" lg="4" sm="8" class="px-3 d-flex flex-column align-center items-center">
         <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full" style="background: #f2f2f2">
-          <v-chip>{{ cardsNumber }}</v-chip>
+          <sup><v-chip>{{ cardsNumber }}</v-chip></sup>
           <div class="mx-2 font-bold text-xl sm:text-3xl">Credits cards</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
         </v-sheet>
@@ -195,6 +206,21 @@
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
+
+  const updates = ref([
+    {
+      text: '1.0: Atualizações nas página de tabelas: deletar transações'
+    },
+    {
+      text: '1.1: Atualizações nas página de tabelas: deletar editar transações'
+    },
+    {
+      text: '2.0: Atualizações nas página de tabelas: opção de download em xlsx'
+    },
+    {
+      text: '2.1: Opção de incluir lançamento pela home'
+    }
+  ])
 
   const page = ref({
     page: 1,
@@ -252,6 +278,10 @@
     }
   }
 
+  const updateTransactions = async (event) => {
+    await fetchData()
+  }
+
   const totalBalance = (expanse, revenue) => {
     const out = expanse.map(i => i.value)
     const inRel = revenue.map(i => i.value)
@@ -263,11 +293,15 @@
   }
 
   const openModal = ref(false);
+  const openModalRelease = ref(false);
 
-  const openModalToRegister = (event) => {
-    openModal.value = event
+  const openModalToRegister = (event, params) => {
+    if (params) {
+      openModalRelease.value = params
+    } else {
+      openModal.value = event
+    }
   };
-
 
   const filteredByMonth = (month) => {
     if (!data.value) {
@@ -322,6 +356,8 @@
     const revenues = releasesIn.value.filter(item => item.month === month)
     return totalBalance(expense, revenues)
   }
+
+  const closeModal = (event) => openModalRelease.value = event
 </script>
 <style scoped lang="scss">
 .wrapper {
