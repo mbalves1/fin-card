@@ -1,11 +1,16 @@
 <template>
   <v-container class="mt-6 sm:mx-auto w-100 align-center">
-    <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
-      <div class="capitalize items-center flex">
-        <v-icon class="mr-2">mdi-plus-circle-outline</v-icon>
-        <span>Category</span>
-      </div>
-    </v-btn>
+    <div class="flex justify-between">
+      <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
+        <div class="capitalize items-center flex">
+          <v-icon class="mr-2">{{registerCategory ? 'mdi-minus-circle-outline' : 'mdi-plus-circle-outline' }}</v-icon>
+          <span>Category</span>
+        </div>
+      </v-btn>
+  
+      <v-icon v-if="hasCloseButton" class="cursor-pointer" @click="closeReleaseModal">mdi-close-circle-outline</v-icon>
+    </div>
+
     <v-row class="d-flex justify-center">
       <v-col v-if="registerCategory" cols="12" lg="3" md="12">
         <v-form>
@@ -74,6 +79,19 @@
             :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-text-field>
 
+          <v-select
+            density="compact"
+            variant="outlined"
+            v-model="form.attached"
+            :items="cards"
+            item-title="bank"
+            item-value="bank"
+            label="Banco"
+            required
+            class="my-1"
+            :rules="[v => !!v || 'O valor é obrigatório']"
+          ></v-select>
+
           <v-text-field
             density="compact"
             variant="outlined"
@@ -82,6 +100,7 @@
             required
             class="my-1"
             type="number"
+            :disabled="cardType === 'Débito'"
           ></v-text-field>
 
           <v-select
@@ -104,20 +123,6 @@
             label="Categoria"
             required
             class="my-1"
-          ></v-select>
-
-          <v-select
-            density="compact"
-            variant="outlined"
-            v-model="form.attached"
-            :items="cards"
-            item-title="bank"
-            item-value="bank"
-            label="Banco"
-            required
-            class="my-1"
-            hide-details
-            :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-select>
 
           <v-radio-group v-model="form.method_payment" inline hide-details="">
@@ -145,6 +150,15 @@
 const { postTransactions } = useTransactions()
 const { getCards } = useCardStore()
 const { postNewCategory, getAllCategory } = useCategory()
+
+defineProps({
+  hasCloseButton: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['closeModal', 'fetchTransactions'])
 
 const form = ref({
   name: null,
@@ -205,6 +219,13 @@ const resetFormValues = () => {
   };
 };
 
+const cardType =  computed(() => {
+  const card = cards.value.filter(card => {
+    return card.bank === form.value.attached
+  })
+  return card[0]?.type
+})
+
 const postCategory = async () => {
   loadingCategory.value = true
   if (!categoryField.value) {
@@ -231,9 +252,9 @@ const postCategory = async () => {
 }
 
 const postReleases = async () => {
-  loading.value = true
   const { valid } = await formRef.value.validate();
   if (valid) {
+    loading.value = true
     const card = cards.value.filter(item => item.bank === form.value.attached)
     const category = categorys.value.filter(item => item.categoryname === form.value.category)
     const installment = Number(form.value.installment) || 1
@@ -241,18 +262,31 @@ const postReleases = async () => {
     const indexMonth = itemsMonth.value.indexOf(form.value.month)
 
     try {
-      installments.map(i => {
-        const payload = {
+      let payload
+      if (cardType.value === 'Crédito') {
+        installments.map(i => {
+          payload = {
+            ...form.value,
+            attached: card,
+            category: category,
+            installment: i,
+            month: itemsMonth.value[[(indexMonth + i) % 12]],
+            value: form.value.value / installment
+          }
+          postTransactions(payload);
+        })
+      } else {
+        payload = {
           ...form.value,
           attached: card,
           category: category,
-          installment: i,
-          month: itemsMonth.value[[(indexMonth + i) % 12]],
-          value: form.value.value / installment
+          installment: Number(form.value.installment) || 1,
+          month: form.value.month,
+          value: form.value.value
         }
         postTransactions(payload);
-      })
-     
+      }
+      emit('fetchTransactions', true)
       form.value = { ...form.value }
 
       resetFormValues();
@@ -278,7 +312,10 @@ const postReleases = async () => {
   } else {
     return;
   }
+}
 
+const closeReleaseModal = () => {
+  emit('closeModal', false)
 }
 
 
