@@ -154,14 +154,38 @@
           <sup><v-chip>{{ cardsNumber }}</v-chip></sup>
           <div class="mx-2 font-bold text-xl sm:text-3xl">Credits cards</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
+          <v-menu
+            v-model="cardTable"
+            :close-on-content-click="false"
+            location="bottom right">
+            <template v-slot:activator="{ props }">
+              <v-icon size="20" class="pl-4" v-bind="props">mdi-cog-outline</v-icon>
+            </template>
+            <v-card>
+              <p class="text-sm pa-2">Cartões cadastrados</p>
+              <v-divider></v-divider>
+              <v-list v-for="(card, cx) in cards" :key="cx">
+                <div class="flex justify-between items-center mx-4">
+                  <div class="text-xs font-bold">{{ card.bank }}</div>
+                  <div>
+                    <v-icon
+                      class="cursor-pointer"
+                      size="15"
+                      color="red"
+                      @click="deleteCard(card)"
+                    >mdi-delete</v-icon>
+                  </div>
+                </div>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-sheet>
-        <div class="">
-          <div class="cardlist sm:ml-0">
+        <div class="w-full mt-9 bg-fincardsecondary">
+          <div class="sm:ml-0">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
           <div class="flex justify-center">
-            <v-dialog v-model="openModal"
-            class="">
+            <v-dialog v-model="openModal">
               <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end" :isModal="true"></ModalRegisterCard>
             </v-dialog>
           </div>
@@ -229,6 +253,7 @@
 
   const welcome = ref(false)
   const menu = ref(false)
+  const cardTable = ref(false)
   const monthView = ref(['Janeiro', 'Fevereiro', 'Março', 'Abril']) 
   const months = useMonths()
 
@@ -358,24 +383,18 @@
   }
 
   const closeModal = (event) => openModalRelease.value = event
+
+  const deleteCard = (card) => {
+    console.log("remove card", card)
+  }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 .wrapper {
   background-color: white;
   &--list {
     height: 400px;
     overflow-y: scroll;
   }
-}
-
-.cardlist {
-  height: 660px;
-  overflow-y: scroll;
-}
-
-.cardlist::-webkit-scrollbar {
-  width: 2px; /* largura da barra de rolagem */
-  border-radius: 10px;
 }
 
 .scrollbar::-webkit-scrollbar-track
@@ -421,15 +440,4 @@
 	background-color: #555;
 }
 
-@media screen and (max-width: 600px) {
-  .cardlist {
-    height: auto;
-    width: 500px;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: flex;
-    flex-direction: row;
-    max-width: 345px
-  }
-}
 </style>
