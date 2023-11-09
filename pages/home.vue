@@ -363,6 +363,28 @@
 	background-color: #555;
 }
 
+.scrollbarView::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.scrollbarView::-webkit-scrollbar
+{
+	width: 2px;
+  margin-right: 2px;
+  height: 8px;
+	background-color: #F5F5F5;
+}
+
+.scrollbarView::-webkit-scrollbar-thumb
+{
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
 @media screen and (max-width: 600px) {
   .cardlist {
     height: auto;

@@ -274,14 +274,6 @@
     }
   }
 
-  const datta = ref([
-    {name: 'hhv', email: 'muril@emewil', age: 34},
-    {name: 'hhv', email: 'muril@emewil', age: 34},
-    {name: 'hhv', email: 'muril@emewil', age: 34},
-    {name: 'hhv', email: 'muril@emewil', age: 34},
-  ])
-
-
   const download = async () => {
 
     const transactions = await getTransactions({

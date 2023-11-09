@@ -34,7 +34,7 @@
       color="#74C27F"
       v-model="register.email"
       required
-          :rules="[v => !!v || 'O nome é e-mail']"
+      :rules="[v => !!v || 'O e-mail é obrigatório']"
     ></v-text-field>
     <v-text-field
       density="compact"
@@ -91,9 +91,9 @@
       </v-btn>
       <v-btn
         height="40"
-        variant="flat"
         class="text-capitalize mt-5"
-        color="grey"
+        variant="plain"
+        v-ripple="false"
         @click="$emit('loginForm')"
         >
         Voltar
