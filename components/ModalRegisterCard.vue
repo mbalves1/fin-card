@@ -31,7 +31,14 @@
                   {{ card.type || 'Credito' }}
                 </div>
                 <div style="font-size: 13px;">
-                  <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag}.svg`" alt="" width="40"/>
+                  <span v-if="card.flag === 'Mastercard' || card.flag === 'mastercard' || card.flag === 'visa' || card.flag === 'Visa'">
+                    <v-img
+                      v-if="card.flag === 'Mastercard' || card.flag === 'mastercard' || card.flag === 'visa' || card.flag === 'Visa'"
+                      :src="`/img/${card.flag}.svg`"
+                      alt="" width="40"
+                    />
+                  </span>
+                  <div v-else>{{ card.flag }}</div>
                 </div>
               </div>
               <div class="mt-10">
@@ -132,7 +139,7 @@
 </template>
 <script setup>
 const { postCard, colorState } = useCardStore()
-const emit = defineEmits()
+const emit = defineEmits(['loadingCards'])
 defineProps({
   variant: {
     type: String,
@@ -163,7 +170,7 @@ const snackbar = ref({
 const card = ref({
   name: null,
   bank: null,
-  type: null,
+  type: 'Crédito',
   flag: null,
   expiration: null
 })
@@ -188,7 +195,7 @@ const resetFormValues = () => {
   card.value = {
     name: null,
     bank: null,
-    type: null,
+    type: 'Crédito',
     flag: null,
     expiration: null
   };
@@ -207,6 +214,7 @@ const sendCard = async () => {
       card.value = { ...card.value }
       
       resetFormValues();
+      emit('loadingCards', true)
       snackbar.value = {
         visible: true,
         color: "#74C27F",

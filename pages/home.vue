@@ -28,7 +28,7 @@
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
         <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
-          <p><strong>Total balance</strong></p>
+          <p><strong>Balanço total</strong></p>
           <h2 class="ml-5">{{ totalBalance(releasesOut, releasesIn) || "R$ 00,00" }}</h2>
           <v-sheet class="d-flex justify-space-between align-center" style="background: #f2f2f2">
             <h3 class="ml-3"></h3>
@@ -150,9 +150,9 @@
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="8" class="px-3 d-flex flex-column align-center items-center">
-        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full" style="background: #f2f2f2">
+        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full bg-fincardsecondary" style="background: #f2f2f2">
           <sup><v-chip>{{ cardsNumber }}</v-chip></sup>
-          <div class="mx-2 font-bold text-xl sm:text-3xl">Credits cards</div>
+          <div class="mx-2 font-bold text-xl sm:text-3xl">Cartões</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
           <v-menu
             v-model="cardTable"
@@ -167,13 +167,20 @@
               <v-list v-for="(card, cx) in cards" :key="cx">
                 <div class="flex justify-between items-center mx-4">
                   <div class="text-xs font-bold">{{ card.bank }}</div>
-                  <div>
+                  <div v-if="!loadingRemove">
                     <v-icon
                       class="cursor-pointer"
                       size="15"
                       color="red"
                       @click="deleteCard(card)"
                     >mdi-delete</v-icon>
+                  </div>
+                  <div v-else>
+                    <v-progress-circular
+                      size="15"
+                      model-value="20"
+                      indeterminate
+                    ></v-progress-circular>
                   </div>
                 </div>
               </v-list>
@@ -186,7 +193,11 @@
           </div>
           <div class="flex justify-center">
             <v-dialog v-model="openModal">
-              <ModalRegisterCard @closeModal="openModalToRegister" class="d-flex justify-end" :isModal="true"></ModalRegisterCard>
+              <ModalRegisterCard
+                @closeModal="openModalToRegister"
+                @loadingCards="fecthDataCards"
+                class="d-flex justify-end"
+                :isModal="true"></ModalRegisterCard>
             </v-dialog>
           </div>
         </div>
@@ -199,7 +210,7 @@
       <v-col class="">
         <v-sheet class="text-h4 px-5 py-0 pb-6 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
           <div class="text-center">
-            <span>Transactions</span>
+            <span>Transações</span>
             <div class="font-normal text-sm">Últimas 10 transações, para maiores informações acessar página de <RouterLink to="table">tabela</RouterLink></div>
           </div>
         </v-sheet>
@@ -219,7 +230,7 @@
 <script setup>
 
   const { getTransactions, transactions } = useTransactions()
-  const { getCards } = useCardStore()
+  const { getCards, deleteCards } = useCardStore()
   const { getUser } = useUserStore()
 
   const data = ref()
@@ -227,6 +238,8 @@
   const size = ref(0);
   const cards = ref(null)
   const cardsNumber = ref(0)
+
+  const loadingRemove = ref(false)
 
   const releasesOut = ref([]);
   const releasesIn = ref([]);
@@ -271,6 +284,7 @@
   }
     try {
       await fetchData()
+      await fecthDataCards()
       await fecthUser()
     } catch (error) {
       console.error(error)
@@ -284,14 +298,21 @@
       console.error(error)
     }
   }
+
+  const fecthDataCards = async () => {
+    try {
+      const fecthCards = await getCards()
+      cards.value = fecthCards
+      cardsNumber.value = cards?.value.length 
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   const fetchData = async () => {
     try {
-      const fecthCards = await getCards()
       const transations = await getTransactions(page.value)
       data.value = await transations.transactions
-      cards.value = fecthCards
-      cardsNumber.value = cards?.value.length 
 
       totalBalance(releasesOut.value, releasesIn.value)
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
@@ -384,8 +405,25 @@
 
   const closeModal = (event) => openModalRelease.value = event
 
-  const deleteCard = (card) => {
-    console.log("remove card", card)
+  const deleteCard = async (card) => {
+    const { _id } = card
+    loadingRemove.value = true
+    try {
+      const response = await deleteCards(_id)
+      loadingRemove.value = false
+      await fecthDataCards()
+      return response
+    } catch(error) {
+      loadingRemove.value = false
+      console.error(error)
+      snackbar.value = {
+        visible: true,
+        color: "red",
+        position: "top",
+        title: "Erro para remover cartão!",
+        icon: "mdi-close-circle"
+      }
+    }
   }
 </script>
 <style lang="scss">
