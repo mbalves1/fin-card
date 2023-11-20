@@ -20,8 +20,7 @@ export async function registerUser(payload) {
     },
     body: JSON.stringify(payload),
   });
-  const data = await response.json();
-  return data;
+  return response.status === 201
 }
 
 export async function getUser() {

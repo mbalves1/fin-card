@@ -12,11 +12,10 @@ export const useUserStore = defineStore('user', {
     async postRegister(payload) {
       try {
         const response = await registerUser(payload)
-        const data = await response.json()
-        
-        return data
+        return response
       } catch (error) {
         console.error("Erro ao criar usuário")
+        throw new Error('Erro ao criar usuário');
       }
     },
     async postLogin(payload) {

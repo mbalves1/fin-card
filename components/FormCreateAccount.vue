@@ -34,7 +34,7 @@
       color="#74C27F"
       v-model="register.email"
       required
-      :rules="[v => !!v || 'O e-mail é obrigatório']"
+      :rules="[v => /.+@.+/.test(v) || 'Email inválido!', v => !!v || 'O e-mail é obrigatório']"
     ></v-text-field>
     <v-text-field
       density="compact"
