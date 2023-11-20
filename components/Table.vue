@@ -30,14 +30,15 @@
           <table>
             <thead>
               <tr>
-                <th style="color: black">Name</th>
-                <th>Type</th>
+                <th style="color: black">Nome</th>
+                <th>Tipo</th>
                 <th>Card</th>
-                <th>Bank</th>
-                <th>Card type</th>
-                <th>Month</th>
-                <th>Value</th>
-                <th style="width: 50px;">Date
+                <th>Banco</th>
+                <th>Método</th>
+                <th>Mês</th>
+                <th>Parcela</th>
+                <th>Valor</th>
+                <th style="width: 50px;">Data
                   <v-icon size="13">mdi-alert-circle-outline</v-icon>
                   <v-tooltip
                     activator="parent"
@@ -50,14 +51,15 @@
             </thead>
             <tbody>
               <tr v-for="(item, ix) in data" :key="ix">
-                <td data-label="Name">{{ item.name}}</td>
-                <td data-label="Type">{{ item.type }}</td>
+                <td data-label="Nome">{{ item.name}}</td>
+                <td data-label="Tipo">{{ item.type }}</td>
                 <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
-                <td data-label="Bank">{{ formatedItem(item.attached, "bank") }}</td>
-                <td data-label="Card type">{{ formatedItem(item.attached, "type")}}</td>
-                <td data-label="Month">{{ item.month }}</td>
-                <td data-label="Value">{{ formatCurrency(item.value)}}</td>
-                <td data-label="Date">{{ formatDate(item.createdAt)}}</td>
+                <td data-label="Banco">{{ formatedItem(item.attached, "bank") }}</td>
+                <td data-label="Método">{{ formatedItem(item.attached, "type")}}</td>
+                <td data-label="Mês">{{ item.month }}</td>
+                <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
+                <td data-label="Valor">{{ formatCurrency(item.value)}}</td>
+                <td data-label="Data">{{ formatDate(item.createdAt)}}</td>
                 <td data-label="">
                   <v-icon color="#70BB7B" class="mr-2 cursor-pointer" @click="openModalToEdit(item)">mdi-pencil</v-icon>
                   <v-icon color="grey" class="cursor-pointer" @click="openModalToDelete(item)">mdi-delete</v-icon>
