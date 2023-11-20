@@ -125,29 +125,26 @@ const loginIn = async (item) => {
 const registerUser = async (item, valid) => {
   if (valid) {
     loading.value = true
-    try {
-      const resp = await postRegister(item)
-      loading.value = false
-      // if (token) router.push("/home")
+    const response = await postRegister(item)
+    if (response) {
+      loading.value = false;
       snackbar.value = {
         visible: true,
-        color: "#74C27F",
-        position: "top",
-        title: "Usuário criado com sucesso!",
-        icon: "mdi-check-circle"
+        color: '#74C27F',
+        position: 'top',
+        title: 'Usuário criado com sucesso!',
+        icon: 'mdi-check-circle',
       };
       changeView(1)
-    } catch (error) {
-  
-      loading.value = false
+    } else {
+      loading.value = false;
       snackbar.value = {
         visible: true,
-        color: "red",
-        position: "top",
-        title: "Ocorreu um erro ao processar a solicitação.",
-        icon: "mdi-close-circle"
+        color: 'red',
+        position: 'top',
+        title: 'Ocorreu um erro ao processar a solicitação.',
+        icon: 'mdi-close-circle',
       };
-      console.error(error)
     }
   }
 }
