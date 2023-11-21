@@ -3,8 +3,8 @@
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
         <div class="capitalize items-center flex">
+          <span class="px-2">Adicionar Categoria</span>
           <v-icon class="mr-2">{{registerCategory ? 'mdi-minus-circle-outline' : 'mdi-plus-circle-outline' }}</v-icon>
-          <span>Category</span>
         </div>
       </v-btn>
   
@@ -14,13 +14,17 @@
     <v-row class="d-flex justify-center">
       <v-col v-if="registerCategory" cols="12" lg="3" md="12">
         <v-form>
-          <div class="py-5 text-base">Registration category</div>
+          <div class="flex items-center">
+            <v-icon style="width:10px">mdi-tag-text-outline</v-icon>
+            <div class="py-3 pl-2 text-sm">Registro de categorias</div>
+          </div>
 
           <v-text-field
             v-model="categoryField"
-            label="Nome da categorias"
+            label="Nome da categoria"
             density="compact"
             variant="outlined"
+            :rules="[v => !!v || 'Nome da categoria é obrigatório!']"
           ></v-text-field>
           <v-btn class="w-100 primary-color mt-5"
             variant="flat"

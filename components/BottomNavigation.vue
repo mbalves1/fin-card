@@ -4,30 +4,31 @@
       <v-bottom-navigation
         v-model="modeValue"
         active
-        color="#74C27F"
+        bg-color="#74C27F"
+        color="#2d4030"
         class="flex items-center"
       >
         <NuxtLink class="list-text text-decoration-none" to="/home">
           <v-btn>
-            <v-icon class="text-#74C27F pa-6" value="home">mdi-home</v-icon>
+            <v-icon class="text-white pa-6" value="home">mdi-home</v-icon>
           </v-btn>
         </NuxtLink>
 
         <NuxtLink class="list-text text-decoration-none" to="/dash">
           <v-btn>
-            <v-icon class="text-#74C27F pa-6">mdi-finance</v-icon>
+            <v-icon class="text-white pa-6">mdi-finance</v-icon>
           </v-btn>
         </NuxtLink>
 
         <NuxtLink class="list-text text-decoration-none" to="/table">
           <v-btn>
-            <v-icon class="text-#74C27F pa-6">mdi-table</v-icon>
+            <v-icon class="text-white pa-6">mdi-table</v-icon>
           </v-btn>
         </NuxtLink>
 
         <NuxtLink class="list-text text-decoration-none" to="/release-register">
           <v-btn>
-            <v-icon class="text-#74C27F pa-6">mdi-cogs</v-icon>
+            <v-icon class="text-white pa-6">mdi-cogs</v-icon>
           </v-btn>
         </NuxtLink>
       </v-bottom-navigation>

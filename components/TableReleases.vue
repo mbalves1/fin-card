@@ -9,9 +9,8 @@
     <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
   </v-snackbar>
 
-  <v-row class="d-flex justify-center" style="height: 70vh;">
+  <v-row class="d-flex justify-center">
     <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
-
       <div>
         <div class="flex">
           <SearchTable
@@ -28,7 +27,7 @@
         <table>
           <thead>
             <tr>
-              <th style="color: black">Nome</th>
+              <th class="font-bold">Nome</th>
               <th>Tipo</th>
               <th>Card</th>
               <th>Banco</th>
@@ -36,7 +35,7 @@
               <th>Mês</th>
               <th>Parcela</th>
               <th>Valor</th>
-              <th style="width: 50px;">Data
+              <th class="cursor-pointer" style="width: 50px;">Data
                 <v-icon size="13">mdi-alert-circle-outline</v-icon>
                 <v-tooltip
                   activator="parent"

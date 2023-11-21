@@ -252,10 +252,13 @@
       text: '1.1: Atualizações nas página de tabelas: deletar editar transações'
     },
     {
-      text: '2.0: Atualizações nas página de tabelas: opção de download em xlsx'
+      text: '1.2: Atualizações nas página de tabelas: opção de download em xlsx'
     },
     {
-      text: '2.1: Opção de incluir lançamento pela home'
+      text: '1.3: Opção de incluir lançamento pela home'
+    },
+    {
+      text: '1.4: Tabela de cartões na tela de tabelas'
     }
   ])
 

@@ -7,6 +7,7 @@
       <v-tabs
         v-model="tab"
         color="#74C27F"
+        align-tabs="center"
       >
         <v-tab value="option-1">
           <v-icon start>
