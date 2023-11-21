@@ -125,8 +125,8 @@ const loginIn = async (item) => {
 const registerUser = async (item, valid) => {
   if (valid) {
     loading.value = true
-    const response = await postRegister(item)
-    if (response) {
+    try {
+      const response = await postRegister(item)
       loading.value = false;
       snackbar.value = {
         visible: true,
@@ -136,7 +136,8 @@ const registerUser = async (item, valid) => {
         icon: 'mdi-check-circle',
       };
       changeView(1)
-    } else {
+      return response
+    } catch (error) {
       loading.value = false;
       snackbar.value = {
         visible: true,
@@ -145,6 +146,7 @@ const registerUser = async (item, valid) => {
         title: 'Ocorreu um erro ao processar a solicitação.',
         icon: 'mdi-close-circle',
       };
+      return
     }
   }
 }

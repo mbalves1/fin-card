@@ -8,94 +8,90 @@
     {{ snackbar.title }}
     <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
   </v-snackbar>
-  <div class="mx-auto">
-    <div v-if="hasSearch" class="py-10 ml-10 text-lg sm:text-3xl mx-auto flex justify-start">Transactions</div>
-    <v-divider></v-divider>
-    <v-row class="d-flex justify-center" style="height: 70vh;">
-      <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
 
-        <div>
-          <div class="flex">
-            <SearchTable
-              v-if="hasSearch"
-              @getFilter="filterTransactions"
-              @clean="refresh"
-            ></SearchTable>
-  
-            <div class="flex cursor-pointer">
-              <IconDownload class="ma-3" @click="download"></IconDownload>
-            </div>
+  <v-row class="d-flex justify-center" style="height: 70vh;">
+    <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
+
+      <div>
+        <div class="flex">
+          <SearchTable
+            v-if="hasSearch"
+            @getFilter="filterTransactions"
+            @clean="refresh"
+          ></SearchTable>
+
+          <div class="flex cursor-pointer">
+            <IconDownload class="ma-3" @click="download"></IconDownload>
           </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th style="color: black">Nome</th>
-                <th>Tipo</th>
-                <th>Card</th>
-                <th>Banco</th>
-                <th>Método</th>
-                <th>Mês</th>
-                <th>Parcela</th>
-                <th>Valor</th>
-                <th style="width: 50px;">Data
-                  <v-icon size="13">mdi-alert-circle-outline</v-icon>
-                  <v-tooltip
-                    activator="parent"
-                    location="top"
-                  >Registration date
-                  </v-tooltip>
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, ix) in data" :key="ix">
-                <td data-label="Nome">{{ item.name}}</td>
-                <td data-label="Tipo">{{ item.type }}</td>
-                <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
-                <td data-label="Banco">{{ formatedItem(item.attached, "bank") }}</td>
-                <td data-label="Método">{{ formatedItem(item.attached, "type")}}</td>
-                <td data-label="Mês">{{ item.month }}</td>
-                <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
-                <td data-label="Valor">{{ formatCurrency(item.value)}}</td>
-                <td data-label="Data">{{ formatDate(item.createdAt)}}</td>
-                <td data-label="">
-                  <v-icon color="#70BB7B" class="mr-2 cursor-pointer" @click="openModalToEdit(item)">mdi-pencil</v-icon>
-                  <v-icon color="grey" class="cursor-pointer" @click="openModalToDelete(item)">mdi-delete</v-icon>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
 
-        <div v-if="hasPagination" class="d-flex justify-space-between align-center mt-0 sm:mt-2 sm:mb-0" style="margin-bottom: 70px !important" density="compact">
-          <div style="height: 30px;" class="d-flex align-center">
-            <v-select
-              v-model="perPageSize"
-              label="Size"
-              density="compact"
-              variant="flat"
-              :items="[2, 5, 10, 15]"
-              class="fs-10 border rounded-lg"
-              hide-details
-              style="width: 85px; padding: 0;"
-              @update:modelValue="paginationNext(1)">
-            </v-select>
-          </div>
-          <v-pagination
-            v-model="pagination"
-            :length="pageLength"
-            total-visible="3"
-            @update:model-value="paginationNext"
+        <table>
+          <thead>
+            <tr>
+              <th style="color: black">Nome</th>
+              <th>Tipo</th>
+              <th>Card</th>
+              <th>Banco</th>
+              <th>Método</th>
+              <th>Mês</th>
+              <th>Parcela</th>
+              <th>Valor</th>
+              <th style="width: 50px;">Data
+                <v-icon size="13">mdi-alert-circle-outline</v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top"
+                >Registration date
+                </v-tooltip>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, ix) in data" :key="ix">
+              <td data-label="Nome">{{ item.name}}</td>
+              <td data-label="Tipo">{{ item.type }}</td>
+              <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
+              <td data-label="Banco">{{ formatedItem(item.attached, "bank") }}</td>
+              <td data-label="Método">{{ formatedItem(item.attached, "type")}}</td>
+              <td data-label="Mês">{{ item.month }}</td>
+              <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
+              <td data-label="Valor">{{ formatCurrency(item.value)}}</td>
+              <td data-label="Data">{{ formatDate(item.createdAt)}}</td>
+              <td data-label="">
+                <v-icon color="#70BB7B" class="mr-2 cursor-pointer" @click="openModalToEdit(item)">mdi-pencil</v-icon>
+                <v-icon color="grey" class="cursor-pointer" @click="openModalToDelete(item)">mdi-delete</v-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-if="hasPagination" class="d-flex justify-space-between align-center mt-0 sm:mt-2 sm:mb-0" style="margin-bottom: 70px !important" density="compact">
+        <div style="height: 30px;" class="d-flex align-center">
+          <v-select
+            v-model="perPageSize"
+            label="Size"
             density="compact"
-          >
-          </v-pagination>
-          <div></div>
+            variant="flat"
+            :items="[2, 5, 10, 15]"
+            class="fs-10 border rounded-lg"
+            hide-details
+            style="width: 85px; padding: 0;"
+            @update:modelValue="paginationNext(1)">
+          </v-select>
         </div>
-      </v-col>
-    </v-row>
-
+        <v-pagination
+          v-model="pagination"
+          :length="pageLength"
+          total-visible="3"
+          @update:model-value="paginationNext"
+          density="compact"
+        >
+        </v-pagination>
+        <div></div>
+      </div>
+    </v-col>
     <v-dialog v-model="openModalEdit">
       <div class="flex justify-center">
         <v-card class="w-500px h-auto overflow-y-auto px-3 py-2">
@@ -151,7 +147,7 @@
         </v-card>
       </div>
     </v-dialog>
-  </div>
+  </v-row>
 </template>
 <script setup>
   const data = ref()
@@ -363,7 +359,6 @@
   }
 
   const saveEdit = async item => {
-    console.log("edfit tabel", item)
     loading.value = true
     try {
       await putTransactions(item)

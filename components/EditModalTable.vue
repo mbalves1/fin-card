@@ -123,7 +123,6 @@ const emit = defineEmits(['closeEditModal', 'saveEditItem'])
 const closeModal = () => emit('closeEditModal', false)
 
 const saveEditItem = () => {
-  console.log("props.itemEdit", props.itemEdit)
   emit('saveEditItem', props.itemEdit)
 }
 

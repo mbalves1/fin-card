@@ -12,6 +12,9 @@ export const useUserStore = defineStore('user', {
     async postRegister(payload) {
       try {
         const response = await registerUser(payload)
+        if (response.status >= 400) {
+          throw new Error('Erro ao criar usuário');
+        }
         return response
       } catch (error) {
         console.error("Erro ao criar usuário")

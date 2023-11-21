@@ -12,19 +12,19 @@
           <v-icon start>
             mdi-account
           </v-icon>
-          Profile
+          <div class="capitalize">Perfil do usuário</div>
         </v-tab>
         <v-tab value="option-2">
           <v-icon start>
             mdi-credit-card
           </v-icon>
-          Credits cards
+          <div class="capitalize">Cadastro de cartão</div>
         </v-tab>
         <v-tab value="option-3">
           <v-icon start>
             mdi-checkbook-arrow-right
           </v-icon>
-          Transactions
+          <div class="capitalize">Cadastro de transações</div>
         </v-tab>
       </v-tabs>
       <v-divider></v-divider>

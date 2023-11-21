@@ -13,6 +13,7 @@ export async function postLogin(payload) {
 }
 
 export async function registerUser(payload) {
+
   const response = await fetch(`${URL_BASE}auth/register`, {
     method: 'POST',
     headers: {
@@ -20,7 +21,7 @@ export async function registerUser(payload) {
     },
     body: JSON.stringify(payload),
   });
-  return response.status === 201
+  return response
 }
 
 export async function getUser() {

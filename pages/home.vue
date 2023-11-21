@@ -208,20 +208,20 @@
   <div class="max-w-1200px mx-auto">
     <v-row class="mt-10 sm:mt-6">
       <v-col class="">
-        <v-sheet class="text-h4 px-5 py-0 pb-6 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
+        <v-sheet class="text-h4 px-5 py-0 font-bold sm:py-8 sm:pb-0 sm:mx-auto">
           <div class="text-center">
             <span>Transações</span>
             <div class="font-normal text-sm">Últimas 10 transações, para maiores informações acessar página de <RouterLink to="table">tabela</RouterLink></div>
           </div>
         </v-sheet>
   
-        <Table
+        <TableReleases
           :hasSpacing="false"
           :hasPagination="false"
           :hasSearch="false"
           :data="data"
         >
-        </Table>
+        </TableReleases>
       </v-col>
     </v-row>
   </div>
