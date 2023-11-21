@@ -16,13 +16,15 @@ export async function postTransactions(payload, token) {
 export async function getTransactions({ page, perPage }) {
   const token = localStorage.getItem("token")
 
-  return await fetch(`${URL_BASE}transactions?page=${page}&perPage=${perPage}`, {
+  const response =  await fetch(`${URL_BASE}transactions?page=${page}&perPage=${perPage}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
   })
+
+  return response
 }
 
 export async function getTransactionsFilters({item, value}, { page, perPage }) {
