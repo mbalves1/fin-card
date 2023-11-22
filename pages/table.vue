@@ -1,4 +1,13 @@
 <template>
+  <v-snackbar
+    v-model="snackbar.visible"
+    :timeout="3000"
+    :location="snackbar.position"
+    :color="snackbar.color"
+  >
+    {{ snackbar.title }}
+    <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
+  </v-snackbar>
   <div class="mx-auto">
     <div class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start bg-fincard sm:bg-transparent">Tabelas</div>
     <v-tabs
@@ -33,7 +42,7 @@
       <TableReleases :hasSpacing="true"></TableReleases>
     </v-window-item>
     <v-window-item value="option-2">
-      <TableCards></TableCards>
+      <TableCards @sendSnackbar="snackSuccess"></TableCards>
     </v-window-item>
     <v-window-item value="option-3">
       Categorias
@@ -42,4 +51,26 @@
 </template>
 <script setup>
   const tab = ref("option-1")
+  const snackbar = ref({
+    color: null,
+    icon: null,
+    mode: null,
+    position: "top",
+    text: null,
+    timeout: 7500,
+    title: null,
+    visible: false,
+    icon: null
+  })
+
+  const snackSuccess = (item) => {
+    console.log("aaaaa", item.value)
+    snackbar.value = {
+      color: item.value.color,
+      icon: item.value.icon,
+      position: item.value.top,
+      title: item.value.title,
+      visible: item.value.visible
+    }
+  }
 </script>

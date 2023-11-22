@@ -51,7 +51,14 @@
               <td data-label="Nome">{{ item.name}}</td>
               <td data-label="Tipo">{{ item.type }}</td>
               <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
-              <td data-label="Banco">{{ formatedItem(item.attached, "bank") }}</td>
+              <td data-label="Banco">
+                <v-badge
+                  :color="item.attached[0].color"
+                  dot
+                  inline
+                ></v-badge>
+                {{ formatedItem(item.attached, "bank") }}
+              </td>
               <td data-label="Método">{{ formatedItem(item.attached, "type")}}</td>
               <td data-label="Mês">{{ item.month }}</td>
               <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
