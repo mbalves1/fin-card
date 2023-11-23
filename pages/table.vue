@@ -2,7 +2,7 @@
   <v-snackbar
     v-model="snackbar.visible"
     :timeout="3000"
-    :location="snackbar.position"
+    location="top"
     :color="snackbar.color"
   >
     {{ snackbar.title }}
@@ -64,7 +64,6 @@
   })
 
   const snackSuccess = (item) => {
-    console.log("aaaaa", item.value)
     snackbar.value = {
       color: item.value.color,
       icon: item.value.icon,

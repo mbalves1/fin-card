@@ -34,3 +34,19 @@ export async function removeCard(token, id) {
     }
   });
 }
+
+export async function putCard(payload, token) {
+
+  const { _id } = payload
+  const response = await fetch(`${URL_BASE}cards/${_id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+  return data;
+}

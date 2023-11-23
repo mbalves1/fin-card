@@ -131,18 +131,18 @@
             <v-spacer></v-spacer>
 
             <v-btn
-              variant="text"
-              color="grey"
+              variant="flat"
+              color="#f2f2f2"
               @click="openModalDelete = !openModalDelete"
-              class="text-capitalize"
+              class="text-capitalize w-49%"
               append-icon="mdi-close"
             >
               Fechar
             </v-btn>
             <v-btn
               color="red"
-              variant="text"
-              class="text-capitalize"
+              variant="flat"
+              class="text-capitalize w-49%"
               append-icon="mdi-delete"
               @click="deleteItem(item)"
               :loading="loading"

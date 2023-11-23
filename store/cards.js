@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postCard, getCard, removeCard } from "../server/api-cards.js"
+import { postCard, getCard, removeCard, putCard } from "../server/api-cards.js"
 
 export const useCardStore = defineStore('card', {
   state: () => ({
@@ -39,5 +39,14 @@ export const useCardStore = defineStore('card', {
         console.error('Error to remove card')
       }
     },
+    async updateCard(card) {
+      const token = localStorage.getItem("token")
+      try {
+        const response = await putCard(card, token)
+        return response
+      } catch (error) {
+        console.error('Error to update card')
+      }
+    }
   }
 })
