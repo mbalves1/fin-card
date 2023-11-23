@@ -24,6 +24,42 @@
     </div>
   </v-dialog>
 
+  <v-dialog v-model="openTutorial">
+    <div class="flex justify-center">
+      <v-card>
+        <v-window
+          v-model="window"
+          show-arrows
+        >
+          <v-window-item
+            v-for="n in steps"
+            :key="n"
+          >
+            <v-card class="flex flex-col items-center justify-center sm:h-500px px-5">
+              <div class="pa-5">
+                {{ n.title }}
+              </div>
+              <div class="mx-auto w-500px">
+                <v-img :src="n.step" />
+              </div>
+            </v-card>
+          </v-window-item>
+        </v-window>
+        <v-card-actions>
+          <v-btn
+            class="mr-2 w-49% text-capitalize"
+            variant="flat"
+            color="#f2f2f2"
+            append-icon="mdi-close"
+            @click="openTutorial = !openTutorial"
+          >
+            Fechar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </div>
+  </v-dialog>
+
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
@@ -46,7 +82,7 @@
                 <v-icon class="mr-2" @click="openModalToRegister(event, true)">mdi-plus-circle-outline</v-icon>
                 <div class="flex justify-center">
                   <v-dialog v-model="openModalRelease">
-                    <v-card class="w-100% sm:w-50%">
+                    <v-card class="w-100%">
                       <ModalRegisterRelease
                         @closeModal="closeModal"
                         @fetchTransactions="updateTransactions"></ModalRegisterRelease>
@@ -239,6 +275,23 @@
   const cards = ref(null)
   const cardsNumber = ref(0)
 
+  const window = ref(0)
+  const steps = ref([
+    {
+      title: 'Para adicionar um lançamento, podemos usar o atalho clicando nesse icone',
+      step: '/step/addRelease.png',
+    },
+    {
+      title: 'Para adicionar mais meses, podemos usar o menu',
+      step: '/step/viewMonth.png',
+    },
+    {
+      title: 'Para adicionar um cartão, podemos usar o atalho clicando nesse item, ou usando o menu lateral em configurações',
+      step: '/step/addCard.png',
+    },
+  ])
+  const openTutorial = ref(false)
+
   const loadingRemove = ref(false)
 
   const releasesOut = ref([]);
@@ -315,6 +368,9 @@
   const fetchData = async () => {
     try {
       const transations = await getTransactions(page.value)
+      if (transactions.transactions.length === 0) {
+        openTutorial.value = true
+      }
       data.value = await transations.transactions
 
       totalBalance(releasesOut.value, releasesIn.value)
