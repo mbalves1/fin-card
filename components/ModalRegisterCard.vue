@@ -23,7 +23,7 @@
               variant="flat"
               :color="color"
   
-              class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-10 sm:mb-0 w-280px sm:w-310px"
+              class="rounded-lg border mx-auto pa-4 pt-3 d-flex flex-column justify-space-around mb-3 sm:mb-0 w-280px sm:w-310px"
               v-bind="props"
             >
               <div class="d-flex align-center justify-space-between">
@@ -57,6 +57,10 @@
                 </v-row>
               </div>
             </v-card>
+
+            <div class="flex text-right justify-end mb-5">
+              <sub class="text-xs"><i>Para definir a cor do cartão, clique no cartão</i></sub>
+            </div>
             
           </template>
           <v-list>
@@ -104,12 +108,12 @@
             density="compact"
             variant="outlined"
             v-model="card.expiration"
-            label="Code"
+            label="Mês"
             required
             class="my-1"
             type="date"
-            mask="DD/MM"
-            :rules="[v => !!v || 'O valor é obrigatório']"
+            mask="MM/YY"
+            :rules="[v => !!v || 'O mês é obrigatório']"
           ></v-text-field>
   
           <v-text-field
@@ -245,5 +249,4 @@ const colors = ref([
   {label: "Prata", value: "silver"},
   {label: "Roxo", value: "purple"},
 ])
-
 </script>

@@ -46,7 +46,7 @@
                 <v-icon class="mr-2" @click="openModalToRegister(event, true)">mdi-plus-circle-outline</v-icon>
                 <div class="flex justify-center">
                   <v-dialog v-model="openModalRelease">
-                    <v-card class="w-100%">
+                    <v-card class="w-100% sm:w-700px">
                       <ModalRegisterRelease
                         @closeModal="closeModal"
                         @fetchTransactions="updateTransactions"></ModalRegisterRelease>

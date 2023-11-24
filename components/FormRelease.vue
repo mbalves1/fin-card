@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mt-6 sm:mx-auto w-100 align-center">
+  <v-card height="auto" class="rounded-lg pa-3" :variant="variant">
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
         <div class="capitalize items-center flex">
@@ -11,8 +11,8 @@
       <v-icon v-if="hasCloseButton" class="cursor-pointer" @click="closeReleaseModal">mdi-close-circle-outline</v-icon>
     </div>
 
-    <v-row class="d-flex justify-center">
-      <v-col v-if="registerCategory" cols="12" lg="3" md="12">
+    <v-row class="d-flex justify-center px-1 sm:px-5">
+      <v-col v-if="registerCategory" cols="12">
         <v-form>
           <div class="flex items-center">
             <v-icon style="width:10px">mdi-tag-text-outline</v-icon>
@@ -33,7 +33,7 @@
             >Salvar</v-btn>
         </v-form>
       </v-col>
-      <v-col cols="12" lg="6" md="12">
+      <v-col cols="12">
         <v-form ref="formRef" class="pb-10 rounded-lg" >
 
           <v-card-title class="py-5">Registration</v-card-title>
@@ -72,17 +72,6 @@
             class="my-1"
           ></v-text-field>
 
-          <v-text-field
-            density="compact"
-            variant="outlined"
-            v-model="form.value"
-            label="Valor"
-            required
-            class="my-1"
-            type="number"
-            :rules="[v => !!v || 'O valor é obrigatório']"
-          ></v-text-field>
-
           <v-select
             density="compact"
             variant="outlined"
@@ -96,38 +85,55 @@
             :rules="[v => !!v || 'O valor é obrigatório']"
           ></v-select>
 
-          <v-text-field
-            density="compact"
-            variant="outlined"
-            v-model="form.installment"
-            label="Parcela"
-            required
-            class="my-1"
-            type="number"
-            :disabled="cardType === 'Débito'"
-          ></v-text-field>
+          <div class="flex gap-2">
 
-          <v-select
-            density="compact"
-            variant="outlined"
-            v-model="form.month"
-            :items="items"
-            label="Mês"
-            required
-            class="my-1"
-          ></v-select>
+            <v-text-field
+              density="compact"
+              variant="outlined"
+              v-model="form.value"
+              label="Valor"
+              required
+              class="my-1"
+              type="number"
+              :rules="[v => !!v || 'O valor é obrigatório']"
+            ></v-text-field>
+  
+            <v-text-field
+              density="compact"
+              variant="outlined"
+              v-model="form.installment"
+              label="Parcela"
+              required
+              class="my-1"
+              type="number"
+              :disabled="cardType === 'Débito'"
+            ></v-text-field>
+          </div>
 
-          <v-select
-            density="compact"
-            variant="outlined"
-            v-model="form.category"
-            :items="categorys"
-            item-title="categoryname"
-            item-value="category"
-            label="Categoria"
-            required
-            class="my-1"
-          ></v-select>
+          <div class="flex gap-2">
+            <v-select
+              density="compact"
+              variant="outlined"
+              v-model="form.month"
+              :items="items"
+              label="Mês"
+              required
+              class="my-1"
+            ></v-select>
+  
+            <v-select
+              density="compact"
+              variant="outlined"
+              v-model="form.category"
+              :items="categorys"
+              item-title="categoryname"
+              item-value="category"
+              label="Categoria"
+              required
+              class="my-1"
+            ></v-select>
+          </div>
+
 
           <v-radio-group v-model="form.method_payment" inline hide-details="">
             <v-radio label="Cartão" value="1"></v-radio>
@@ -147,8 +153,7 @@
         </v-form>
       </v-col>
     </v-row>
-
-  </v-container>
+  </v-card>
 </template>
 <script setup>
 const { postTransactions } = useTransactions()
