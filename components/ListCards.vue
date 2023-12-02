@@ -1,6 +1,12 @@
 <template>
-  <div class="border rounded overflow-x-scroll sm:overflow-y-scroll sm:h-610px sm:has-vertical-scroll">
-    <div class="gap-2 py-5 flex nowrap sm:flex-wrap sm:justify-center">
+  <div
+    class="border rounded overflow-x-scroll sm:overflow-y-scroll  sm:has-vertical-scroll"
+    :class="[modalRelease ? 'h-auto' : 'sm:h-610px']"
+  >
+    <div
+      class="gap-2 py-5 flex nowrap"
+      :class="[modalRelease ? '' : 'sm:flex-wrap sm:justify-center']"
+    >
       <div
         v-for="(card, cardx) in data"
         :key="cardx"
@@ -14,7 +20,9 @@
             min-width="145px"
             elevation="0"
             :card="card"
-            >
+            :modalRelease="modalRelease"
+            @select-bank="selectedCard"
+          >
           </Card>
         </div>
       </div>
@@ -25,8 +33,17 @@
 defineProps({
   data: {
     type: [Array, Object]
+  },
+  modalRelease: {
+    type: Boolean,
+    default: false
   }
 })
+const emit = defineEmits(['selectedCard'])
+
+const selectedCard = (cardBank) => {
+  emit('selectedCard', cardBank)
+}
 </script>
 <style lang="scss">
 .has-vertical-scroll::-webkit-scrollbar {

@@ -1,8 +1,12 @@
 <template>
   <v-card
     elevation="0"
-    class="bg-#f2f2f2 rounded-lg pa-4 pt-3 d-flex flex-column justify-space-around border"
+    class="bg-#f2f2f2 rounded-lg pa-4 pt-3 d-flex flex-column justify-space-around"
+
+    :style="cardSelecBorder === card.bank ? 'border: 2px solid green; background: #f2f2f2' : 'border: 1px solid #c1c1c1; background: white'"
+    @click="selectBank"
   >
+    {{ card.bank === cardSelecBorder }}
     <div class="d-flex align-center justify-space-between">
       <div class="fs-10">
         {{ card.type }}
@@ -25,13 +29,30 @@
   </v-card>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   card: {
     type: Object
   },
+  modalRelease: {
+    type: Boolean,
+    default: false
+  },
 })
+const emit = defineEmits(['selectBank'])
+const cardSelecBorder = ref(null)
+
 
 const { colorState } = useCardStore()
 
+const selectBank = () => {
+  console.log(props.card.bank)
+  if (cardSelecBorder.value !== props.card.bank) {
+    console.log("togfgle")
+    cardSelecBorder.value = props.card.bank
+    emit('selectBank', props.card)
+  } else {
+    cardSelecBorder.value = null
+  }
+}
 
 </script>
