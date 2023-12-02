@@ -1,5 +1,9 @@
 <template>
-  <v-card height="auto" class="rounded-lg pa-3 overflow-y-scroll" :variant="variant">
+  <v-card
+    height="auto"
+    class="rounded-lg pa-3 overflow-y-scroll"
+    style="overflow: scroll"
+    :variant="variant">
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
         <div class="capitalize items-center flex">
@@ -77,19 +81,6 @@
             label="Descrição"
             class="my-1"
           ></v-text-field>
-
-          <v-select
-            density="compact"
-            variant="outlined"
-            v-model="form.attached"
-            :items="cards"
-            item-title="bank"
-            item-value="bank"
-            label="Banco"
-            required
-            class="my-1"
-            :rules="[v => !!v || 'O valor é obrigatório']"
-          ></v-select>
 
           <div class="flex gap-2">
 

@@ -15,6 +15,10 @@
         <div>
           <Card
             class="mx-2"
+            :style="
+              isSelect(card) ?
+              'border: 2px solid green; ' :
+              'border: 1px solid #ccc;'"
             height="145"
             width="145"
             min-width="145px"
@@ -30,7 +34,7 @@
   </div>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   data: {
     type: [Array, Object]
   },
@@ -40,9 +44,17 @@ defineProps({
   }
 })
 const emit = defineEmits(['selectedCard'])
+const select = ref(null)
+
+const isSelect = (item) => {
+  return item.bank === select.value
+}
 
 const selectedCard = (cardBank) => {
-  emit('selectedCard', cardBank)
+  if (props.modalRelease) {
+    select.value = cardBank.bank
+    emit('selectedCard', cardBank)
+  }
 }
 </script>
 <style lang="scss">
