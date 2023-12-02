@@ -1,7 +1,8 @@
 <template>
   <v-card
     elevation="0"
-    class="bg-#f2f2f2 rounded-lg pa-4 pt-3 d-flex flex-column justify-space-around border"
+    class="bg-#f2f2f2 rounded-lg pa-4 pt-3 d-flex flex-column justify-space-around"
+    @click="selectBank"
   >
     <div class="d-flex align-center justify-space-between">
       <div class="fs-10">
@@ -25,13 +26,21 @@
   </v-card>
 </template>
 <script setup>
-defineProps({
+const props = defineProps({
   card: {
     type: Object
   },
+  modalRelease: {
+    type: Boolean,
+    default: false
+  },
 })
+const emit = defineEmits(['selectBank'])
 
 const { colorState } = useCardStore()
 
+const selectBank = () => {
+  emit('selectBank', props.card)
+}
 
 </script>

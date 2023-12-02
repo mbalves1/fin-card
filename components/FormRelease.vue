@@ -1,5 +1,9 @@
 <template>
-  <v-card height="auto" class="rounded-lg pa-3" :variant="variant">
+  <v-card
+    height="auto"
+    class="rounded-lg pa-3 overflow-y-scroll"
+    style="overflow: scroll"
+    :variant="variant">
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
         <div class="capitalize items-center flex">
@@ -38,6 +42,12 @@
 
           <v-card-title class="py-5">Registration</v-card-title>
 
+          <ListCards
+            :data="cards"
+            :modal-release="true"
+            @selected-card="selectedAttached"
+          ></ListCards>
+
           <v-snackbar
             v-model="snackbar.visible"
             :timeout="3000"
@@ -71,19 +81,6 @@
             label="Descrição"
             class="my-1"
           ></v-text-field>
-
-          <v-select
-            density="compact"
-            variant="outlined"
-            v-model="form.attached"
-            :items="cards"
-            item-title="bank"
-            item-value="bank"
-            label="Banco"
-            required
-            class="my-1"
-            :rules="[v => !!v || 'O valor é obrigatório']"
-          ></v-select>
 
           <div class="flex gap-2">
 
@@ -258,6 +255,10 @@ const postCategory = async () => {
       console.error('error', error)
     }
   }
+}
+
+const selectedAttached = (cardBank) => {
+  form.value.attached = cardBank.bank
 }
 
 const postReleases = async () => {
