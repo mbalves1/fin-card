@@ -24,6 +24,16 @@
     </div>
   </v-dialog>
 
+  <v-dialog v-model="openModalRelease">
+    <div class="flex items-center justify-center">
+      <v-card class="w-100% sm:w-700px">
+        <ModalRegisterRelease
+          @closeModal="closeModal"
+          @fetchTransactions="updateTransactions"></ModalRegisterRelease>
+      </v-card>
+    </div>
+  </v-dialog>
+
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
@@ -44,15 +54,6 @@
               <div class="text-sm">Overview</div>
               <div class="flex text-xs justify-end items-start cursor-pointer">
                 <v-icon class="mr-2" @click="openModalToRegister(event, true)">mdi-plus-circle-outline</v-icon>
-                <div class="flex justify-center">
-                  <v-dialog v-model="openModalRelease">
-                    <v-card class="w-100% sm:w-700px">
-                      <ModalRegisterRelease
-                        @closeModal="closeModal"
-                        @fetchTransactions="updateTransactions"></ModalRegisterRelease>
-                    </v-card>
-                  </v-dialog>
-                </div>
                 <v-menu
                   v-model="menu"
                   :close-on-content-click="false"

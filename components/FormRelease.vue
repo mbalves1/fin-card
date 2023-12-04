@@ -40,7 +40,7 @@
       <v-col cols="12">
         <v-form ref="formRef" class="pb-10 rounded-lg" >
 
-          <v-card-title class="py-5">Registration</v-card-title>
+          <div class="text-base py-5">Registro de despesa</div>
 
           <ListCards
             :data="cards"
@@ -117,7 +117,7 @@
               required
               class="my-1"
             ></v-select>
-  
+            
             <v-select
               density="compact"
               variant="outlined"
@@ -128,9 +128,8 @@
               label="Categoria"
               required
               class="my-1"
-            ></v-select>
-          </div>
-
+              ></v-select>
+            </div>
 
           <v-radio-group v-model="form.method_payment" inline hide-details="">
             <v-radio label="Cartão" value="1"></v-radio>
