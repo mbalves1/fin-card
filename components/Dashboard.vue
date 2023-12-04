@@ -1,34 +1,97 @@
 <template>
   <div class="mx-auto w-full">
     <div class="py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start">Dashboard</div>
-    <v-divider class="mb-10"></v-divider>
+    <v-divider class="mb-1"></v-divider>
     <v-container>
       <v-row>
         <v-col>
+          <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-5">
+            <v-col class="border rounded-lg bg-white">
+              <div class="text-xs my-1"><v-icon class="mr-2">mdi-chart-line</v-icon> Mês de maior despesa</div>
+              <div class="flex">
+                mês: <div class="font-bold ml-2"></div>
+              </div>
+            </v-col>
+            <v-col class="border rounded-lg bg-white">
+              <div class="text-xs"><v-icon class="mr-2">mdi-tag-outline</v-icon> Maior despesa por categoria</div>
+              <div class="flex">
+                mês: <div class="font-bold ml-2"></div>
+              </div>
+            </v-col>
+            <v-col class="border rounded-lg bg-white">
+              <div class="text-xs"><v-icon class="mr-2">mdi-credit-card</v-icon>Cartão mais usado</div>
+              <div class="flex">
+                mês: <div class="font-bold ml-2"></div>
+              </div>
+            </v-col>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" lg="8">
           <div class=" bg-fincardsecondary border rounded-lg pa-10">
             <div class="font-bold text-2xl text-center">Despesa anual</div>
             <div v-if="releasesOut" class="mt-10">
-              <BarChart :data="chartDataBar" :options="chartOptions" style="height: 300px"></BarChart>
+              <BarChart :data="chartDataBar" :options="chartOptions" class="max-h-200px"></BarChart>
+            </div>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="4" md="6">
+          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="font-bold py-5">Transações por cartão</div>
+            <div v-if="releasesIn">
+              <DoughnutChart :data="chartData" :options="chartOptionsDoughnut" class="doughnut h-200px" ></DoughnutChart>
             </div>
           </div>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg pa-10 bg-fincardsecondary">
-            <div class="font-bold">Transações por cartão</div>
+          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="font-bold flex justify-between items-center">
+              <div class="py-5 text-sm">Transações por cartão ({{ selectedMonth }})</div>
+              <div>
+                <v-menu
+                v-model="menuCompare"
+                :close-on-content-click="false"
+                location="bottom center">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props">mdi-cog-outline</v-icon>
+                  </template>
+                  <v-card min-width="300">
+                    <p class="text-sm pa-2">Mês</p>
+                    <v-divider></v-divider>
+                    <v-list>
+                      <v-list-item>
+                        <v-select
+                        v-model="selectedMonth"
+                        :items="months"
+                        chips
+                        density="compact"
+                        variant="outlined"
+                        item-value="value"
+                        item-title="name"
+                        :return-object="false"
+                        hide-details
+                        ></v-select>
+                      </v-list-item>
+                    </v-list>
+                  </v-card>
+                </v-menu>
+              </div>
+            </div>
             <div v-if="releasesIn">
-              <DoughnutChart :data="chartData" :options="chartOptionsDoughnut" class="doughnut" ></DoughnutChart>
+              <DoughnutChart :data="chartDataCards" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
             </div>
           </div>
         </v-col>
         <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg pa-10 bg-fincardsecondary">
-            <div class="font-bold flex justify-between">
-              <div>Transações por mês ({{ selectedMonth }})</div>
+          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="font-bold flex justify-between items-center">
+              <div class="py-5 text-sm">Transações por mês ({{ selectedMonth }})</div>
               <div>
                 <v-menu
-                v-model="menuCompare"
+                v-model="menuCard"
                 :close-on-content-click="false"
                 location="bottom center">
                 <template v-slot:activator="{ props }">
@@ -60,9 +123,9 @@
           </div>
         </v-col>
         <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg pa-10 bg-fincardsecondary">
-            <div class="font-bold flex justify-between">
-              <div>Categorias por mês ({{ selectedMonth }})</div>
+          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="font-bold flex justify-between items-center">
+              <div class="py-5 text-sm">Transações por categoria ({{ selectedMonth }})</div>
               <div>
                 <v-menu
                 v-model="menuCategory"
@@ -93,8 +156,10 @@
                 </v-menu>
               </div>
             </div>
-            <DoughnutChart :data="chartDataCategoy" :options="chartOptionsDoughnut"></DoughnutChart>
+            <div v-if="releasesIn">
+              <DoughnutChart :data="chartDataCategoy" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
             </div>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -109,6 +174,7 @@
   const months = useMonths()
   const menuCategory = ref(false)
   const menuCompare = ref(false)
+  const menuCard = ref(false)
   const resultCurrentMonthCategory = ref({})
   const resultCurrentMonthCompare = ref({})
 
@@ -180,12 +246,6 @@
           filler: {
             propagate: false
           },
-          // legend: {
-            //   position: 'right',
-            //   labels: {
-              //     usePointStyle: true
-              //   }
-              // }
         },
         scales: {
           y: {
@@ -270,8 +330,7 @@
       datasets: [
         {
           backgroundColor: ['#943021', '#D07A6C', '#471710', '#D07A6C', '#471710', '#D07A6C'],
-          data: dataSet,
-          borderRadius: 5
+          data: dataSet
         }
       ]
     };
@@ -301,6 +360,40 @@
         }
       ]
     };
+  });
+
+  const chartDataCards = computed(() => {
+    const releases = releasesOut.value.filter(({month}) => month === selectedMonth.value)
+
+    const sumBank = {};
+    const colorsCard = {}
+    
+    releases.forEach((objeto) => {
+      const { value, attached } = objeto;
+
+      attached.forEach((attachedObj) => {
+        const { bank, color } = attachedObj;
+
+        if (sumBank[bank] === undefined) {
+          sumBank[bank] = 0;
+          colorsCard[bank] = color;
+        }
+
+        sumBank[bank] += value;
+      });
+    });
+
+    const labels = Object.keys(sumBank);
+    const backgroundColors = labels.map(label => colorsCard[label]);
+    return {
+      labels,
+      datasets: [
+        {
+          backgroundColor: backgroundColors,
+          data: Object.values(sumBank)
+        }
+      ]
+    }
   });
 
 </script>
