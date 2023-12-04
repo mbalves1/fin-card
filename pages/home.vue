@@ -260,6 +260,12 @@
     },
     {
       text: '1.4: Tabela de cartões na tela de tabelas'
+    },
+    {
+      text: '1.5: Tabela de categorias na tela de tabelas, atualização e remoção de categorias'
+    },
+    {
+      text: '1.6: Gráfico de categorias e atualização do layout'
     }
   ])
 

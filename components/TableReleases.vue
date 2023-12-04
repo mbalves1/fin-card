@@ -98,6 +98,7 @@
         <div></div>
       </div>
     </v-col>
+
     <v-dialog v-model="openModalEdit">
       <div class="flex justify-center">
         <v-card class="w-500px h-auto overflow-y-auto px-3 py-2">

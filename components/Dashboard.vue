@@ -1,6 +1,10 @@
 <template>
   <div class="mx-auto w-full">
-    <div class="py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start">Dashboard</div>
+    <div
+      class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start items-center bg-fincard sm:bg-transparent">
+      <v-icon class="mr-3 sm:visible">mdi-finance</v-icon>
+      <div class="">Dashboard</div>
+      </div>
     <v-divider class="mb-1"></v-divider>
     <v-container>
       <v-row>

@@ -9,7 +9,9 @@
     <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
   </v-snackbar>
   <div class="mx-auto">
-    <div class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start bg-fincard sm:bg-transparent">Tabelas</div>
+    <div
+      class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start items-center bg-fincard sm:bg-transparent">
+      <v-icon class="mr-3">mdi-table</v-icon>Tabelas</div>
     <v-tabs
       v-model="tab"
       color="#74C27F"
@@ -45,7 +47,7 @@
       <TableCards @sendSnackbar="snackSuccess"></TableCards>
     </v-window-item>
     <v-window-item value="option-3">
-      Categorias
+      <TableCategorys></TableCategorys>
     </v-window-item>
   </v-window>
 </template>
