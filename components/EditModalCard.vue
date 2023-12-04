@@ -127,7 +127,6 @@ const formRef = ref(null);
 const closeModal = () => emit('closeEditModal', false)
 
 const confirm = () => {
-  console.log(formRef.value)
   const { isValid } = formRef.value
   if (isValid) {
     formEdit.value = !formEdit.value
