@@ -9,12 +9,12 @@
         {{ card.type }}
       </div>
       <div class="fs-13">
-        <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag}.svg`" alt="" width="40"/>
+        <v-img v-if="card.flag === 'Mastercard' || card.flag === 'Visa'" :src="`/img/${card.flag.toLowerCase()}.svg`" alt="" width="40"/>
       </div>
     </div>
     <div class="mt-2">
       <v-chip :color="card.color" class="fs-10">{{ card.bank }}</v-chip>
-      <div class="fs-10 font-bold">{{ card.name }}</div>
+      <div class="fs-10 mt-1 font-bold">{{ card.name }}</div>
     
       <v-row no-gutters class="pt-2">
         <v-col class="">

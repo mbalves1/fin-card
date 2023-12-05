@@ -80,6 +80,14 @@
 </div>
 </template>
 <script setup>
+  const { registerCard } = useCardStore()
+
+  onMounted(() => {
+    const data = registerCard
+    if (data) {
+      tab.value = data
+    }
+  })
 
   const tab = ref("option-1");
 

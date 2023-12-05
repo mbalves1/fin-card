@@ -1,4 +1,27 @@
 <template>
+  <v-dialog v-model="hasCards" persistent>
+    <div class="flex justify-center">
+      <v-card class="w-500px pa-2" color="#f2f2f2">
+        <v-row>
+          <v-col>
+            <div class="py-2 flex gap-2 items-center">
+              <v-icon color="orange">mdi-alert</v-icon>
+              <div class="">Cartão não cadastrado!</div>
+            </div>
+            <div class="bg-white pa-2 rounded">Antes de cadastrar um lançamento, é recomendado castrar um cartão para o lançamento. Pelo cartão fazemos o lançamento do banco.
+            </div>
+            <div
+              class="bg-fincard pa-2 flex border rounded mt-3 cursor-pointer"
+              @click="goToCardForm"
+            >
+              <div>Cadastrar cartão</div>
+              <v-icon>mdi-arrow-right</v-icon>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card>
+    </div>
+  </v-dialog>
   <v-card
     height="auto"
     class="rounded-lg pa-3 overflow-y-scroll"
@@ -153,7 +176,7 @@
 </template>
 <script setup>
 const { postTransactions } = useTransactions()
-const { getCards } = useCardStore()
+const { getCards, registerFirstCard } = useCardStore()
 const { postNewCategory, getAllCategory } = useCategory()
 
 defineProps({
@@ -164,6 +187,8 @@ defineProps({
 })
 
 const emit = defineEmits(['closeModal', 'fetchTransactions'])
+
+const router = useRouter()
 
 const form = ref({
   name: null,
@@ -180,6 +205,7 @@ const form = ref({
 const categoryField = ref(null)
 
 const items = useMonths()
+const hasCards = ref(false)
 
 const snackbar = ref({
   color: null,
@@ -209,6 +235,9 @@ const fetchCards = async () => {
   const card = await getCards()
   const category = await getAllCategory()
   cards.value = card
+  if (card.length === 0) {
+    hasCards.value = true
+  }
   categorys.value = category
 }
 
@@ -223,6 +252,12 @@ const resetFormValues = () => {
     attached: null
   };
 };
+
+const goToCardForm = () => {
+  registerFirstCard('option-2')
+  hasCards.value = false
+  router.push({ path: '/release-register' }
+)}
 
 const cardType =  computed(() => {
   const card = cards.value.filter(card => {
