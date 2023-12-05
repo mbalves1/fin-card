@@ -9,24 +9,18 @@
     <v-container>
       <v-row>
         <v-col>
-          <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-5">
-            <v-col class="border rounded-lg bg-white">
-              <div class="text-xs my-1"><v-icon class="mr-2">mdi-chart-line</v-icon> Mês de maior despesa</div>
-              <div class="flex">
-                mês: <div class="font-bold ml-2"></div>
-              </div>
-            </v-col>
-            <v-col class="border rounded-lg bg-white">
-              <div class="text-xs"><v-icon class="mr-2">mdi-tag-outline</v-icon> Maior despesa por categoria</div>
-              <div class="flex">
-                mês: <div class="font-bold ml-2"></div>
-              </div>
-            </v-col>
-            <v-col class="border rounded-lg bg-white">
-              <div class="text-xs"><v-icon class="mr-2">mdi-credit-card</v-icon>Cartão mais usado</div>
-              <div class="flex">
-                mês: <div class="font-bold ml-2"></div>
-              </div>
+          <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-1 overflow-scroll sm:no-overflow">
+            <v-col v-for="(highlight, hx) in highlights" :key="hx">
+              <v-col class="border rounded-lg bg-white">
+                <div class="text-xs my-1">
+                  <v-icon class="mr-2">{{ highlight.icon }}</v-icon>{{ highlight.title }}
+                </div>
+
+                <div class="flex text-sm">
+                  {{ highlight.item }}: <div class="font-bold ml-2"></div>
+                  <div class="font-bold">{{ highlight.valueRef }}</div>
+                </div>
+              </v-col>
             </v-col>
           </div>
         </v-col>
@@ -176,11 +170,20 @@
   const data = ref()
   const selectedMonth = ref('Janeiro')
   const months = useMonths()
+  const monthWithRef = useMonthsRef()
   const menuCategory = ref(false)
   const menuCompare = ref(false)
   const menuCard = ref(false)
   const resultCurrentMonthCategory = ref({})
   const resultCurrentMonthCompare = ref({})
+
+  const valueRefHighlightExpense = ref(null)
+
+  const highlights = ref([
+    { icon: 'mdi-chart-line', title: 'Mês de maior despesa', item: 'Mês', valueRef: valueRefHighlightExpense},
+    { icon: 'mdi-tag-outline', title: 'Maior despesa por categoria', item: 'Categoria', valueRef: 'aqui'},
+    { icon: 'mdi-credit-card', title: 'Cartão mais usado', item: 'Cartão', valueRef: 'aqui'},
+  ])
 
   const page = ref({
     page: 1,
@@ -202,6 +205,7 @@
 
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
       releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
+      highExpenseByMonth()
     } catch (error) {
       console.error(error)
     }
@@ -295,7 +299,7 @@
     });
 
     return {
-      labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+      labels: months.value,
       datasets: [
         {
           backgroundColor: ['#943021', '#C7402C', '#943021', '#D07A6C', '#471710', '#943021'],
@@ -399,6 +403,30 @@
       ]
     }
   });
+
+  const highExpenseByMonth = () => {
+    const expenses = chartDataBar
+    const { datasets } = expenses.value
+    const { data } = datasets[0]
+    const higher = Math.max(...data);
+    const idx = data.indexOf(higher);
+    monthWithRef.value
+    const month = Object.entries(monthWithRef.value).find(([key, value]) => value === idx)
+    valueRefHighlightExpense.value = month[0]
+    return month[0]
+  }
+
+  // const highExpenseByCategory = () => {
+  //   const expenses = chartDataBar
+  //   const { datasets } = expenses.value
+  //   const { data } = datasets[0]
+  //   const higher = Math.max(...data);
+  //   const idx = data.indexOf(higher);
+  //   monthWithRef.value
+  //   const month = Object.entries(monthWithRef.value).find(([key, value]) => value === idx)
+  //   valueRefHighlightExpense.value = month[0]
+  //   return month[0]
+  // }
 
 </script>
 <style scoped>
