@@ -25,8 +25,9 @@
   <v-card
     height="auto"
     class="rounded-lg pa-3 overflow-y-scroll"
-    style="overflow: scroll"
-    :variant="variant">
+    style="overflow: scroll;"
+    :variant="variant"
+  >
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
         <div class="capitalize items-center flex">
@@ -38,7 +39,7 @@
       <v-icon v-if="hasCloseButton" class="cursor-pointer" @click="closeReleaseModal">mdi-close-circle-outline</v-icon>
     </div>
 
-    <v-row class="d-flex justify-center px-1 sm:px-5">
+    <v-row class="d-flex justify-center px-1 sm:px-10" style="background: white !important;">
       <v-col v-if="registerCategory" cols="12">
         <v-form>
           <div class="flex items-center">
@@ -141,7 +142,7 @@
               class="my-1"
             ></v-select>
             
-            <v-select
+            <!-- <v-select
               density="compact"
               variant="outlined"
               v-model="form.category"
@@ -151,7 +152,22 @@
               label="Categoria"
               required
               class="my-1"
-              ></v-select>
+              ></v-select> -->
+
+            <v-combobox
+              class="my-1"
+              :items="categorys"
+              @change="postCategory"
+              v-model="categoryField"
+              item-title="categoryname"
+              item-value="category"
+              required
+              hint="Para cadastrar uma categoria nova, apenas digite!"
+              label="Categoria"
+              density="compact"
+              variant="outlined"
+              :rules="[v => !!v || 'Nome da categoria é obrigatório!']"
+            ></v-combobox>
             </div>
 
           <v-radio-group v-model="form.method_payment" inline hide-details="">
