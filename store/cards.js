@@ -5,8 +5,12 @@ export const useCardStore = defineStore('card', {
   state: () => ({
     cards: [],
     msg: null,
+    registerCard: ''
   }),
   actions: {
+    registerFirstCard(payload) {
+      this.registerCard = payload
+    },
     async postCard(payload) {
       const token = localStorage.getItem("token")
 

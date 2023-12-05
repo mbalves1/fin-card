@@ -34,7 +34,7 @@
                   <span v-if="card.flag === 'Mastercard' || card.flag === 'mastercard' || card.flag === 'visa' || card.flag === 'Visa'">
                     <v-img
                       v-if="card.flag === 'Mastercard' || card.flag === 'mastercard' || card.flag === 'visa' || card.flag === 'Visa'"
-                      :src="`/img/${card.flag}.svg`"
+                      :src="`/img/${(card.flag).toLowerCase()}.svg`"
                       alt="" width="40"
                     />
                   </span>
