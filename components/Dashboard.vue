@@ -175,14 +175,16 @@
   const menuCompare = ref(false)
   const menuCard = ref(false)
   const resultCurrentMonthCategory = ref({})
-  const resultCurrentMonthCompare = ref({})
+  const totalBankExpenses = ref(null)
 
   const valueRefHighlightExpense = ref(null)
+  const valueRefHighlightCategory = ref(null)
+  const valueRefHighlightCard = ref(null)
 
   const highlights = ref([
     { icon: 'mdi-chart-line', title: 'Mês de maior despesa', item: 'Mês', valueRef: valueRefHighlightExpense},
-    { icon: 'mdi-tag-outline', title: 'Maior despesa por categoria', item: 'Categoria', valueRef: 'aqui'},
-    { icon: 'mdi-credit-card', title: 'Cartão mais usado', item: 'Cartão', valueRef: 'aqui'},
+    { icon: 'mdi-tag-outline', title: 'Maior despesa por categoria', item: 'Categoria', valueRef: valueRefHighlightCategory},
+    { icon: 'mdi-credit-card', title: 'Cartão mais usado', item: 'Cartão', valueRef: valueRefHighlightCard},
   ])
 
   const page = ref({
@@ -206,6 +208,8 @@
       releasesOut.value = await data.value.filter(rel => rel.type === 'Saída');
       releasesIn.value = await data.value.filter(rel => rel.type === 'Entrada');
       highExpenseByMonth()
+      highExpenseByCategory()
+      higherExpensesByCard()
     } catch (error) {
       console.error(error)
     }
@@ -232,7 +236,9 @@
       });
     });
 
+    totalBankExpenses.value = sumBank
     const labels = Object.keys(sumBank);
+
     const backgroundColors = labels.map(label => colorsCard[label]);
     return {
       labels,
@@ -416,17 +422,19 @@
     return month[0]
   }
 
-  // const highExpenseByCategory = () => {
-  //   const expenses = chartDataBar
-  //   const { datasets } = expenses.value
-  //   const { data } = datasets[0]
-  //   const higher = Math.max(...data);
-  //   const idx = data.indexOf(higher);
-  //   monthWithRef.value
-  //   const month = Object.entries(monthWithRef.value).find(([key, value]) => value === idx)
-  //   valueRefHighlightExpense.value = month[0]
-  //   return month[0]
-  // }
+  const getHighestValue = (data, valueRef) => {
+    const higherValue = Math.max(...Object.values(data));
+    const higherCategory = Object.keys(data).find(key => data[key] === higherValue);
+    valueRef.value = higherCategory;
+  };
+
+  const highExpenseByCategory = () => {
+    getHighestValue(resultCurrentMonthCategory.value, valueRefHighlightCategory);
+  };
+
+  const higherExpensesByCard = () => {
+    getHighestValue(totalBankExpenses.value, valueRefHighlightCard);
+  };
 
 </script>
 <style scoped>
