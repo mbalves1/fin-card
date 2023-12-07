@@ -261,6 +261,10 @@
 
   const refresh = async item => {
     try {
+      page.value = {
+        page: 1,
+        perPage: 10
+      }
       await fetchData()
     }
     catch(error) {
@@ -318,11 +322,15 @@
   }
 
   const filterTransactions = async (item) => {
-    currentFilter.value = item
-    const filter = await getFiltersTransactions(item, page.value)
-    data.value = filter.transactions
-    totalCount.value = filter.totalCount
-    pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+    try {
+      currentFilter.value = item
+      const filter = await getFiltersTransactions(item, page.value)
+      data.value = filter.transactions
+      totalCount.value = filter.totalCount
+      pageLength.value = Math.ceil(totalCount.value/perPageSize.value)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const openModalToEdit = item => {

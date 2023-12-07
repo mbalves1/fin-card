@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row class="mt-2">
     <v-col cols="12" lg="12" md="12" xs="11" class="d-flex">
       <v-menu
         v-model="menu"
@@ -50,15 +50,17 @@
           </v-list-item>
 
           <v-list-item>
-            <v-select
+            <!-- <v-select
               v-if="item === 'bank'"
               density="compact"
               variant="outlined"
               :items="itemsBank"
+              item-title="bank"
+              item-value="bank"
               rounded="full"
               hide-details
               v-model="itemSearch"
-            ></v-select>
+            ></v-select> -->
 
             <v-select
               v-if="item === 'month'"
@@ -92,7 +94,7 @@
             class="text-capitalize"
             append-icon="mdi-close"
           >
-            Cancel
+            Cancelar
           </v-btn>
           <v-btn
             color="green"
@@ -101,7 +103,7 @@
             append-icon="mdi-send"
             @click="search"
           >
-            Save
+            Filtrar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -111,17 +113,30 @@
   </v-row>
 </template>
 <script setup>
+// const { getCards } = useCardStore()
+
 const items = ref([
-  { name: "Bank", value: "bank" },
-  { name: "Month", value: "month" },
-  { name: "Type", value: "type" }
+  // { name: "Banco", value: "bank" },
+  { name: "Mês", value: "month" },
+  { name: "Tipo", value: "type" }
 ])
 const itemsMonth = useMonths()
 const itemSearch = ref(null)
+const itemsBank = ref(null)
 const menu = ref(false)
 const item = ref(null)
 
 const emit = defineEmits(['getFilter'])
+
+// onMounted( async () => {
+//   try {
+//     const response = await getCards()
+//     itemsBank.value = response
+//   }
+//   catch (error) {
+//     console.error('Error:', error)
+//   }
+// })
 
 const search = () => {
   menu.value = false

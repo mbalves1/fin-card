@@ -141,18 +141,6 @@
               required
               class="my-1"
             ></v-select>
-            
-            <!-- <v-select
-              density="compact"
-              variant="outlined"
-              v-model="form.category"
-              :items="categorys"
-              item-title="categoryname"
-              item-value="category"
-              label="Categoria"
-              required
-              class="my-1"
-              ></v-select> -->
 
             <v-combobox
               class="my-1"
