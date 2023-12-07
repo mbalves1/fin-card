@@ -185,10 +185,15 @@
     }
   })
 
+  const emit = defineEmits(['initialLoadingEmits'])
+
   onMounted(async () => {
+    emit('initialLoadingEmits', true)
     try {
       await fetchData()
+      emit('initialLoadingEmits', false)
     } catch (error) {
+      emit('initialLoadingEmits', false)
       console.error(error)
     }
   });

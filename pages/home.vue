@@ -34,6 +34,10 @@
     </div>
   </v-dialog>
 
+  <LoadingGlobal
+    :initialLoading="initialLoading"
+  ></LoadingGlobal>
+
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
@@ -240,6 +244,8 @@
   const cards = ref(null)
   const cardsNumber = ref(0)
 
+  const initialLoading = ref(false)
+
   const loadingRemove = ref(false)
 
   const releasesOut = ref([]);
@@ -284,19 +290,22 @@
     const WELCOME_KEY = 'hasShownWelcome';
     const hasShownWelcome = JSON.parse(localStorage.getItem(WELCOME_KEY))
     if (!hasShownWelcome) {
-    // Exibe a mensagem de boas-vindas
-    welcome.value = true;
-    localStorage.setItem(WELCOME_KEY, JSON.stringify(true));
+      // Exibe a mensagem de boas-vindas
+      welcome.value = true;
+      localStorage.setItem(WELCOME_KEY, JSON.stringify(true));
 
-    setTimeout(() => {
-      welcome.value = false;
-    }, 4000);
-  }
+      setTimeout(() => {
+        welcome.value = false;
+      }, 4000);
+    }
+    initialLoading.value = true
     try {
       await fetchData()
       await fecthDataCards()
       await fecthUser()
+      initialLoading.value = false
     } catch (error) {
+      initialLoading.value = false
       console.error(error)
     }
   });

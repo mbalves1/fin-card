@@ -8,6 +8,11 @@
     {{ snackbar.title }}
     <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
   </v-snackbar>
+
+  <loading-global
+    :initialLoading="initialLoading"
+  ></loading-global>
+
   <div class="mx-auto">
     <div
       class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start items-center bg-fincard sm:bg-transparent">
@@ -41,7 +46,10 @@
 
   <v-window v-model="tab">
     <v-window-item value="option-1">
-      <TableReleases :hasSpacing="true"></TableReleases>
+      <TableReleases
+        :hasSpacing="true"
+        @initial-loading-emits="loadingHandle"
+      ></TableReleases>
     </v-window-item>
     <v-window-item value="option-2">
       <TableCards @sendSnackbar="snackSuccess"></TableCards>
@@ -65,6 +73,8 @@
     icon: null
   })
 
+  const initialLoading = ref(false)
+
   const snackSuccess = (item) => {
     snackbar.value = {
       color: item.value.color,
@@ -73,5 +83,9 @@
       title: item.value.title,
       visible: item.value.visible
     }
+  }
+
+  const loadingHandle = (event) => {
+    initialLoading.value = event
   }
 </script>
