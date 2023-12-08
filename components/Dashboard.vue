@@ -5,30 +5,85 @@
 
   <div class="mx-auto w-full">
     <div
-      class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-start items-center bg-fincard sm:bg-transparent">
-      <v-icon class="mr-3 sm:visible">mdi-finance</v-icon>
-      <div class="">Dashboard</div>
+      class="py-6 sm:py-10 pl-10 text-lg sm:text-3xl mx-auto flex justify-between items-center bg-fincard sm:bg-transparent">
+      <div class="flex items-center">
+        <v-icon class="mr-3 sm:visible">mdi-finance</v-icon>
+        <div class="">Dashboard</div>
+      </div>
+      <div class="text-xs sm:text-sm mr-4 sm:mr-20">
+        <v-menu
+          v-model="menuCategory"
+          :close-on-content-click="false"
+          location="bottom center">
+          <template v-slot:activator="{ props }">
+            <div class="flex gap-3">
+              <v-icon v-bind="props">mdi-cog-outline</v-icon>
+              <div>Configurações</div>
+            </div>
+            </template>
+            <v-card min-width="300">
+              <p class="text-sm pa-2">Mês</p>
+              <v-divider></v-divider>
+              <v-list>
+                <v-list-item>
+                  <v-checkbox
+                    class="mt-2"
+                    label="Mostrar highlight"
+                    color="#74C27F"
+                    density="compact"
+                    hide-details
+                    v-model="highlightShow"></v-checkbox>
+
+                  <v-checkbox
+                    label="Mostrar mês"
+                    hide-details
+                    density="compact"
+                    color="#74C27F"
+                    v-model="monthShow"></v-checkbox>
+                  
+                  <v-select
+                    v-if="monthShow"
+                    v-model="selectedMonth"
+                    :items="months"
+                    chips
+                    density="compact"
+                    variant="outlined"
+                    item-value="value"
+                    item-title="name"
+                    :return-object="false"
+                    hide-details
+                  ></v-select>
+                    
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
+        </div>
       </div>
     <v-divider class="mb-1"></v-divider>
     <v-container>
-      <v-row>
-        <v-col>
-          <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-1 overflow-scroll sm:no-overflow">
-            <v-col v-for="(highlight, hx) in highlights" :key="hx">
-              <v-col class="border rounded-lg bg-white">
-                <div class="text-xs my-1">
-                  <v-icon class="mr-2">{{ highlight.icon }}</v-icon>{{ highlight.title }}
-                </div>
-
-                <div class="flex text-sm">
-                  {{ highlight.item }}: <div class="font-bold ml-2"></div>
-                  <div class="font-bold">{{ highlight.valueRef }}</div>
+      <v-slide-y-reverse-transition>
+        <v-row v-if="highlightShow">
+          <v-col>
+            <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-1 overflow-scroll sm:no-overflow">
+              <v-col v-for="(highlight, hx) in highlights" :key="hx">
+                <div class="flex border rounded-lg bg-white pa-4 items-center">
+                  <div class="text-xs my-1">
+                    <v-icon class="mr-4 bg-fincardsecondary pa-5 rounded-xl">{{ highlight.icon }}</v-icon>
+                  </div>
+  
+                  <div class="flex flex-col text-xs sm:text-sm">
+                    <div>{{ highlight.title }}</div>
+                    <div class="font-bold mr-2 flex">{{ highlight.item }}:
+                      <div class="font-bold ml-2">{{ highlight.valueRef }}</div>
+                    </div>
+                  </div>
                 </div>
               </v-col>
-            </v-col>
-          </div>
-        </v-col>
-      </v-row>
+            </div>
+          </v-col>
+        </v-row>
+      </v-slide-y-reverse-transition>
       <v-row>
         <v-col cols="12" lg="8">
           <div class=" bg-fincardsecondary border rounded-lg pa-10">
@@ -47,123 +102,38 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
-            <div class="font-bold flex justify-between items-center">
-              <div class="py-5 text-sm">Transações por cartão ({{ selectedMonth }})</div>
-              <div>
-                <v-menu
-                v-model="menuCompare"
-                :close-on-content-click="false"
-                location="bottom center">
-                <template v-slot:activator="{ props }">
-                  <v-icon v-bind="props">mdi-cog-outline</v-icon>
-                  </template>
-                  <v-card min-width="300">
-                    <p class="text-sm pa-2">Mês</p>
-                    <v-divider></v-divider>
-                    <v-list>
-                      <v-list-item>
-                        <v-select
-                        v-model="selectedMonth"
-                        :items="months"
-                        chips
-                        density="compact"
-                        variant="outlined"
-                        item-value="value"
-                        item-title="name"
-                        :return-object="false"
-                        hide-details
-                        ></v-select>
-                      </v-list-item>
-                    </v-list>
-                  </v-card>
-                </v-menu>
+      <v-slide-y-reverse-transition>
+        <v-row v-if="monthShow">
+          <v-col cols="12" lg="4" md="6">
+            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+              <div class="font-bold flex justify-between items-center">
+                <div class="py-5 text-sm">Transações por cartão ({{ selectedMonth }})</div>
+              </div>
+              <div v-if="releasesIn">
+                <DoughnutChart :data="chartDataCards" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
               </div>
             </div>
-            <div v-if="releasesIn">
-              <DoughnutChart :data="chartDataCards" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
+          </v-col>
+          <v-col cols="12" lg="4" md="6">
+            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+              <div class="font-bold flex justify-between items-center">
+                <div class="py-5 text-sm">Transações por mês ({{ selectedMonth }})</div>
+              </div>
+              <BarChart class="max-h-200px" :data="chartDataCompare" :options="chartOptions"></BarChart>
             </div>
-          </div>
-        </v-col>
-        <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
-            <div class="font-bold flex justify-between items-center">
-              <div class="py-5 text-sm">Transações por mês ({{ selectedMonth }})</div>
-              <div>
-                <v-menu
-                v-model="menuCard"
-                :close-on-content-click="false"
-                location="bottom center">
-                <template v-slot:activator="{ props }">
-                  <v-icon v-bind="props">mdi-cog-outline</v-icon>
-                  </template>
-                  <v-card min-width="300">
-                    <p class="text-sm pa-2">Mês</p>
-                    <v-divider></v-divider>
-                    <v-list>
-                      <v-list-item>
-                        <v-select
-                        v-model="selectedMonth"
-                        :items="months"
-                        chips
-                        density="compact"
-                        variant="outlined"
-                        item-value="value"
-                        item-title="name"
-                        :return-object="false"
-                        hide-details
-                        ></v-select>
-                      </v-list-item>
-                    </v-list>
-                  </v-card>
-                </v-menu>
+          </v-col>
+          <v-col cols="12" lg="4" md="6">
+            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+              <div class="font-bold flex justify-between items-center">
+                <div class="py-5 text-sm">Transações por categoria ({{ selectedMonth }})</div>
+              </div>
+              <div v-if="releasesIn">
+                <DoughnutChart :data="chartDataCategoy" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
               </div>
             </div>
-            <BarChart class="max-h-200px" :data="chartDataCompare" :options="chartOptions"></BarChart>
-          </div>
-        </v-col>
-        <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
-            <div class="font-bold flex justify-between items-center">
-              <div class="py-5 text-sm">Transações por categoria ({{ selectedMonth }})</div>
-              <div>
-                <v-menu
-                v-model="menuCategory"
-                :close-on-content-click="false"
-                location="bottom center">
-                <template v-slot:activator="{ props }">
-                  <v-icon v-bind="props">mdi-cog-outline</v-icon>
-                  </template>
-                  <v-card min-width="300">
-                    <p class="text-sm pa-2">Mês</p>
-                    <v-divider></v-divider>
-                    <v-list>
-                      <v-list-item>
-                        <v-select
-                        v-model="selectedMonth"
-                        :items="months"
-                        chips
-                        density="compact"
-                        variant="outlined"
-                        item-value="value"
-                        item-title="name"
-                        :return-object="false"
-                        hide-details
-                        ></v-select>
-                      </v-list-item>
-                    </v-list>
-                  </v-card>
-                </v-menu>
-              </div>
-            </div>
-            <div v-if="releasesIn">
-              <DoughnutChart :data="chartDataCategoy" :options="chartOptionsDoughnut" class="" ></DoughnutChart>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
+          </v-col>
+        </v-row>
+      </v-slide-y-reverse-transition>
     </v-container>
   </div>
 </template>
@@ -186,6 +156,10 @@
   const valueRefHighlightCard = ref(null)
 
   const initialLoading = ref(false)
+
+  // variables to show options
+  const highlightShow = ref(true)
+  const monthShow = ref(true)
 
   const highlights = ref([
     { icon: 'mdi-chart-line', title: 'Mês de maior despesa', item: 'Mês', valueRef: valueRefHighlightExpense},

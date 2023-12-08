@@ -48,3 +48,13 @@ export const useMonthsRef = () => {
   });
   return monthMap
 }
+
+export const paymentMethod = (payment) => {
+  if (!payment) return
+  const methods = {
+    0: "Cartão",
+    1: "Dinheiro",
+    2: "Pix",
+  }
+  return methods[payment]
+}

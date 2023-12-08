@@ -21,8 +21,8 @@
           </thead>
           <tbody>
             <tr v-for="(item, ix) in cardCategory" :key="ix">
-              <td data-label="id" style="max-width: 100px !important">{{ item._id }}</td>
-              <td data-label="categoryname" v-if="ix !== currentItemIndex">{{ item.categoryname }}</td>
+              <td data-label="id">{{ item._id }}</td>
+              <td data-label="Categoria" v-if="ix !== currentItemIndex">{{ item.categoryname }}</td>
               <div v-if="ix === currentItemIndex" class="flex items-center">
                 <v-text-field
                   density="compact"
@@ -32,7 +32,7 @@
                   v-model="cardCategory.categoryname"
                 ></v-text-field>  
               </div>
-              <td data-label="categoryname">{{ formatDate(item.createdAt) }}</td>
+              <td data-label="Data de criação">{{ formatDate(item.createdAt) }}</td>
               <td data-label="">
                 <v-icon
                   v-if="ix === currentItemIndex"

@@ -12,7 +12,55 @@
   <v-row class="d-flex justify-center">
     <v-col cols="12" :lg="hasSpacing ? 10 : 12" md="12" class="d-flex justify-space-between flex-column">
       <div>
-        <div class="flex">
+        <div class="flex items-center">
+          <!-- <v-btn class="text-xs mt-2 text-capitalize px-4" variant="flat"> -->
+            <v-menu
+              v-model="config"
+              :close-on-content-click="false"
+              location="bottom center">
+              <template v-slot:activator="{ props }">
+                <div class="flex gap-3 mt-3 text-xs">
+                  <v-icon v-bind="props">mdi-cog-outline</v-icon>
+                </div>
+                </template>
+                <v-card min-width="300">
+                  <p class="text-sm pa-2">Colunas</p>
+                  <v-divider></v-divider>
+                  <v-list>
+                    <v-list-item>
+                      <v-checkbox
+                        class="mt-2"
+                        label="Tipo"
+                        color="#74C27F"
+                        density="compact"
+                        hide-details
+                        v-model="typeColumn"
+                      ></v-checkbox>
+
+                      <v-checkbox
+                        class="mt-2"
+                        label="Cartão"
+                        color="#74C27F"
+                        density="compact"
+                        hide-details
+                        v-model="cardColumn"
+                      ></v-checkbox>
+
+                      <v-checkbox
+                        class="mt-2"
+                        label="Método"
+                        color="#74C27F"
+                        density="compact"
+                        hide-details
+                        v-model="methodColumn"
+                      ></v-checkbox>
+                        
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-menu>
+          <!-- </v-btn> -->
+
           <SearchTable
             v-if="hasSearch"
             @getFilter="filterTransactions"
@@ -28,10 +76,11 @@
           <thead>
             <tr>
               <th class="font-bold">Nome</th>
-              <th>Tipo</th>
-              <th>Card</th>
+              <th v-if="typeColumn">Tipo</th>
+              <th v-if="cardColumn">Card</th>
               <th>Banco</th>
-              <th>Método</th>
+              <th v-if="methodColumn">Método</th>
+              <th>Pagamento</th>
               <th>Mês</th>
               <th>Parcela</th>
               <th>Valor</th>
@@ -49,8 +98,8 @@
           <tbody>
             <tr v-for="(item, ix) in data" :key="ix">
               <td data-label="Nome">{{ item.name}}</td>
-              <td data-label="Tipo">{{ item.type }}</td>
-              <td data-label="Card">{{ formatedItem(item.attached, "flag") }}</td>
+              <td data-label="Tipo" v-if="typeColumn">{{ item.type }}</td>
+              <td data-label="Card" v-if="cardColumn">{{ formatedItem(item.attached, "flag") }}</td>
               <td data-label="Banco">
                 <v-badge
                   :color="item.attached[0].color"
@@ -59,7 +108,8 @@
                 ></v-badge>
                 {{ formatedItem(item.attached, "bank") }}
               </td>
-              <td data-label="Método">{{ formatedItem(item.attached, "type")}}</td>
+              <td data-label="Método" v-if="methodColumn">{{ formatedItem(item.attached, "type")}}</td>
+              <td data-label="Método de pagamento">{{ paymentMethod(item.method_payment) }}</td>
               <td data-label="Mês">{{ item.month }}</td>
               <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
               <td data-label="Valor">{{ formatCurrency(item.value)}}</td>
@@ -201,6 +251,12 @@
   const totalCount = ref(0)
   const pageLength = ref(3)
   const perPageSize = ref(10)
+
+  // config to show columns
+  const config = ref(false)
+  const typeColumn = ref(true)
+  const cardColumn = ref(true)
+  const methodColumn = ref(true)
 
   const page =ref({
     page: 1,
