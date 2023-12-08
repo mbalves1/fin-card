@@ -15,6 +15,7 @@
         <div class="flex items-center">
           <!-- <v-btn class="text-xs mt-2 text-capitalize px-4" variant="flat"> -->
             <v-menu
+              v-if="hasSearch"
               v-model="config"
               :close-on-content-click="false"
               location="bottom center">
