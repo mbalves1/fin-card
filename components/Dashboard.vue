@@ -63,9 +63,9 @@
     <v-divider class="mb-1"></v-divider>
     <v-container>
       <v-slide-y-reverse-transition>
-        <v-row v-if="highlightShow">
+        <v-row v-if="highlightShow" no-gutters>
           <v-col>
-            <div class="border bg-fincardsecondary rounded-lg pa-5 flex gap-1 overflow-scroll sm:no-overflow">
+            <div class="bg-fincardsecondary rounded-lg sm:pa-5 flex gap-1 overflow-scroll sm:overflow-none">
               <v-col v-for="(highlight, hx) in highlights" :key="hx">
                 <div class="flex border rounded-lg bg-white pa-4 items-center">
                   <div class="text-xs my-1">
@@ -86,7 +86,7 @@
       </v-slide-y-reverse-transition>
       <v-row>
         <v-col cols="12" lg="8">
-          <div class=" bg-fincardsecondary border rounded-lg pa-10">
+          <div class=" bg-white border rounded-lg pa-10">
             <div class="font-bold text-2xl text-center">Despesa anual</div>
             <div v-if="releasesOut" class="mt-10">
               <BarChart :data="chartDataBar" :options="chartOptions" class="max-h-200px"></BarChart>
@@ -94,7 +94,7 @@
           </div>
         </v-col>
         <v-col cols="12" lg="4" md="6">
-          <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+          <div class="border rounded-lg px-10 pb-10 bg-white">
             <div class="font-bold py-5">Transações por cartão</div>
             <div v-if="releasesIn">
               <DoughnutChart :data="chartData" :options="chartOptionsDoughnut" class="doughnut h-200px" ></DoughnutChart>
@@ -105,7 +105,7 @@
       <v-slide-y-reverse-transition>
         <v-row v-if="monthShow">
           <v-col cols="12" lg="4" md="6">
-            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="border rounded-lg px-10 pb-10 bg-white">
               <div class="font-bold flex justify-between items-center">
                 <div class="py-5 text-sm">Transações por cartão ({{ selectedMonth }})</div>
               </div>
@@ -115,7 +115,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="4" md="6">
-            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="border rounded-lg px-10 pb-10 bg-white">
               <div class="font-bold flex justify-between items-center">
                 <div class="py-5 text-sm">Transações por mês ({{ selectedMonth }})</div>
               </div>
@@ -123,7 +123,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="4" md="6">
-            <div class="border rounded-lg px-10 pb-10 bg-fincardsecondary">
+            <div class="border rounded-lg px-10 pb-10 bg-white">
               <div class="font-bold flex justify-between items-center">
                 <div class="py-5 text-sm">Transações por categoria ({{ selectedMonth }})</div>
               </div>

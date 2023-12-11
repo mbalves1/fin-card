@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-row class="background flex-row">
+    <v-row class="d-flex flex-row">
       <v-col xs="12" md="6" lg="6" col="12" class="left-col d-flex justify-center align-center">
         <slot></slot>
       </v-col>
@@ -10,10 +10,6 @@
 </template>
 
 <style scoped lang="scss">
-.background {
-  display: flex;
-}
-
 .left-col {
   flex: 1;
   display: flex;

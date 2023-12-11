@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    style="background: #f2f2f2;"
+    style="background: white;"
     v-model="drawer"
     :rail="rail"
     permanent
