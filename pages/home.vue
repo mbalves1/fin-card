@@ -41,18 +41,13 @@
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
-        <v-sheet class="me-auto border rounded pa-3" style="background: #f2f2f2">
+        <div class="me-auto border rounded pa-3 mb-5" style="background: #f2f2f2">
           <p><strong>Balanço total</strong></p>
+          <p class="fs-10 font-italic" >fluxo de caixa anual</p>
           <h2 class="ml-5">{{ totalBalance(releasesOut, releasesIn) || "R$ 00,00" }}</h2>
-          <v-sheet class="d-flex justify-space-between align-center" style="background: #f2f2f2">
-            <h3 class="ml-3"></h3>
-            <p class="fs-10" >Number of financial postings {{ size || 0 }}</p>
             <!-- <v-icon>mdi-arrow-bottom-left</v-icon> -->
-          </v-sheet>
-        </v-sheet>
+        </div>
         <div>
-          <v-divider class="my-2 mb-5"></v-divider>
-
           <div class="bg-fincardsecondary pa-3 border rounded">
             <div class="flex items-center justify-between pb-2">
               <div class="text-sm">Overview</div>
@@ -155,7 +150,7 @@
         </div>
       </v-col>
       <v-col cols="12" lg="4" sm="8" class="px-3 d-flex flex-column align-center items-center">
-        <v-sheet class="text-h4 d-flex px-5 py-7 align-center border rounded w-full bg-fincardsecondary" style="background: #f2f2f2">
+        <div class="text-h4 d-flex px-5 py-7 align-center border rounded w-full bg-fincardsecondary mb-5 sm:h-102px" style="background: #f2f2f2">
           <sup><v-chip>{{ cardsNumber }}</v-chip></sup>
           <div class="mx-2 font-bold text-xl sm:text-3xl">Cartões</div>
           <v-icon size="20" @click="openModalToRegister">mdi-plus-circle-outline</v-icon>
@@ -191,8 +186,8 @@
               </v-list>
             </v-card>
           </v-menu>
-        </v-sheet>
-        <div class="w-full mt-9 bg-fincardsecondary">
+        </div>
+        <div class="w-full bg-fincardsecondary">
           <div class="sm:ml-0">
             <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
           </div>
