@@ -66,6 +66,7 @@
 
           <div class="text-base py-5">Registro de despesa</div>
 
+          <p v-if="hasCardSelected" class="text-red text-xs">Escolha o banco**</p>
           <ListCards
             :data="cards"
             :modal-release="true"
@@ -210,6 +211,7 @@ const categoryField = ref(null)
 
 const items = useMonths()
 const hasCards = ref(false)
+const hasCardSelected = ref(false)
 
 const snackbar = ref({
   color: null,
@@ -307,54 +309,61 @@ const postReleases = async () => {
     const installment = Number(form.value.installment) || 1
     const installments = Array.from({ length: installment }, (_, i) => i + 1);
     const indexMonth = itemsMonth.value.indexOf(form.value.month)
+    if (card.length === 0) {
+      loading.value = false
+      hasCardSelected.value = true
+      return
+    } else {
+      try {
+        hasCardSelected.value = false
+        let payload
 
-    try {
-      let payload
-      if (cardType.value === 'Crédito') {
-        installments.map(i => {
+        if (cardType.value === 'Crédito') {
+          installments.map(i => {
+            payload = {
+              ...form.value,
+              attached: card,
+              category: categoryField.value,
+              installment: i,
+              month: itemsMonth.value[[(indexMonth + i) % 12]],
+              value: form.value.value / installment
+            }
+            postTransactions(payload);
+          })
+        } else {
           payload = {
             ...form.value,
             attached: card,
             category: categoryField.value,
-            installment: i,
-            month: itemsMonth.value[[(indexMonth + i) % 12]],
-            value: form.value.value / installment
+            installment: Number(form.value.installment) || 1,
+            month: form.value.month,
+            value: form.value.value
           }
           postTransactions(payload);
-        })
-      } else {
-        payload = {
-          ...form.value,
-          attached: card,
-          category: categoryField.value,
-          installment: Number(form.value.installment) || 1,
-          month: form.value.month,
-          value: form.value.value
         }
-        postTransactions(payload);
-      }
-      emit('fetchTransactions', true)
-      form.value = { ...form.value }
+        emit('fetchTransactions', true)
+        form.value = { ...form.value }
 
-      resetFormValues();
-      snackbar.value = {
-        visible: true,
-        color: "#74C27F",
-        position: "top",
-        title: "Registration completed successfully!",
-        icon: "mdi-check-circle"
+        resetFormValues();
+        snackbar.value = {
+          visible: true,
+          color: "#74C27F",
+          position: "top",
+          title: "Registration completed successfully!",
+          icon: "mdi-check-circle"
+        }
+        loading.value = false
+      } catch (error) {
+        snackbar.value = {
+          visible: true,
+          color: "red",
+          position: "top",
+          title: "Error occurred during registration!",
+          icon: "mdi-close-circle"
+        }
+        console.error(error);
+        loading.value = false
       }
-      loading.value = false
-    } catch (error) {
-      snackbar.value = {
-        visible: true,
-        color: "red",
-        position: "top",
-        title: "Error occurred during registration!",
-        icon: "mdi-close-circle"
-      }
-      console.error(error);
-      loading.value = false
     }
   } else {
     return;
