@@ -79,6 +79,7 @@
               <th v-if="typeColumn">Tipo</th>
               <th v-if="cardColumn">Card</th>
               <th>Banco</th>
+              <th>Categoria</th>
               <th v-if="methodColumn">Método</th>
               <th>Pagamento</th>
               <th>Mês</th>
@@ -108,6 +109,7 @@
                 ></v-badge>
                 {{ formatedItem(item.attached, "bank") }}
               </td>
+              <td data-label="Categoria">{{ formatCategory(item.category) }}</td>
               <td data-label="Método" v-if="methodColumn">{{ formatedItem(item.attached, "type")}}</td>
               <td data-label="Método de pagamento">{{ paymentMethod(item.method_payment) }}</td>
               <td data-label="Mês">{{ item.month }}</td>

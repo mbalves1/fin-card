@@ -58,3 +58,11 @@ export const paymentMethod = (payment) => {
   }
   return methods[payment]
 }
+
+export const formatCategory = (category) => {
+  const categoryName = category.map(({categoryname}) => {
+    return categoryname
+  })
+
+  return categoryName[0]
+}
