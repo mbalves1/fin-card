@@ -22,7 +22,7 @@
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
       <v-col cols="12" md="8" sm="12">
-        <div class="me-auto border rounded pa-3 mb-5" style="background: #f2f2f2">
+        <div class="me-auto border rounded pa-3 mb-5 bg-fincardsecondary">
           <p><strong>Balanço total</strong></p>
           <p class="fs-10 font-italic" >fluxo de caixa anual</p>
           <h2 class="ml-5">{{ totalBalance(releasesOut, releasesIn) || "R$ 00,00" }}</h2>
@@ -79,9 +79,9 @@
                           <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
                             {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
                           </v-icon>
-                            <span>{{ release.name }}</span>
+                            <span class="text-xs">{{ release.name }}</span>
                         </div>
-                        <div>{{ formatCurrency(release.value) }}</div>
+                        <div class="text-xs">{{ formatCurrency(release.value) }}</div>
                       </div>
                     </div>
                   </div>
