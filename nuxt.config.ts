@@ -27,12 +27,13 @@ export default defineNuxtConfig({
     ],
   },
   build: {
-    transpile: ['vuetify', 'chart.js'],
+    transpile: ['vuetify', 'chart.js', '@vuepic/vue-datepicker'],
   },
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     'vuetify/dist/vuetify.css',
     'vuetify/lib/styles/main.sass',
+    '@vuepic/vue-datepicker/dist/main.css',
     '~/assets/style.scss',
     '~/assets/table.scss'
   ],
