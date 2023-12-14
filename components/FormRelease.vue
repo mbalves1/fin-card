@@ -171,7 +171,7 @@
 
           <v-btn
             @click="postReleases"
-            class="w-100 primary-color mt-5 text-capitalize"
+            class="w-100 primary-color my-5 text-capitalize"
             variant="flat"
             color="#74C27F"
             :loading="loading"
