@@ -89,7 +89,7 @@
           <v-row>
             <v-col cols="12" md="6" sm="12">
               <div class="flex justify-center">
-                <div class="flex" style="height: 350px; justify-content: center !important;">
+                <div class="flex" style="height: 290px; justify-content: center !important;">
                   <VueDatePicker
                     format="dd/MM/yyyy"
                     class="h-40px"
