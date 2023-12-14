@@ -113,7 +113,9 @@
               <td data-label="Método" v-if="methodColumn">{{ formatedItem(item.attached, "type")}}</td>
               <td data-label="Método de pagamento">{{ paymentMethod(item.method_payment) }}</td>
               <td data-label="Mês">{{ item.month }}</td>
-              <td data-label="Parcela" class="text-center">{{ item.installment }}</td>
+              <td data-label="Parcela" class="text-center">{{ item.installment }}
+                <span v-if="item.installment_total" class="text-xs">x{{ item.installment_total }}</span>
+              </td>
               <td data-label="Valor">{{ formatCurrency(item.value)}}</td>
               <td data-label="Data">{{ formatDate(item.createdAt)}}</td>
               <td data-label="">
