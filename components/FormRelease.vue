@@ -22,9 +22,8 @@
       </v-card>
     </div>
   </v-dialog>
-  <v-card
-    class="rounded-lg pa-3"
-    style="overflow-y: scroll; height: 100vh;"
+  <div
+    class="rounded-lg pa-3 overflow-auto h-800px scrollbarView"
   >
     <div class="flex justify-between">
       <v-btn variant="text" class="text-green" @click="registerCategory = !registerCategory">
@@ -60,12 +59,12 @@
         </v-form>
       </v-col>
       <v-col cols="12" md="12">
-        <v-form ref="formRef" class="pb-10 rounded-lg">
-
+        <v-form ref="formRef" class="rounded-lg">
           <div class="text-base py-5">Registro de despesa</div>
 
           <p v-if="hasCardSelected" class="text-red text-xs">Escolha o banco**</p>
           <ListCards
+            class="scrollbarView"
             :data="cards"
             :modal-release="true"
             @selected-card="selectedAttached"
@@ -181,7 +180,7 @@
         </v-form>
       </v-col>
     </v-row>
-  </v-card>
+  </div>
 </template>
 <script setup>
 import VueDatePicker from '@vuepic/vue-datepicker';

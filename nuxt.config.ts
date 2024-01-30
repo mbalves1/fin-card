@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     'vuetify/lib/styles/main.sass',
     '@vuepic/vue-datepicker/dist/main.css',
     '~/assets/style.scss',
-    '~/assets/table.scss'
+    '~/assets/table.scss',
+    '~/assets/scrollbar.scss'
   ],
 })

@@ -7,7 +7,7 @@
 
   <v-dialog v-model="openModalRelease">
     <div class="flex items-center justify-center">
-      <v-card class="w-100% sm:w-700px">
+      <v-card class="w-100% sm:w-700px overflow-auto h-90vh sm:h-75vh">
         <ModalRegisterRelease
           @closeModal="closeModal"
           @fetchTransactions="updateTransactions"></ModalRegisterRelease>
@@ -404,49 +404,6 @@
     height: 400px;
     overflow-y: scroll;
   }
-}
-
-.scrollbar::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: #F5F5F5;
-}
-
-.scrollbar::-webkit-scrollbar
-{
-	width: 2px;
-  margin-right: 2px;
-	background-color: #F5F5F5;
-}
-
-.scrollbar::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
-}
-
-.scrollbarView::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: #F5F5F5;
-}
-
-.scrollbarView::-webkit-scrollbar
-{
-	width: 2px;
-  margin-right: 2px;
-  height: 8px;
-	background-color: #F5F5F5;
-}
-
-.scrollbarView::-webkit-scrollbar-thumb
-{
-	border-radius: 3px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
 }
 
 </style>

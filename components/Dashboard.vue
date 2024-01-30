@@ -322,6 +322,8 @@
     const dataSet = Object.values(categoryLabel);
     resultCurrentMonthCategory.value = categoryLabel
 
+    console.log("datase", dataSet)
+
     return {
       labels,
       datasets: [
