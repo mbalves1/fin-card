@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     ],
     '@nuxtjs/google-fonts',
     '@unocss/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    'nuxt-vitest'
   ],
   imports: {
     dirs: [
