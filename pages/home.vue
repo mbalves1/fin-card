@@ -1,23 +1,125 @@
 <template>
-  <div>
-  <UpdateHome
-    :welcome="welcome"
-  >
-  </UpdateHome>
+  <div class="bg-#f2f2f2">
+    <UpdateHome
+      :welcome="welcome"
+    >
+    </UpdateHome>
 
-  <v-dialog v-model="openModalRelease">
-    <div class="flex items-center justify-center">
-      <v-card class="w-100% sm:w-700px overflow-auto h-90vh sm:h-75vh">
-        <ModalRegisterRelease
-          @closeModal="closeModal"
-          @fetchTransactions="updateTransactions"></ModalRegisterRelease>
-      </v-card>
+    <v-dialog v-model="openModalRelease">
+      <div class="flex items-center justify-center">
+        <v-card class="w-100% sm:w-700px overflow-auto h-90vh sm:h-75vh">
+          <ModalRegisterRelease
+            @closeModal="closeModal"
+            @fetchTransactions="updateTransactions"></ModalRegisterRelease>
+        </v-card>
+      </div>
+    </v-dialog>
+
+    <LoadingGlobal
+      :initialLoading="initialLoading"
+    ></LoadingGlobal>
+
+    <div class="h-20vh bg-green flex items-center">
+      <div class="container mx-auto flex justify-between py-4 md:py">
+        <div class="font-bold text-xl">Balanço total: R$ 975</div>
+        <div>aqui</div>
+      </div>
     </div>
-  </v-dialog>
 
-  <LoadingGlobal
-    :initialLoading="initialLoading"
-  ></LoadingGlobal>
+  <v-div class="w-full">
+    <v-row class="overflow-x-auto">
+      <div class="flex gap-4 w-full mb-4 ml-10">
+        <div v-for="(month, mx) in monthView" :key="mx">
+          <v-card v-if="reduceMonthValue(month) != 0" variant="flat" class="pb-3 w-300px sm:w-230px rounded-xl">
+            <div class="flex justify-between items-center text-sm">
+              <div class="text-lg font-bold pt-3 px-5">{{month}}</div>
+              <div class="pr-5 mt-3 text-xs font-bold">{{reduceMonthValue(month)}}</div>
+            </div>
+            <v-divider class="mx-4 my-2"></v-divider>
+            <div class="h-230px overflow-y-auto scrollbar">
+              <div v-for="(release, cx) in filteredByMonth(month)" :key="cx" class="px-6 py-1 text-sm">
+                <div class="flex justify-between">
+                  <div>
+                    <v-icon :style="{ fontSize: '14px' }" :class="release.type === 'Entrada' ? 'text-green':'text-red'" class="mr-1 text-lg">
+                      {{release.type === 'Entrada' ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'}}
+                    </v-icon>
+                      <span class="text-xs">{{ release.name }}</span>
+                  </div>
+                  <div class="text-xs">{{ formatCurrency(release.value) }}</div>
+                </div>
+              </div>
+            </div>
+          </v-card>
+        </div>
+      </div>
+    </v-row>
+  </v-div>
+
+  <div class="mt-7 mx-10">
+    <v-row class="gap-4">
+      <v-col lg="7" class="rounded-xl h-300px">
+        <v-row class="ma-2 gap-4">
+          <v-col class="bg-white rounded-xl">
+            <v-card class="" variant="flat">
+              <div class="flex justify-between items-center text-sm">
+                <div class="text-lg font-bold pt-3 px-5">Bancos</div>
+              </div>
+              <v-divider class="mx-4 my-2"></v-divider>
+              <div class="h-180px overflow-y-auto scrollbar">
+                <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
+                  <div class="flex justify-between px-5 text-xs sm:text-base" >
+                    <div class="">
+                      <v-icon :class="`text-${card.color}`">mdi-credit-card</v-icon>
+                      {{ card.bank }}</div>
+                      <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+          <v-col class="bg-white rounded-xl">
+            <v-card class="" variant="flat">
+              <div class="flex justify-between items-center text-sm">
+                <div class="text-lg font-bold pt-3 px-5">Categorias</div>
+              </div>
+              <v-divider class="mx-4 my-2"></v-divider>
+              <div class="h-180px overflow-y-auto scrollbar">
+                <div v-for="(release, rx) in category" :key="rx" class="pb-2">
+                  <div class="flex justify-between px-5 text-xs sm:text-base flex-col">
+                    <div v-for="(rel, cx) in release.category" :key="cx" class="pb-2 flex justify-between">
+                      <div v-if="rel">{{ rel }}</div>
+                        <i v-else class="text-grey text-sm">sem categoria</i>
+                        <div>{{ formatCurrency(filteredCategoryValue(rel)) }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12" lg="4" class="bg-white rounded-xl">
+        <div class="w-full">
+          <div class="sm:ml-0">
+            <ListCards :data="cards" @openModalCard="openModalToRegister" class=""></ListCards>
+          </div>
+          <div class="flex justify-center">
+            <v-dialog v-model="openModal">
+              <ModalRegisterCard
+                @closeModal="openModalToRegister"
+                @loadingCards="fecthDataCards"
+                class="d-flex justify-end"
+                :isModal="true"></ModalRegisterCard>
+            </v-dialog>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
+
+  <div class="h-90vh">
+    aquii    
+  </div>
 
   <v-container class="mx-auto w-full">
     <v-row class="wrapper rounded-xl flex-column flex-sm-row">
@@ -235,7 +337,7 @@
 
   const menu = ref(false)
   const cardTable = ref(false)
-  const monthView = ref(['Janeiro', 'Fevereiro', 'Março', 'Abril']) 
+  const monthView = ref(['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro']) 
   const months = useMonths()
 
   onMounted(async () => {

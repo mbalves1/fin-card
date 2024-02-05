@@ -254,7 +254,7 @@
 
   const totalCount = ref(0)
   const pageLength = ref(3)
-  const perPageSize = ref(10)
+  const perPageSize = ref(5)
 
   // config to show columns
   const config = ref(false)
@@ -264,7 +264,7 @@
 
   const page =ref({
     page: 1,
-    perPage: 10
+    perPage: 5
   })
 
   const snackbar = ref({
@@ -328,7 +328,7 @@
     try {
       page.value = {
         page: 1,
-        perPage: 10
+        perPage: 5
       }
       await fetchData()
     }

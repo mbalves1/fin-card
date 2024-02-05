@@ -1,12 +1,12 @@
 <template>
   <v-navigation-drawer
-    style="background: #f2f2f2;"
+    style="background: white;"
     v-model="drawer"
     :rail="rail"
     permanent
     :location="size < 600 ? '' : 'left'"
     @click="rail = false"
-    class="rounded-xl navBarLeft"
+    class="rounded-xl navBarLeft ma-3"
     rail-width="85"
   >
     <v-list-item

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border rounded overflow-x-scroll sm:overflow-y-scroll  sm:has-vertical-scroll"
+    class="rounded overflow-x-scroll sm:overflow-y-scroll  sm:has-vertical-scroll"
     :class="[modalRelease ? 'h-auto' : 'sm:h-610px']"
   >
     <div
