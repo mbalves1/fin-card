@@ -60,7 +60,14 @@
       </v-col>
       <v-col cols="12" md="12">
         <v-form ref="formRef" class="rounded-lg">
-          <div class="text-base py-5">Registro de despesa</div>
+          <div class="text-base py-5">Registro de despesa / recebível</div>
+
+          <div>
+            <v-radio-group class="py-2" v-model="form.type" inline hide-details="">
+              <v-radio label="Saída" value="Saída"></v-radio>
+              <v-radio label="Entrada" value="Entrada"></v-radio>
+            </v-radio-group>
+          </div>
 
           <p v-if="hasCardSelected" class="text-red text-xs">Escolha o banco**</p>
           <ListCards
@@ -80,12 +87,11 @@
             <v-icon class="ml-10">{{ snackbar.icon }}</v-icon>
           </v-snackbar>
 
-          <v-radio-group class="py-2" v-model="form.type" inline hide-details="">
-            <v-radio label="Saída" value="Saída"></v-radio>
-            <v-radio label="Entrada" value="Entrada"></v-radio>
-          </v-radio-group>
+          <div v-if="form.type === 'Entrada'">
+            <v-checkbox label="Lançamento programado ?" hide-details v-model="form.planned_launch"></v-checkbox>
+          </div>
 
-          <v-row>
+          <v-row class="mt-2">
             <v-col cols="12" md="6" sm="12">
               <div class="flex justify-center">
                 <div class="flex" style="height: 290px; justify-content: center !important;">
@@ -206,6 +212,7 @@ const form = ref({
   value: null,
   installment: null,
   installment_total: null,
+  planned_launch: false,
   month: 'Janeiro',
   type: "Saída",
   method_payment: null,
@@ -215,7 +222,7 @@ const form = ref({
 
 const categoryField = ref(null)
 
-const dateSelected = ref(null)
+const dateSelected = ref(new Date())
 const hasCards = ref(false)
 const hasCardSelected = ref(false)
 
@@ -262,6 +269,7 @@ const resetFormValues = () => {
     installment: null,
     installment_total: null,
     month: null,
+    year: null,
     type: "Saída",
     attached: null
   };
@@ -277,6 +285,8 @@ const formatDateSelected = () => {
   const month = date.toLocaleDateString("pt-BR", {
     month: "numeric"
   });
+
+  form.value.year = date.getFullYear();
   const newMonth = +month - 1
   form.value.month = Object.keys(monthRef.value).find((key) => monthRef.value[key] === newMonth)
   return formattedDate
@@ -341,9 +351,10 @@ const postReleases = async () => {
       try {
         hasCardSelected.value = false
         let payload
-        
-        if (cardType.value === 'Crédito') {
+
+        if (cardType.value === 'Crédito' && form.value.type === 'Saída') {
           installments.map(i => {
+            console.log('itemsMonth.value[[(indexMonth + i) % 12]],', itemsMonth.value[[(indexMonth + i) % 12]],)
             payload = {
               ...form.value,
               attached: card,
@@ -351,10 +362,10 @@ const postReleases = async () => {
               installment_total: form.value.installment,
               installment: i,
               month: itemsMonth.value[[(indexMonth + i) % 12]],
+              year: form.value.year,
               transaction_date: transactionDate,
               value: form.value.value / installment
             }
-            console.log("payload1", payload)
             postTransactions(payload);
           })
         } else {
@@ -365,10 +376,10 @@ const postReleases = async () => {
             installment_total: form.value.installment,
             installment: Number(form.value.installment) || 1,
             transaction_date: transactionDate,
+            year: form.value.year,
             month: form.value.month,
             value: form.value.value
           }
-          console.log("payload2", payload)
           postTransactions(payload);
         }
         emit('fetchTransactions', true)
