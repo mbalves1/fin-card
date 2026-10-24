@@ -341,7 +341,13 @@ const postReleases = async () => {
     const card = cards.value.filter(item => item.bank === form.value.attached)
     const installment = Number(form.value.installment) || 1
     const installments = Array.from({ length: installment }, (_, i) => i + 1);
-    const transactionDate = formatDateSelected()
+    formatDateSelected()
+    // envia a data como Date (ISO); a string pt-BR "dd/mm/aaaa" não é aceita pelo Mongoose
+    const transactionDate = dateSelected.value
+    // categoria digitada no combobox chega como string, mas o model espera um objeto
+    const category = typeof categoryField.value === 'string'
+      ? { categoryname: categoryField.value }
+      : categoryField.value
     const indexMonth = itemsMonth.value.indexOf(form.value.month)
     if (card.length === 0) {
       loading.value = false
@@ -358,7 +364,7 @@ const postReleases = async () => {
             payload = {
               ...form.value,
               attached: card,
-              category: categoryField.value,
+              category,
               installment_total: form.value.installment,
               installment: i,
               month: itemsMonth.value[[(indexMonth + i) % 12]],
@@ -372,7 +378,7 @@ const postReleases = async () => {
           payload = {
             ...form.value,
             attached: card,
-            category: categoryField.value,
+            category,
             installment_total: form.value.installment,
             installment: Number(form.value.installment) || 1,
             transaction_date: transactionDate,
