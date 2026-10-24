@@ -65,15 +65,12 @@
           </template>
           <v-list>
             <v-list-item
-              v-for="(item, index) in colors"
-              :key="index"
-              :value="index"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-              <v-radio-group hide-details v-model="color">
-                <v-radio :label="item.label" :value="item.value"></v-radio>
-              </v-radio-group>
-            </v-list-item>
+              v-for="item in colors"
+              :key="item.value"
+              :title="item.label"
+              :active="color === item.value"
+              @click="color = item.value"
+            ></v-list-item>
           </v-list>
         </v-menu>
         <v-form ref="formRef">
@@ -203,6 +200,7 @@ const resetFormValues = () => {
     flag: null,
     expiration: null
   };
+  color.value = 'blue'
 };
 
 const sendCard = async () => {
@@ -236,7 +234,7 @@ const sendCard = async () => {
   }
 }
 
-const color = ref(null)
+const color = ref('blue')
 
 const close = () => emit("closeModal", false)
 
