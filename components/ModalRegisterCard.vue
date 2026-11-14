@@ -70,7 +70,11 @@
               :title="item.label"
               :active="color === item.value"
               @click="color = item.value"
-            ></v-list-item>
+            >
+              <template v-slot:prepend>
+                <v-icon :color="item.value">mdi-circle</v-icon>
+              </template>
+            </v-list-item>
           </v-list>
         </v-menu>
         <v-form ref="formRef">

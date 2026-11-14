@@ -13,7 +13,10 @@
       </div>
     </div>
     <div class="mt-2">
-      <v-chip :color="card.color" class="fs-10">{{ card.bank }}</v-chip>
+      <div class="d-flex align-center">
+        <v-icon :color="card.color || 'grey'" size="18" class="mr-1">mdi-credit-card</v-icon>
+        <v-chip :color="card.color || 'grey'" class="fs-10">{{ card.bank }}</v-chip>
+      </div>
       <div class="fs-10 mt-1 font-bold">{{ card.name }}</div>
     
       <v-row no-gutters class="pt-2">
