@@ -99,7 +99,7 @@
                     <div v-for="(card, cx) in cards" :key="cx" class="pb-2">
                       <div class="flex justify-between px-5 text-xs sm:text-base" >
                         <div class="">
-                          <v-icon :class="`text-${card.color}`">mdi-credit-card</v-icon>
+                          <v-icon :color="card.color || 'grey'">mdi-credit-card</v-icon>
                           {{ card.bank }}</div>
                           <div>{{ formatCurrency(filteredByBank(card.bank)) }}</div>
                       </div>
